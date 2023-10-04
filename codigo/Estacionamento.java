@@ -48,4 +48,30 @@ public class Estacionamento {
 		
 	}
 
+	public String getNome(){
+		return nome;
+	}
+	
+	public void setNome(String nome){
+		this.nome = nome;
+	}
+
+	public int getQuantFileiras(){
+		return quantFileiras;
+	}
+
+	public void setQuantFIleiras(int quantFileiras){
+		this.quantFileiras = quantFileiras;
+	}
+
+	public int getVagasPorFileira(){
+		return vagasPorFileira;
+	}
+
+	public void setVagasPorFIleira(int vagasPorFileira){
+		this.vagasPorFileira = vagasPorFileira;
+	}
+
+	
+
 }
