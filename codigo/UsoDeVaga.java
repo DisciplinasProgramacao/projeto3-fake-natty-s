@@ -1,5 +1,3 @@
-
-
 public class UsoDeVaga {
 
 	private static final double FRACAO_USO = 0.25;
@@ -20,6 +18,38 @@ public class UsoDeVaga {
 
 	public double valorPago() {
 		
+	}
+
+	public Vaga getVaga() {
+		return vaga;
+	}
+
+	public void setVaga(Vaga vaga) {
+		this.vaga = vaga;
+	}
+
+	public LocalDateTime getEntrada() {
+		return entrada;
+	}
+
+	public void setEntrada(LocalDateTime entrada) {
+		this.entrada = entrada;
+	}
+
+	public LocalDateTime getSaida() {
+		return saida;
+	}
+
+	public void setSaida(LocalDateTime saida) {
+		this.saida = saida;
+	}
+
+	public double getValorPago() {
+		return valorPago;
+	}
+
+	public void setValorPago(double valorPago) {
+		this.valorPago = valorPago;
 	}
 
 }
