@@ -8,27 +8,48 @@ public class Veiculo {
 
     public Veiculo(String placa) {
         this.placa = placa;
-        this.usos = new ArrayList<UsoDeVaga>(); 
+        this.usos = new ArrayList<UsoDeVaga>();
     }
 
+    /**
+     * Estaciona o veículo em uma vaga, se a vaga estiver disponível.
+     * @param vaga A vaga onde o veículo deve estacionar.
+     */
     public void estacionar(Vaga vaga) {
         if (vaga.disponivel()) {
-			
             vaga.estacionar();
         } else {
             System.out.println("A vaga não está disponível.");
         }
     }
 
+    /**
+     * Registra a saída do veículo de uma vaga e calcula o valor a ser pago.
+     * @param vaga A vaga da qual o veículo está saindo.
+     * @return O valor a ser pago pelo uso da vaga.
+     */
     public double sair(Vaga vaga) {
-        if (!vaga.disponivel()) {
-            vaga.sair();
-        } else {
+        boolean veiculoEstacionadoNaVaga = false;
+        for (UsoDeVaga usoDeVaga : usos) {
+            if (usoDeVaga.getVaga() == vaga) {
+                veiculoEstacionadoNaVaga = true;
+                double valorPago = usoDeVaga.sair();
+                usos.remove(usoDeVaga);
+                return valorPago;
+            }
+        }
+        
+        if (!veiculoEstacionadoNaVaga) {
             System.out.println("O veículo não está estacionado na vaga.");
         }
         
+        return 0.0;
     }
 
+    /**
+     * Calcula o valor total arrecadado pela empresa de estacionamento com este veículo.
+     * @return O valor total arrecadado.
+     */
     public double totalArrecadado() {
         double totalValor = 0.0;
         for (UsoDeVaga usoDeVaga : usos) {
@@ -37,6 +58,11 @@ public class Veiculo {
         return totalValor;
     }
 
+    /**
+     * Calcula o valor arrecadado pela empresa de estacionamento com este veículo em um mês específico.
+     * @param mes O mês para o qual o valor arrecadado deve ser calculado.
+     * @return O valor arrecadado no mês especificado.
+     */
     public double arrecadadoNoMes(int mes) {
         double totalArrecadadoNoMes = 0.0;
         for (UsoDeVaga usoDeVaga : usos) {
@@ -47,8 +73,12 @@ public class Veiculo {
         return totalArrecadadoNoMes;
     }
 
+    /**
+     * Obtém o número total de usos de vaga feitos por este veículo.
+     * @return O número total de usos de vaga.
+     */
     public int totalDeUsos() {
-        return usos.size(); 
+        return usos.size();
     }
 
     public String getPlaca() {
@@ -67,4 +97,3 @@ public class Veiculo {
         this.usos = usos;
     }
 }
-
