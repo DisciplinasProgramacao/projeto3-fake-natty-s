@@ -1,74 +1,70 @@
+import java.util.List;
+import java.util.ArrayList;
 
 public class Veiculo {
 
-	private String placa;
-	private UsoDeVaga[] usos;
+    private String placa;
+    private List<UsoDeVaga> usos;
 
-	
-	public Veiculo(String placa) {
-		this.placa = placa;
-		this.usos = new ArrayList<UsoDeVaga>(); 
-	}
+    public Veiculo(String placa) {
+        this.placa = placa;
+        this.usos = new ArrayList<UsoDeVaga>(); 
+    }
 
-	
-	public void estacionar(Vaga vaga) {
-		
-		if (vaga.disponivel()) {
-			vaga.estacionar(); 
-		} else {
-			System.out.println("A vaga não está disponível.");
-		}
-	}
-	
-	public double sair(Vaga vaga) {
-		
-		if (!vaga.disponivel()) {
-			vaga.sair();
+    public void estacionar(Vaga vaga) {
+        if (vaga.disponivel()) {
 			
-		} else {
-			System.out.println("O veículo não está estacionado na vaga.");
-		}
-		
-	}
-	
+            vaga.estacionar();
+        } else {
+            System.out.println("A vaga não está disponível.");
+        }
+    }
 
-	public double totalArrecadado() {
-		double totalValor = 0.0;
-		for (UsoDeVaga usoDeVaga : usos) {
-			totalValor += usoDeVaga.valorPago();
-		}
-		return totalValor;
-	}
-	
+    public double sair(Vaga vaga) {
+        if (!vaga.disponivel()) {
+            vaga.sair();
+        } else {
+            System.out.println("O veículo não está estacionado na vaga.");
+        }
+        
+    }
 
-	public double arrecadadoNoMes(int mes) {
-		double totalArrecadadoNoMes = 0.0;
-		for (UsoDeVaga usoDeVaga : usos) {
-			if (usoDeVaga.getEntrada().getMonthValue() == mes) {
-				totalArrecadadoNoMes += usoDeVaga.valorPago();
-			}
-		}
-		return totalArrecadadoNoMes;
-	}
-	
-	public int totalDeUsos() {
-		return usos.length;
-	}
+    public double totalArrecadado() {
+        double totalValor = 0.0;
+        for (UsoDeVaga usoDeVaga : usos) {
+            totalValor += usoDeVaga.valorPago();
+        }
+        return totalValor;
+    }
 
-	public String getPlaca() {
-		return placa;
-	}
+    public double arrecadadoNoMes(int mes) {
+        double totalArrecadadoNoMes = 0.0;
+        for (UsoDeVaga usoDeVaga : usos) {
+            if (usoDeVaga.getEntrada().getMonthValue() == mes) {
+                totalArrecadadoNoMes += usoDeVaga.valorPago();
+            }
+        }
+        return totalArrecadadoNoMes;
+    }
 
-	public UsoDeVaga[] getUsos() {
-		return usos;
-	}
-	public void setPlaca(String placa) {
-		this.placa = placa;
-	}
+    public int totalDeUsos() {
+        return usos.size(); 
+    }
 
-	public void setUsos(UsoDeVaga[] usos) {
-		this.usos = usos;
-	}
+    public String getPlaca() {
+        return placa;
+    }
 
+    public List<UsoDeVaga> getUsos() {
+        return usos;
+    }
 
+    public void setPlaca(String placa) {
+        this.placa = placa;
+    }
+
+    public void setUsos(List<UsoDeVaga> usos) {
+        this.usos = usos;
+    }
 }
+
