@@ -7,10 +7,9 @@ public class Cliente {
     private String id;
     private List<Veiculo> veiculos;
 
-    public Cliente(String nome, String id) {
-        this.nome = nome;
-        this.id = id;
-    }
+	public Cliente(String nome, String id) {
+		
+	}
 
     public void addVeiculo(Veiculo veiculo) {
         veiculos.add(veiculo);
@@ -26,12 +25,8 @@ public class Cliente {
     }
 	
 	public int totalDeUsos() {
-        int total = 0;
-        for (Veiculo veiculo : veiculos) {
-            total += veiculos.getUsos();
-        }
-        return total;
-    }
+		
+	}
 
     public double arrecadadoPorVeiculo(String placa) {
         for (Veiculo veiculo : veiculos) {
