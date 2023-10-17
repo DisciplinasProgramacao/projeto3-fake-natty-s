@@ -45,7 +45,7 @@ public class Estacionamento {
 
 	public double totalArrecadado() {
 		for (Cliente cliente : clientes) {
-			valorTotal += cliente.getArrecadoTotal();
+			valorTotal += cliente.getArrecadadoTotal();
 		}
 		return valorTotal;
 	}
@@ -54,7 +54,7 @@ public class Estacionamento {
 		for (Cliente cliente : clientes) {
 			 int mesCliente = cliente.GetData().getMonth();
 			 if (mesCliente == mes) {
-				 valorMes += cliente.getArrecadoNoMes();
+				 valorMes += cliente.getArrecadadoNoMes();
 			 }
 			 return valorMes;
 		}
@@ -62,7 +62,7 @@ public class Estacionamento {
 
 	public double valorMedioPorUso() {
 		for (Cliente cliente : clientes) {
-			valorUso = cliente.getArrecadoPorVeiculo() / cliente.getTotalDeUsos();
+			valorUso = cliente.getArrecadadoPorVeiculo() / cliente.getTotalDeUsos();
 		}
 		return valorUso;
 	}
