@@ -7,6 +7,7 @@ public class Veiculo {
 	
 	public Veiculo(String placa) {
 		this.placa = placa;
+		this.usos = new ArrayList<UsoDeVaga>(); 
 	}
 
 	
@@ -27,7 +28,7 @@ public class Veiculo {
 		} else {
 			System.out.println("O veículo não está estacionado na vaga.");
 		}
-		return 0.0; 
+		
 	}
 	
 
