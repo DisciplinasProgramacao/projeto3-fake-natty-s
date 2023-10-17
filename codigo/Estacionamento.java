@@ -23,7 +23,6 @@ public class Estacionamento {
 	 * @param nome, fileiras, vagasPorFila
 	 */
     public Estacionamento(String nome, int fileiras, int vagasPorFila) {
-<<<<<<< HEAD
         this.nome = nome;
         this.fileiras = fileiras;
         this.colunas = vagasPorFila;
@@ -31,9 +30,6 @@ public class Estacionamento {
         this.vagas = new ArrayList<>();
         this.valorArrecadado = 0;
         gerarVagas();
-=======
-       
->>>>>>> master
     }
 
 
@@ -42,15 +38,10 @@ public class Estacionamento {
 	 * chama o medoto addVeiculo(veiculo) do cliente especifico)
 	 */
     public void addVeiculo(Veiculo veiculo, String idCli) {
-<<<<<<< HEAD
         Cliente cliente = encontrarClientePorId(idCli);
         if (cliente != null) {
             cliente.addVeiculo(veiculo);
         }
-=======
-        
-        
->>>>>>> master
     }
 
 	/*
@@ -59,11 +50,7 @@ public class Estacionamento {
 	 */
 
     public void addCliente(Cliente cliente) {
-<<<<<<< HEAD
         clientes.add(cliente);
-=======
-        
->>>>>>> master
     }
 
 
@@ -74,7 +61,6 @@ public class Estacionamento {
 
     private void gerarVagas() {
 		
-<<<<<<< HEAD
 		int fila = 1;
 		int posicaoLista;
 		for(int i = 0; i <= fileiras; i++){
@@ -88,9 +74,6 @@ public class Estacionamento {
 			}
 			fila++;
 		}
-=======
-
->>>>>>> master
     }
 
 	/* Encontra vaga disponivel e chama metodo estacionar(placa) desta vaga
@@ -98,7 +81,6 @@ public class Estacionamento {
 	 */
 
     public void estacionar(String placa) {
-<<<<<<< HEAD
         for (Vaga vaga : vagas) { //procura vaga
             if (vaga.disponivel()) {
                 vaga.estacionar(placa);
@@ -108,19 +90,12 @@ public class Estacionamento {
         }
     }
 
-=======
-        
-    }
-
-	
->>>>>>> master
 	/*
 	 * Encontra cliente por um id e retorna este cliente
 	 * @param String idCli
 	 */
 
     private Cliente encontrarClientePorId(String idCli) {
-<<<<<<< HEAD
         for (Cliente cliente : clientes) {
             if (cliente.getId().equals(idCli)) {
                 return cliente;
@@ -131,14 +106,6 @@ public class Estacionamento {
 
 	public double getValorArrecadado() {
         return valorArrecadado;
-=======
-      
-        
-    }
-
-	public double getValorArrecadado() {
-        
->>>>>>> master
     }
 
 	public double sair(String placa) {
