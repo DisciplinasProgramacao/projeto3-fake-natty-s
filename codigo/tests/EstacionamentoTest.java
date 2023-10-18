@@ -20,11 +20,11 @@ public class EstacionamentoTest {
 @Before
     public void setUp() {
         estacionamento = new Estacionamento("Nome do Estacionamento", 5, 10);
-        cliente1 = new Cliente("Cliente1");
-        cliente2 = new Cliente("Cliente2");
-        cliente3 = new Cliente("Cliente3");
-        cliente4 = new Cliente("Cliente4");
-        cliente5 = new Cliente("Cliente5");
+        cliente1 = new Cliente("Cliente1", "1");
+        cliente2 = new Cliente("Cliente2", "2");
+        cliente3 = new Cliente("Cliente3", "3");
+        cliente4 = new Cliente("Cliente4", "4");
+        cliente5 = new Cliente("Cliente5", "5");
         veiculo1 = new Veiculo("ABC123");
         veiculo2 = new Veiculo("XYZ789");
     }
