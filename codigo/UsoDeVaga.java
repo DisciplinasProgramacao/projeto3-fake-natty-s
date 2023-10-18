@@ -46,7 +46,6 @@ public class UsoDeVaga {
 		}
 	}
 	
-
 	/**
      * Obtém o valor total pago pelo cliente pelo uso da vaga.
      * 
