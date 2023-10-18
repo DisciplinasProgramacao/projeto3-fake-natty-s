@@ -1,4 +1,8 @@
 
+//Classe estacionamento - Gabriel Pongelupe e Felipe Picinin
+
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +23,13 @@ public class Estacionamento {
 	 * @param nome, fileiras, vagasPorFila
 	 */
     public Estacionamento(String nome, int fileiras, int vagasPorFila) {
-       
+        this.nome = nome;
+        this.fileiras = fileiras;
+        this.colunas = vagasPorFila;
+        this.clientes = new ArrayList<>();
+        this.vagas = new ArrayList<>();
+        this.valorArrecadado = 0;
+        gerarVagas();
     }
 
 
@@ -28,8 +38,10 @@ public class Estacionamento {
 	 * chama o medoto addVeiculo(veiculo) do cliente especifico)
 	 */
     public void addVeiculo(Veiculo veiculo, String idCli) {
-        
-        
+        Cliente cliente = encontrarClientePorId(idCli);
+        if (cliente != null) {
+            cliente.addVeiculo(veiculo);
+        }
     }
 
 	/*
@@ -38,7 +50,7 @@ public class Estacionamento {
 	 */
 
     public void addCliente(Cliente cliente) {
-        
+        clientes.add(cliente);
     }
 
 
@@ -49,7 +61,19 @@ public class Estacionamento {
 
     private void gerarVagas() {
 		
+		int fila = 1;
+		int posicaoLista;
+		for(int i = 0; i <= fileiras; i++){
 
+			for(int j = 0; j <= colunas; j++){
+				posicaoLista = i * j + (j * i - 1);
+				if(vagas.get(posicaoLista) == null){
+					Vaga vaga = new Vaga(i, j);
+					vagas.add(vaga);
+				}
+			}
+			fila++;
+		}
     }
 
 	/* Encontra vaga disponivel e chama metodo estacionar(placa) desta vaga
@@ -57,22 +81,31 @@ public class Estacionamento {
 	 */
 
     public void estacionar(String placa) {
-        
+        for (Vaga vaga : vagas) { //procura vaga
+            if (vaga.disponivel()) {
+                vaga.estacionar(placa);
+                valorArrecadado += 4; // Adicionar ao valor arrecadado a cada 15 minutos
+                break;
+            }
+        }
     }
 
-	
 	/*
 	 * Encontra cliente por um id e retorna este cliente
 	 * @param String idCli
 	 */
 
     private Cliente encontrarClientePorId(String idCli) {
-      
-        
+        for (Cliente cliente : clientes) {
+            if (cliente.getId().equals(idCli)) {
+                return cliente;
+            }
+        }
+        return null; // Cliente não encontrado
     }
 
 	public double getValorArrecadado() {
-        
+        return valorArrecadado;
     }
 
 	public double sair(String placa) {
