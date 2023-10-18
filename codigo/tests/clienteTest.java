@@ -1,16 +1,10 @@
-
-
-package codigo.tests;
+package tests;
+import src.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
-
-import codigo.Cliente;
 
 public class clienteTest {
 
@@ -21,24 +15,17 @@ public class clienteTest {
     @BeforeEach
     public void setUp() {
         cliente = new Cliente("Cliente Teste", "123");
-        veiculo1 = new Veiculo("ABC123", "Carro");
-        veiculo2 = new Veiculo("DEF456", "Moto");
+        veiculo1 = new Veiculo("ABC123");
+        veiculo2 = new Veiculo("DEF456");
         cliente.addVeiculo(veiculo1);
         cliente.addVeiculo(veiculo2);
     }
 
     @Test
     public void testAddVeiculo() {
-        Veiculo novoVeiculo = new Veiculo("GHI789", "Caminhão");
+        Veiculo novoVeiculo = new Veiculo("GHI789");
         cliente.addVeiculo(novoVeiculo);
         assertEquals(3, cliente.getVeiculos().size());
-    }
-
-    @Test
-    public void testPossuiVeiculo() {
-        Veiculo veiculo = cliente.possuiVeiculo("ABC123");
-        assertNotNull(veiculo);
-        assertEquals("Carro", veiculo.getTipo());
     }
 
     @Test

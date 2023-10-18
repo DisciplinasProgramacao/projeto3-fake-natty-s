@@ -1,15 +1,13 @@
+package src;
 
 //Classe estacionamento - Gabriel Pongelupe e Felipe Picinin
 
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Estacionamento {
-
-	
 
     private String nome;
     private List<Cliente> clientes;

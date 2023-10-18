@@ -1,8 +1,11 @@
+package tests;
+import src.*;
+
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-package tests;
+
 
 public class EstacionamentoTest {
     private Estacionamento estacionamento;
