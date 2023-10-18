@@ -4,8 +4,8 @@ package src;
 //Classe estacionamento - Gabriel Pongelupe e Felipe Picinin
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class Estacionamento {
@@ -74,7 +74,8 @@ public class Estacionamento {
 			for(int j = 0; j <= colunas; j++){
 				posicaoLista = i * j + (j * i - 1);
 				if(vagas.get(posicaoLista) == null){
-					Vaga vaga = new Vaga(i, j);
+					//ATENÇÃO PONGE, MUDAR ESSA MATRIZ PARA A CLASSE VAGA. ISSO AQUI FOI SÓ PRA RODAR :)
+					Vaga vaga = new Vaga("A", 1);
 					vagas.add(vaga);
 				}
 			}
@@ -89,7 +90,7 @@ public class Estacionamento {
     public void estacionar(String placa) {
         for (Vaga vaga : vagas) { //procura vaga
             if (vaga.disponivel()) {
-                vaga.estacionar(placa);
+                vaga.estacionar();
                 valorArrecadado += 4; // Adicionar ao valor arrecadado a cada 15 minutos
                 break;
             }
@@ -125,7 +126,7 @@ public class Estacionamento {
 
 	public double totalArrecadado() {
 		for (Cliente cliente : clientes) {
-			valorTotal += cliente.getArrecadadoTotal();
+			valorTotal += cliente.arrecadadoTotal();
 		}
 		return valorTotal;
 	}
@@ -134,7 +135,7 @@ public class Estacionamento {
 		for (Cliente cliente : clientes) {
 			 int mesCliente = cliente.GetData().getMonth();
 			 if (mesCliente == mes) {
-				 valorMes += cliente.getArrecadadoNoMes();
+				 valorMes += cliente.arrecadadoNoMes(mes);
 			 }
 			 return valorMes;
 		}
@@ -142,7 +143,7 @@ public class Estacionamento {
 
 	public double valorMedioPorUso() {
 		for (Cliente cliente : clientes) {
-			valorUso = cliente.getArrecadadoPorVeiculo() / cliente.getTotalDeUsos();
+			valorUso = cliente.arrecadadoPorVeiculo() / cliente.getTotalDeUsos();
 		}
 		return valorUso;
 	}

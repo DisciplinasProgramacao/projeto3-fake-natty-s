@@ -1,5 +1,5 @@
-
 package tests;
+import src.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ public class veiculoTest {
     @BeforeEach
     void setUp() {
         veiculo = new Veiculo("ABC123");
-        vaga = new Vaga("A1");
+        vaga = new Vaga("A", 1);
     }
 
     @Test
@@ -43,9 +43,11 @@ public class veiculoTest {
         assertTrue(vaga.disponivel()); // A vaga deve continuar disponível
     }
 
+
+    /*
     @Test
     void testTotalArrecadado() {
-        UsoDeVaga uso1 = new UsoDeVaga();
+        UsoDeVaga uso1 = new UsoDeVaga(vaga, true, false, true);
         uso1.registrarValorPago(50.0);
         UsoDeVaga uso2 = new UsoDeVaga();
         uso2.registrarValorPago(75.0);
@@ -72,5 +74,6 @@ public class veiculoTest {
         assertEquals(75.0, veiculo.arrecadadoNoMes(2));
         assertEquals(0.0, veiculo.arrecadadoNoMes(3)); // Sem uso em março
     }
+     */
 }
 

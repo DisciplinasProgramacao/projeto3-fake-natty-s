@@ -1,4 +1,5 @@
 package src;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -22,10 +23,10 @@ public class UsoDeVaga {
 	private boolean polimento;
 
 	/**
-     * Cria uma instância de UsoDeVaga associada a uma vaga específica.
-     * 
-     * @param vaga A vaga de estacionamento utilizada.
-     */
+	 * Cria uma instância de UsoDeVaga associada a uma vaga específica.
+	 * 
+	 * @param vaga A vaga de estacionamento utilizada.
+	 */
 	public UsoDeVaga(Vaga vaga, boolean manobrista, boolean lavagem, boolean polimento) {
 		this.vaga = vaga;
 		this.entrada = LocalDateTime.now();
@@ -35,42 +36,37 @@ public class UsoDeVaga {
 	}
 
 	/**
-     * Registra a saída do cliente da vaga e calcula o valor a ser pago.
+	 * Registra a saída do cliente da vaga e calcula o valor a ser pago.
 	 * 
-     * @param manobrista Informa se o serviço do manobrista foi contratado
-     * @param lavagem Informa se o serviço de lavagem foi contratado
-	 * @param polimento Informa se o serviço do polimento foi contratado
+	 * @param manobrista Informa se o serviço do manobrista foi contratado
+	 * @param lavagem    Informa se o serviço de lavagem foi contratado
+	 * @param polimento  Informa se o serviço do polimento foi contratado
 	 * 
-     * @return O valor a ser pago pelo uso da vaga.
-     */
+	 * @return O valor a ser pago pelo uso da vaga.
+	 */
 	public double sair(boolean manobrista, boolean lavagem, boolean polimento) {
-		if (this.saida == null) {
-			this.saida = LocalDateTime.now();
-			long minutosEstacionado = Duration.between(entrada, saida).toMinutes();
-			double valorAPagar = (minutosEstacionado / 15) * VALOR_FRACAO;
-			valorAPagar = Math.min(valorAPagar, VALOR_MAXIMO);
-			if(manobrista) {
-				valorAPagar += 5.0;
-			}
-			if(lavagem && minutosEstacionado > 59) {
-				valorAPagar += 20.0;
-			}
-			if(polimento && minutosEstacionado > 119) {
-				valorAPagar += 45.0;
-			}
-			this.valorPago = valorAPagar;
-			return valorAPagar;
-		} else {
-			System.out.println("O veículo já saiu da vaga.");
-			return 0.0; 
+		this.saida = LocalDateTime.now();
+		long minutosEstacionado = Duration.between(entrada, saida).toMinutes();
+		double valorAPagar = (minutosEstacionado / 15) * VALOR_FRACAO;
+		valorAPagar = Math.min(valorAPagar, VALOR_MAXIMO);
+		if (manobrista) {
+			valorAPagar += 5.0;
 		}
+		if (lavagem && minutosEstacionado > 59) {
+			valorAPagar += 20.0;
+		}
+		if (polimento && minutosEstacionado > 119) {
+			valorAPagar += 45.0;
+		}
+		this.valorPago = valorAPagar;
+		return valorAPagar;
 	}
-	
+
 	/**
-     * Obtém o valor total pago pelo cliente pelo uso da vaga.
-     * 
-     * @return O valor total pago.
-     */
+	 * Obtém o valor total pago pelo cliente pelo uso da vaga.
+	 * 
+	 * @return O valor total pago.
+	 */
 	public double valorPago() {
 		return valorPago;
 	}

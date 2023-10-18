@@ -1,4 +1,5 @@
 package src;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -11,7 +12,7 @@ public class Cliente {
     public Cliente(String nome, String id) {
         this.nome = nome;
         this.id = id;
-	     this.veiculos = new ArrayList<Veiculo>(); 
+        this.veiculos = new ArrayList<Veiculo>();
     }
 
     public void addVeiculo(Veiculo veiculo) {
@@ -19,15 +20,15 @@ public class Cliente {
     }
 
     public Veiculo possuiVeiculo(String placa) {
-    for (Veiculo veiculo : veiculos) {
-        if (veiculo.getPlaca().equals(placa)) {
-            return veiculo; 
+        for (Veiculo veiculo : veiculos) {
+            if (veiculo.getPlaca().equals(placa)) {
+                return veiculo;
+            }
         }
+        return null;
     }
-    return null; 
-    }
-	
-	public int totalDeUsos() {
+
+    public int totalDeUsos() {
         int total = 0;
         for (Veiculo veiculo : veiculos) {
             total += veiculo.totalDeUsos();
@@ -84,4 +85,3 @@ public class Cliente {
         this.veiculos = veiculos;
     }
 }
-

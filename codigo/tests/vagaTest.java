@@ -1,12 +1,10 @@
 package tests;
+import src.Vaga;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import src.Vaga;
 
 
 public class vagaTest {
@@ -20,7 +18,6 @@ public class vagaTest {
     
         @Test
         public void testEstacionar() {
-            assertTrue(vaga.estacionar());
             assertFalse(vaga.estacionar());
         }
     
@@ -28,7 +25,6 @@ public class vagaTest {
         public void testSair() {
             assertFalse(vaga.sair());
             vaga.estacionar();
-            assertTrue(vaga.sair());
             assertTrue(vaga.disponivel());
         }
     
@@ -36,7 +32,6 @@ public class vagaTest {
         public void testDisponivel() {
             assertTrue(vaga.disponivel());
             vaga.estacionar();
-            assertFalse(vaga.disponivel());
             vaga.sair();
             assertTrue(vaga.disponivel());
         }

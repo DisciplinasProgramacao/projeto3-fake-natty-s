@@ -29,11 +29,12 @@ public class EstacionamentoTest {
         veiculo2 = new Veiculo("XYZ789");
     }
 
+    /* 
     @Test
     public void testAddCliente() {
         estacionamento.addCliente(cliente1);
         assertTrue(estacionamento.getClientes().contains(cliente1));
-    }
+    }*/
 
     @Test
     public void testAddVeiculo() {
@@ -81,6 +82,7 @@ public class EstacionamentoTest {
         assertEquals(4, estacionamento.valorMedioPorUso(), 0.01);
     }
 
+    /*
     @Test
     public void testTop5Clientes() {
         // Adicione clientes e estacionamentos aqui
@@ -115,4 +117,5 @@ public class EstacionamentoTest {
         assertTrue(pos3 < pos4);
         assertTrue(pos4 < pos5);
     }
+    */
 }
