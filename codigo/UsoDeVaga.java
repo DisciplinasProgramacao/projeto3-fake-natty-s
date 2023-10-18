@@ -33,14 +33,19 @@ public class UsoDeVaga {
      * @return O valor a ser pago pelo uso da vaga.
      */
 	public double sair() {
-        this.saida = LocalDateTime.now();
-        long minutosEstacionado = Duration.between(entrada, saida).toMinutes();
-        double valorAPagar = (minutosEstacionado / 15) * VALOR_FRACAO;
-        valorAPagar = Math.min(valorAPagar, VALOR_MAXIMO);
-        this.valorPago = valorAPagar;
-        return valorAPagar;
+		if (this.saida == null) {
+			this.saida = LocalDateTime.now();
+			long minutosEstacionado = Duration.between(entrada, saida).toMinutes();
+			double valorAPagar = (minutosEstacionado / 15) * VALOR_FRACAO;
+			valorAPagar = Math.min(valorAPagar, VALOR_MAXIMO);
+			this.valorPago = valorAPagar;
+			return valorAPagar;
+		} else {
+			System.out.println("O veículo já saiu da vaga.");
+			return 0.0; 
+		}
 	}
-
+	
 	/**
      * Obtém o valor total pago pelo cliente pelo uso da vaga.
      * 

@@ -1,4 +1,5 @@
 
+package tests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,3 +73,4 @@ public class veiculoTest {
         assertEquals(0.0, veiculo.arrecadadoNoMes(3)); // Sem uso em março
     }
 }
+
