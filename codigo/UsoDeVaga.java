@@ -35,7 +35,11 @@ public class UsoDeVaga {
 
 	/**
      * Registra a saída do cliente da vaga e calcula o valor a ser pago.
-     * 
+	 * 
+     * @param manobrista Informa se o serviço do manobrista foi contratado
+     * @param lavagem Informa se o serviço de lavagem foi contratado
+	 * @param polimento Informa se o serviço do polimento foi contratado
+	 * 
      * @return O valor a ser pago pelo uso da vaga.
      */
 	public double sair(boolean manobrista, boolean lavagem, boolean polimento) {
