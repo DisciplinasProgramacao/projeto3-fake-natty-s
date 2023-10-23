@@ -65,37 +65,41 @@ public class Estacionamento {
 	 * 
 	 */
 
-    private void gerarVagas() {
-		
-		int fila = 1;
-		int posicaoLista;
-		for(int i = 0; i <= fileiras; i++){
-
-			for(int j = 0; j <= colunas; j++){
-				posicaoLista = i * j + (j * i - 1);
-				if(vagas.get(posicaoLista) == null){
-					//ATENÇÃO PONGE, MUDAR ESSA MATRIZ PARA A CLASSE VAGA. ISSO AQUI FOI SÓ PRA RODAR :)
-					Vaga vaga = new Vaga("A", 1);
-					vagas.add(vaga);
-				}
+	 private void gerarVagas() {
+		vagas = new ArrayList<>();
+		char filaChar = 'A';
+	
+		for (int fila = 1; fila <= fileiras; fila++) {
+			for (int numero = 1; numero <= colunas; numero++) {
+				String filaString = String.valueOf(filaChar); // Converte char para String
+				Vaga vaga = new Vaga(filaString, numero);
+				vagas.add(vaga);
 			}
-			fila++;
+			filaChar++; // Avança para a próxima letra da fila (B, C, ...)
 		}
-    }
+	}
 
 	/* Encontra vaga disponivel e chama metodo estacionar(placa) desta vaga
 	 * @param String placa
 	 */
 
-    public void estacionar(String placa) {
-        for (Vaga vaga : vagas) { //procura vaga
-            if (vaga.disponivel()) {
-                vaga.estacionar();
-                valorArrecadado += 4; // Adicionar ao valor arrecadado a cada 15 minutos
-                break;
-            }
-        }
-    }
+	 public void estacionar(String placa) {
+		
+		for (Cliente cliente : clientes) {
+			if (cliente.possuiVeiculo(placa) != null) {
+				Veiculo veiculo_cliente = cliente.possuiVeiculo(placa);
+
+				for (Vaga vaga : vagas) { // procura vaga
+					if (vaga.disponivel()) {
+						veiculo_cliente.estacionar(vaga);
+						
+						break;
+					}
+				}
+			}
+		}
+
+	}
 
 	/*
 	 * Encontra cliente por um id e retorna este cliente
