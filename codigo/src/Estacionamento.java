@@ -66,7 +66,7 @@ public class Estacionamento {
 	 */
 
 	 private void gerarVagas() {
-		vagas = new ArrayList<>();
+		
 		char filaChar = 'A';
 	
 		for (int fila = 1; fila <= fileiras; fila++) {
