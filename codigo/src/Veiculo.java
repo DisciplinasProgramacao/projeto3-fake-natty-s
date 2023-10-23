@@ -34,8 +34,8 @@ public class Veiculo {
         for (UsoDeVaga usoDeVaga : usos) {
             if (usoDeVaga.getVaga() == vaga) {
                 veiculoEstacionadoNaVaga = true;
-                //ATENÇÃO AQUI GAARD. TEMOS QUE ANALISAR ESSES PARAMETROS. FOI MIGUE EM
-                double valorPago = usoDeVaga.sair(true, false, true);
+                
+                double valorPago = usoDeVaga.sair();
                 usos.remove(usoDeVaga);
                 return valorPago;
             }
