@@ -3,8 +3,15 @@ import src.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
+
+import src.Veiculo;
+import src.Vaga;
+import src.UsoDeVaga;
+
+import java.time.LocalDateTime;
+
+
 
 public class veiculoTest {
 
@@ -23,12 +30,16 @@ public class veiculoTest {
         assertFalse(vaga.disponivel());
     }
 
+    
+
     @Test
     void testEstacionarNaoDisponivel() {
         vaga.estacionar();
         veiculo.estacionar(vaga);
-        assertTrue(vaga.disponivel()); // A vaga deve continuar ocupada
+        assertFalse(vaga.disponivel()); // A vaga deve continuar ocupada
     }
+
+    
 
     @Test
     void testSair() {
@@ -39,41 +50,56 @@ public class veiculoTest {
 
     @Test
     void testSairNaoEstacionado() {
-        veiculo.sair(vaga);
-        assertTrue(vaga.disponivel()); // A vaga deve continuar disponível
+        // veiculo nao estaciona em nenhuma vaga, logo retorna zero quando chama metodo veiculo.sair();
+
+        assertEquals(0.0, veiculo.sair(vaga)); // A vaga deve continuar disponível
     }
 
 
-    /*
+    
     @Test
     void testTotalArrecadado() {
-        UsoDeVaga uso1 = new UsoDeVaga(vaga, true, false, true);
-        uso1.registrarValorPago(50.0);
-        UsoDeVaga uso2 = new UsoDeVaga();
-        uso2.registrarValorPago(75.0);
+        double total = 0;
 
-        veiculo.adicionarUso(uso1);
-        veiculo.adicionarUso(uso2);
-
-        assertEquals(125.0, veiculo.totalArrecadado());
+        veiculo.estacionar(vaga); // estacionamos diversas vezes e saimos, adicionando o valor da saida a variavel total
+        total += veiculo.sair(vaga);
+        veiculo.estacionar(vaga);
+        total += veiculo.sair(vaga);
+        veiculo.estacionar(vaga);
+        total += veiculo.sair(vaga);
+        
+        assertEquals(total, veiculo.totalArrecadado()); // compara o total com o retorno do metodo totalArrecadada();
     }
 
     @Test
     void testArrecadadoNoMes() {
-        UsoDeVaga uso1 = new UsoDeVaga();
-        uso1.registrarEntrada(LocalDateTime.of(2023, 1, 15, 12, 0));
-        uso1.registrarValorPago(50.0);
-        UsoDeVaga uso2 = new UsoDeVaga();
-        uso2.registrarEntrada(LocalDateTime.of(2023, 2, 10, 15, 0));
-        uso2.registrarValorPago(75.0);
 
-        veiculo.adicionarUso(uso1);
-        veiculo.adicionarUso(uso2);
+        // Cria alguns UsoDeVaga com datas de entrada e saída para um mês específico (por exemplo, mês 3)
+        LocalDateTime entrada1 = LocalDateTime.of(2023, 3, 1, 8, 0);
+        LocalDateTime saida1 = LocalDateTime.of(2023, 3, 1, 10, 0);
+        UsoDeVaga uso1 = new UsoDeVaga(vaga, false, false, false);
+        uso1.setEntrada(entrada1);
+        uso1.setSaida(saida1);
 
-        assertEquals(50.0, veiculo.arrecadadoNoMes(1));
-        assertEquals(75.0, veiculo.arrecadadoNoMes(2));
-        assertEquals(0.0, veiculo.arrecadadoNoMes(3)); // Sem uso em março
+        // Cria alguns UsoDeVaga com datas de entrada e saída para um mês específico (por exemplo, mês 3)
+        LocalDateTime entrada2 = LocalDateTime.of(2023, 3, 2, 9, 0);
+        LocalDateTime saida2 = LocalDateTime.of(2023, 3, 2, 12, 0);
+        UsoDeVaga uso2 = new UsoDeVaga(vaga, false, false, false);
+        uso2.setEntrada(entrada2);
+        uso2.setSaida(saida2);
+
+        // Adicione os Usos de Vaga ao Veiculo
+        veiculo.getUsos().add(uso1);
+        veiculo.getUsos().add(uso2);
+
+        // Verifique se o método totalArrecadadoNoMes() retorna o valor esperado para o mês 3
+        double totalArrecadadoNoMes = veiculo.arrecadadoNoMes(3);
+        assertEquals(10.0, totalArrecadadoNoMes); // O valor total esperado para o mês 3 é 10.0
     }
-     */
 }
+
+
+
+
+
 
