@@ -71,9 +71,16 @@ public class Estacionamento {
 	
 		for (int fila = 1; fila <= fileiras; fila++) {
 			for (int numero = 1; numero <= colunas; numero++) {
-				String filaString = String.valueOf(filaChar); // Converte char para String
-				Vaga vaga = new Vaga(filaString, numero);
-				vagas.add(vaga);
+				
+				int index_vaga = numero + (colunas * (fila - 1)); //pega a posição da lista em que esta
+
+				if(vagas.get(index_vaga) == null){
+					String filaString = String.valueOf(filaChar); // Converte char para String
+					Vaga vaga = new Vaga(filaString, numero);
+					vagas.add(vaga);
+					return;
+				}
+				
 			}
 			filaChar++; // Avança para a próxima letra da fila (B, C, ...)
 		}
