@@ -1,15 +1,16 @@
 package src;
 
 import java.util.List;
-
 import src.Exceptions.ExcecaoAddArray;
-
+import java.io.Serializable;
 import java.util.ArrayList;
+import src.ManipuladorDeArquivo;
+
 
 /**
  * Classe que representa um cliente e seus veículos.
  */
-public class Cliente {
+public class Cliente implements Serializable {
 
     private String nome;
     private String id;

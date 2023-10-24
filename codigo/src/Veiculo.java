@@ -1,14 +1,14 @@
 package src;
 
 import java.util.List;
-
 import src.Exceptions.ExcecaoEstacionarSemSair;
 import src.Exceptions.ExcecaoSairFinalizada;
-
 import java.time.LocalDateTime;
+import java.io.Serializable;
 import java.util.ArrayList;
+import src.ManipuladorDeArquivo;
 
-public class Veiculo {
+public class Veiculo implements Serializable {
 
     private String placa;
     private List<UsoDeVaga> usos;

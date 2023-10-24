@@ -1,5 +1,7 @@
 package src;
 
+import java.io.Serializable;
+import src.ManipuladorDeArquivo;
 
 //Classe estacionamento - Gabriel Pongelupe e Felipe Picinin
 
@@ -7,12 +9,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-
 import src.Exceptions.ExcecaoCadastrarVeiculoExistente;
 import src.Exceptions.ExcecaoClientejaExistente;
 import src.Exceptions.ExcecaoEstacionarSemSair;
 
-public class Estacionamento {
+public class Estacionamento implements Serializable {
 
     private String nome;
     private List<Cliente> clientes;
