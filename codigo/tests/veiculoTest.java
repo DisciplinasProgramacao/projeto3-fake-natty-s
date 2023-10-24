@@ -78,14 +78,14 @@ public class veiculoTest {
         // Cria alguns UsoDeVaga com datas de entrada e saída para um mês específico (por exemplo, mês 3)
         LocalDateTime entrada1 = LocalDateTime.of(2023, 3, 1, 8, 0);
         LocalDateTime saida1 = LocalDateTime.of(2023, 3, 1, 10, 0);
-        UsoDeVaga uso1 = new UsoDeVaga(vaga, false, false, false);
+        UsoDeVaga uso1 = new UsoDeVaga(vaga);
         uso1.setEntrada(entrada1);
         uso1.setSaida(saida1);
 
         // Cria alguns UsoDeVaga com datas de entrada e saída para um mês específico (por exemplo, mês 3)
         LocalDateTime entrada2 = LocalDateTime.of(2023, 3, 2, 9, 0);
         LocalDateTime saida2 = LocalDateTime.of(2023, 3, 2, 12, 0);
-        UsoDeVaga uso2 = new UsoDeVaga(vaga, false, false, false);
+        UsoDeVaga uso2 = new UsoDeVaga(vaga);
         uso2.setEntrada(entrada2);
         uso2.setSaida(saida2);
 
