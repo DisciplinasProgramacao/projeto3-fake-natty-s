@@ -1,6 +1,9 @@
 package src;
 
 import java.util.List;
+
+import src.Exceptions.ExcecaoAddArray;
+
 import java.util.ArrayList;
 
 /**

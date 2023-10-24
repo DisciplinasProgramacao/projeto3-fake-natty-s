@@ -1,5 +1,11 @@
 package src;
+
 import java.util.List;
+
+import src.Exceptions.ExcecaoEstacionarSemSair;
+import src.Exceptions.ExcecaoSairFinalizada;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Veiculo {
@@ -14,42 +20,60 @@ public class Veiculo {
 
     /**
      * Estaciona o veículo em uma vaga, se a vaga estiver disponível.
+     * 
      * @param vaga A vaga onde o veículo deve estacionar.
      */
-    public void estacionar(Vaga vaga) {
-        if (vaga.disponivel()) {
-            vaga.estacionar();
-        } else {
-            System.out.println("A vaga não está disponível.");
+    public void estacionar(Vaga vaga) throws ExcecaoEstacionarSemSair {
+        for (UsoDeVaga usoDeVaga : usos) {
+
+            if (!usoDeVaga.getSaida().isBefore(LocalDateTime.now()) || usoDeVaga.getSaida() == null) {
+                throw new ExcecaoEstacionarSemSair(usoDeVaga.getVaga());
+            } else {
+                if (vaga.disponivel()) {
+                    vaga.estacionar();
+                } else {
+                    System.out.println("A vaga não está disponível.");
+                }
+            }
+
         }
+
     }
 
     /**
      * Registra a saída do veículo de uma vaga e calcula o valor a ser pago.
+     * 
      * @param vaga A vaga da qual o veículo está saindo.
      * @return O valor a ser pago pelo uso da vaga.
      */
-    public double sair(Vaga vaga) {
+    public double sair(Vaga vaga) throws ExcecaoSairFinalizada {
         boolean veiculoEstacionadoNaVaga = false;
         for (UsoDeVaga usoDeVaga : usos) {
             if (usoDeVaga.getVaga() == vaga) {
-                veiculoEstacionadoNaVaga = true;
-                
-                double valorPago = usoDeVaga.sair();
-                usos.remove(usoDeVaga);
-                return valorPago;
+                if (usoDeVaga.getSaida().isBefore(LocalDateTime.now())) {
+                    throw new ExcecaoSairFinalizada(vaga);
+                } else {
+                    veiculoEstacionadoNaVaga = true;
+
+                    double valorPago = usoDeVaga.sair();
+
+                    return valorPago;
+                }
+
             }
         }
-        
+
         if (!veiculoEstacionadoNaVaga) {
             System.out.println("O veículo não está estacionado na vaga.");
         }
-        
+
         return 0.0;
     }
 
     /**
-     * Calcula o valor total arrecadado pela empresa de estacionamento com este veículo.
+     * Calcula o valor total arrecadado pela empresa de estacionamento com este
+     * veículo.
+     * 
      * @return O valor total arrecadado.
      */
     public double totalArrecadado() {
@@ -61,7 +85,9 @@ public class Veiculo {
     }
 
     /**
-     * Calcula o valor arrecadado pela empresa de estacionamento com este veículo em um mês específico.
+     * Calcula o valor arrecadado pela empresa de estacionamento com este veículo em
+     * um mês específico.
+     * 
      * @param mes O mês para o qual o valor arrecadado deve ser calculado.
      * @return O valor arrecadado no mês especificado.
      */
@@ -77,6 +103,7 @@ public class Veiculo {
 
     /**
      * Obtém o número total de usos de vaga feitos por este veículo.
+     * 
      * @return O número total de usos de vaga.
      */
     public int totalDeUsos() {
