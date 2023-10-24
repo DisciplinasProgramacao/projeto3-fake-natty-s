@@ -29,12 +29,14 @@ public class Vaga implements Serializable {
 	 * @return true se ele pode estacionar ou false se ele não pode estacionar
 	 */	
 
-	public boolean estacionar() {
-		if (!disponivel) {
+	public boolean estacionar()  {
+		if (disponivel) {
 			disponivel = false;
 			return true;
 		} else {
+			
 			return false;
+			
 		}
 	}
 
@@ -54,6 +56,10 @@ public class Vaga implements Serializable {
 
 	}
 
+	public String getPosicao(){
+		return this.fila + numero;
+	}
+
 /**
 	 * Verifica se esta disponivel
 	 *
@@ -64,5 +70,7 @@ public class Vaga implements Serializable {
 		return disponivel;
 
 	}
+
+	
 
 }
