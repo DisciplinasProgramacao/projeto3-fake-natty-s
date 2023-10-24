@@ -1,5 +1,6 @@
 package tests;
 
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,6 +36,7 @@ public class veiculoTest {
     void testEstacionarNaoDisponivel() {
         vaga.estacionar();
         veiculo.estacionar(vaga);
+        veiculo.sair(vaga);
         assertFalse(vaga.disponivel()); // A vaga deve continuar ocupada
     }
 
@@ -92,13 +94,7 @@ public class veiculoTest {
         veiculo.getUsos().add(uso2);
 
         // Verifique se o método totalArrecadadoNoMes() retorna o valor esperado para o mês 3
-        double totalArrecadadoNoMes = veiculo.arrecadadoNoMes(3);
-        assertEquals(10.0, totalArrecadadoNoMes); // O valor total esperado para o mês 3 é 10.0
+        
+        assertEquals(10.0, veiculo.arrecadadoNoMes(3)); // O valor total esperado para o mês 3 é 10.0
     }
 }
-
-
-
-
-
-
