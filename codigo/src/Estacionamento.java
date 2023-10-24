@@ -8,6 +8,10 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+import src.Exceptions.ExcecaoCadastrarVeiculoExistente;
+import src.Exceptions.ExcecaoClientejaExistente;
+import src.Exceptions.ExcecaoEstacionarSemSair;
+
 public class Estacionamento {
 
     private String nome;
@@ -43,11 +47,17 @@ public class Estacionamento {
 	 * Adiciona veiculo a um cliente (faz a verificação se aql cliente existe cadastrado e 
 	 * chama o medoto addVeiculo(veiculo) do cliente especifico)
 	 */
-    public void addVeiculo(Veiculo veiculo, String idCli) {
+    public void addVeiculo(Veiculo veiculo, String idCli) throws ExcecaoCadastrarVeiculoExistente{
         Cliente cliente = encontrarClientePorId(idCli);
-        if (cliente != null) {
-            cliente.addVeiculo(veiculo);
-        }
+		List<Veiculo> veiculos = cliente.getVeiculos();
+
+		if(veiculos.contains(veiculo)){
+			throw new ExcecaoCadastrarVeiculoExistente(veiculo);
+		}else{
+			cliente.addVeiculo(veiculo);
+		}
+		
+        
     }
 
 	/*
@@ -55,8 +65,14 @@ public class Estacionamento {
 	  @param cliente: Cliente
 	 */
 
-    public void addCliente(Cliente cliente) {
-        clientes.add(cliente);
+    public void addCliente(Cliente cliente) throws ExcecaoClientejaExistente {
+
+        if(clientes.contains(cliente)){
+            throw new ExcecaoClientejaExistente(cliente);
+        }
+        else{
+        	clientes.add(cliente);
+        }
     }
 
 
@@ -90,15 +106,15 @@ public class Estacionamento {
 	 * @param String placa
 	 */
 
-	 public void estacionar(String placa) {
+	 public void estacionar(String placa) throws ExcecaoEstacionarSemSair{
 		
 		for (Cliente cliente : clientes) {
 			if (cliente.possuiVeiculo(placa) != null) {
-				Veiculo veiculo_cliente = cliente.possuiVeiculo(placa);
+				Veiculo veiculo = cliente.possuiVeiculo(placa);
 
 				for (Vaga vaga : vagas) { // procura vaga
 					if (vaga.disponivel()) {
-						veiculo_cliente.estacionar(vaga);
+						veiculo.estacionar(vaga);
 						
 						break;
 					}

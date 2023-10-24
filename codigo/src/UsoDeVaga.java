@@ -37,9 +37,18 @@ public class UsoDeVaga {
 	 * 
 	 * @return O valor a ser pago pelo uso da vaga.
 	 */
-	public double sair() {
+	public double sair() throws RuntimeException{
 		this.saida = LocalDateTime.now();
 		long minutosEstacionado = Duration.between(entrada, saida).toMinutes();
+	
+		for (ServicosAdicionais servico : servicosAdicionais) {
+			if (servico == ServicosAdicionais.POLIMENTO && minutosEstacionado < 120) {
+				throw new RuntimeException("Tempo mínimo de permanência para polimento não atendido.");
+			} else if (servico == ServicosAdicionais.LAVAGEM && minutosEstacionado < 60) {
+				throw new RuntimeException("Tempo mínimo de permanência para lavagem não atendido.");
+			}
+		}
+
 		double valorAPagar = (minutosEstacionado / 15) * VALOR_FRACAO;
 		valorAPagar = Math.min(valorAPagar, VALOR_MAXIMO);
 	
@@ -48,7 +57,7 @@ public class UsoDeVaga {
 				.mapToDouble(ServicosAdicionais::getValor)
 				.sum();
 	
-		valorAPagar += valorServicosAdicionais; // Adiciona o valor dos serviços ao valor total
+		valorAPagar += valorServicosAdicionais;
 	
 		this.valorPago = valorAPagar;
 		return valorAPagar;

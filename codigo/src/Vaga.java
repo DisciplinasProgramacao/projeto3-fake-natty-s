@@ -2,6 +2,8 @@ package src;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 public class Vaga {
 
 	private String fila;
@@ -27,12 +29,14 @@ public class Vaga {
 	 * @return true se ele pode estacionar ou false se ele não pode estacionar
 	 */	
 
-	public boolean estacionar() {
-		if (!disponivel) {
+	public boolean estacionar()  {
+		if (disponivel) {
 			disponivel = false;
 			return true;
 		} else {
+			
 			return false;
+			
 		}
 	}
 
@@ -52,6 +56,10 @@ public class Vaga {
 
 	}
 
+	public String getPosicao(){
+		return this.fila + numero;
+	}
+
 /**
 	 * Verifica se esta disponivel
 	 *
@@ -62,5 +70,7 @@ public class Vaga {
 		return disponivel;
 
 	}
+
+	
 
 }
