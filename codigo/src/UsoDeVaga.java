@@ -1,9 +1,11 @@
 package src;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import src.ManipuladorDeArquivo;
 
 /**
  * Classe que representa o uso de uma vaga de estacionamento.
@@ -11,7 +13,7 @@ import java.util.List;
  * Esta classe permite registrar a entrada, saída e cálculo do valor pago por um
  * cliente ao utilizar uma vaga de estacionamento.
  */
-public class UsoDeVaga {
+public class UsoDeVaga implements Serializable {
 
 	private static final double VALOR_FRACAO = 4.0;
 	private static final double VALOR_MAXIMO = 50.0;

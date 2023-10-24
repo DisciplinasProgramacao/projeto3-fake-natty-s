@@ -1,9 +1,11 @@
 package src;
 
 import java.util.List;
+import java.io.Serializable;
 import java.util.ArrayList;
+import src.ManipuladorDeArquivo;
 
-public class Cliente {
+public class Cliente implements Serializable {
 
     private String nome;
     private String id;
