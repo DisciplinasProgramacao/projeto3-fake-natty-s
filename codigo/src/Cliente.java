@@ -106,7 +106,18 @@ public class Cliente {
         return arrecadadoMes;
     }
 
-    
+    /**
+     * Obtém o histórico de usos de todas as vagas de estacionamento deste cliente.
+     * 
+     * @return Uma lista de usos de vaga do cliente.
+    */
+    public List<UsoDeVaga> obterHistoricoDeUsos() {
+        List<UsoDeVaga> historico = new ArrayList<>();
+        for (Veiculo veiculo : veiculos) {
+            historico.addAll(veiculo.getUsos());
+        }
+        return historico;
+    }
 
     /**
      * Obtém o nome do cliente.
