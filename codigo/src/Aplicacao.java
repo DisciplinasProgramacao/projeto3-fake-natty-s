@@ -18,9 +18,7 @@ public class Aplicacao {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-                
-            selecionarEstacionamento();
-
+    
             System.out.println("Menu Principal do Estacionamento:");
             System.out.println("1. Menu Estacionamento");
             System.out.println("2. Menu Cliente");

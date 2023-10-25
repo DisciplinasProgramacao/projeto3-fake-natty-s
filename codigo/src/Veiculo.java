@@ -4,7 +4,6 @@ import java.util.List;
 import src.Exceptions.ExcecaoEstacionarSemSair;
 import src.Exceptions.ExcecaoSairFinalizada;
 import java.time.LocalDateTime;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Veiculo {
