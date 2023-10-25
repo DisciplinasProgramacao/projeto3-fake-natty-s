@@ -1,14 +1,13 @@
 package src;
 
 import java.util.List;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 
 /**
  * Classe que representa um cliente e seus veículos.
  */
-public class Cliente implements Serializable {
+public class Cliente {
 
     private String nome;
     private String id;
@@ -105,6 +104,19 @@ public class Cliente implements Serializable {
             arrecadadoMes += veiculo.arrecadadoNoMes(mes);
         }
         return arrecadadoMes;
+    }
+
+    /**
+     * Obtém o histórico de usos de todas as vagas de estacionamento deste cliente.
+     * 
+     * @return Uma lista de usos de vaga do cliente.
+    */
+    public List<UsoDeVaga> obterHistoricoDeUsos() {
+        List<UsoDeVaga> historico = new ArrayList<>();
+        for (Veiculo veiculo : veiculos) {
+            historico.addAll(veiculo.getUsos());
+        }
+        return historico;
     }
 
     /**

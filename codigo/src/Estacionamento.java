@@ -7,11 +7,13 @@ import src.ManipuladorDeArquivo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import src.Exceptions.ExcecaoCadastrarVeiculoExistente;
 import src.Exceptions.ExcecaoClientejaExistente;
 import src.Exceptions.ExcecaoEstacionarSemSair;
+import src.Exceptions.ExcecaoSairFinalizada;
 import src.UsoDeVaga;
 
 public class Estacionamento implements Serializable {
@@ -151,11 +153,18 @@ public class Estacionamento implements Serializable {
 	 * 
 	 * @param placa A placa do veículo que deseja sair.
 	 */
-	public void sair(String placa) {
+	public void sair(String placa) throws ExcecaoSairFinalizada {
 		for (Cliente cliente : clientes) {
 			if (cliente.possuiVeiculo(placa) != null) {
 				Veiculo veiculo = cliente.possuiVeiculo(placa);
+
 				int size = veiculo.getUsos();
+
+				for (UsoDeVaga uso : veiculo.getUsos()) {
+					if (uso.getSaida() == null) {
+						veiculo.sair(uso.getVaga());
+					}
+				}
 			}
 
 		}
