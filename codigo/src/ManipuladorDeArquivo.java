@@ -17,16 +17,11 @@ public class ManipuladorDeArquivo {
         }
     }
 
-    public static <T extends Serializable> T lerObjeto(String nomeArquivo, Class<T> classeDoObjeto) {
+    public static <T extends Serializable> T lerObjeto(String nomeArquivo) {
         T objeto = null;
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(nomeArquivo))) {
-            Object obj = inputStream.readObject();
-            if (classeDoObjeto.isInstance(obj)) {
-                objeto = classeDoObjeto.cast(obj);
-            } else {
-                throw new ClassCastException("O objeto lido não é do tipo esperado.");
-            }
-        } catch (IOException | ClassNotFoundException | ClassCastException e) {
+
+        } catch (IOException | ClassCastException e) {
             System.err.println("Erro ao ler o objeto de " + nomeArquivo + ": " + e.getMessage());
         }
         return objeto;
