@@ -155,11 +155,7 @@ public class Estacionamento implements Serializable {
 		for (Cliente cliente : clientes) {
 			if (cliente.possuiVeiculo(placa) != null) {
 				Veiculo veiculo = cliente.possuiVeiculo(placa);
-				for (UsoDeVaga uso : veiculo.getUsos()) {
-					if (usoDeVaga.getSaida() == null) {
-						veiculo.sair(uso.getVaga);
-					}
-				}
+				int size = veiculo.getUsos();
 			}
 
 		}
@@ -257,4 +253,9 @@ public class Estacionamento implements Serializable {
 	public void setcoluna(int colunas) {
 		this.colunas = colunas;
 	}
+
+	public List<Cliente> getClientes() {
+    return clientes;
+}
+	
 }

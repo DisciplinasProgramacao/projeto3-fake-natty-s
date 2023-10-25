@@ -1,10 +1,8 @@
 package src;
 
 import java.util.List;
-import src.Exceptions.ExcecaoAddArray;
 import java.io.Serializable;
 import java.util.ArrayList;
-import src.ManipuladorDeArquivo;
 
 
 /**
