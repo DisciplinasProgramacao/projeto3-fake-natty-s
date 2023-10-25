@@ -6,9 +6,8 @@ import src.Exceptions.ExcecaoSairFinalizada;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 import java.util.ArrayList;
-import src.ManipuladorDeArquivo;
 
-public class Veiculo implements Serializable {
+public class Veiculo {
 
     private String placa;
     private List<UsoDeVaga> usos;

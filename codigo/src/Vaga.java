@@ -1,10 +1,8 @@
 package src;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import src.ManipuladorDeArquivo;
 
-public class Vaga implements Serializable {
+public class Vaga {
 
 	private String fila;
 	private int numero;
