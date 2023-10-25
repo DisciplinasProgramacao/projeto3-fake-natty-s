@@ -106,6 +106,8 @@ public class Cliente {
         return arrecadadoMes;
     }
 
+    
+
     /**
      * Obtém o nome do cliente.
      * 
