@@ -48,6 +48,7 @@ public class Veiculo implements Serializable{
      */
     public double sair(Vaga vaga) throws ExcecaoSairFinalizada {
         boolean veiculoEstacionadoNaVaga = false;
+        double valorPago = 0.0;
         for (UsoDeVaga usoDeVaga : usos) {
             if (usoDeVaga.getVaga() == vaga) {
                 if (usoDeVaga.getSaida().isBefore(LocalDateTime.now())) {
@@ -55,12 +56,13 @@ public class Veiculo implements Serializable{
                 } else {
                     veiculoEstacionadoNaVaga = true;
 
-                    double valorPago = usoDeVaga.sair();
+                    valorPago = usoDeVaga.sair();
 
                     return valorPago;
                 }
 
             }
+            return valorPago;
         }
 
         if (!veiculoEstacionadoNaVaga) {
