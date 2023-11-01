@@ -2,6 +2,7 @@ package src;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -9,7 +10,7 @@ import java.util.Comparator;
 /**
  * Classe que representa um cliente e seus veículos.
  */
-public class Cliente {
+public class Cliente implements Serializable {
 
     private String nome;
     private String id;

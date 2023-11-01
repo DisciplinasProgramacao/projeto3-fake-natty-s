@@ -3,10 +3,12 @@ package src;
 import java.util.List;
 import src.Exceptions.ExcecaoEstacionarSemSair;
 import src.Exceptions.ExcecaoSairFinalizada;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class Veiculo {
+public class Veiculo implements Serializable{
 
     private String placa;
     private List<UsoDeVaga> usos;
