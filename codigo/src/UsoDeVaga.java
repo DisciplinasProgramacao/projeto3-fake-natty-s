@@ -5,7 +5,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import src.ManipuladorDeArquivo;
 
 /**
  * Classe que representa o uso de uma vaga de estacionamento.

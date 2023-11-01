@@ -1,11 +1,8 @@
 package src;
 
 import java.util.List;
-import src.Exceptions.ExcecaoAddArray;
 import java.io.Serializable;
 import java.util.ArrayList;
-import src.ManipuladorDeArquivo;
-
 
 /**
  * Classe que representa um cliente e seus veículos.
@@ -26,7 +23,7 @@ public class Cliente implements Serializable {
     public Cliente(String nome, String id) {
         this.nome = nome;
         this.id = id;
-        this.veiculos = new ArrayList<Veiculo>();
+        //this.veiculos = new ArrayList<Veiculo>();
     }
 
     /**

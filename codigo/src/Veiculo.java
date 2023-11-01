@@ -6,7 +6,6 @@ import src.Exceptions.ExcecaoSairFinalizada;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 import java.util.ArrayList;
-import src.ManipuladorDeArquivo;
 
 public class Veiculo implements Serializable {
 

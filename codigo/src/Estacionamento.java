@@ -9,23 +9,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import src.Exceptions.ExcecaoCadastrarVeiculoExistente;
-import src.Exceptions.ExcecaoClientejaExistente;
-import src.Exceptions.ExcecaoEstacionarSemSair;
+import src.Exceptions.*;
 
 public class Estacionamento implements Serializable {
 
     private String nome;
-    private List<Cliente> clientes;
+	private List<Cliente> clientes;
     private List<Vaga> vagas;
     private int fileiras;
     private int colunas;
     private double valorArrecadado;
     private int valorTotal;
-	  private int valorMes;
-	  private int valorUso;
-
-
+	private int valorMes;
+	private int valorUso;
 
 	/*Construtor Estacionamento
 	 * @param nome, fileiras, vagasPorFila
@@ -36,10 +32,10 @@ public class Estacionamento implements Serializable {
         this.colunas = vagasPorFila;
         this.clientes = new ArrayList<>();
         this.vagas = new ArrayList<>();
-        this.valorArrecadado = 0;
+        this.valorArrecadado = 0; 
         this.valorTotal = 0;
-		    this.valorMes = 0;
-		    this.valorUso = 0;
+		this.valorMes = 0;
+		this.valorUso = 0;
         gerarVagas();
     }
 
@@ -192,9 +188,10 @@ public class Estacionamento implements Serializable {
 
     return top5.toString();
 	}
-
-
 	
+    public String getNome() {
+		return nome;
+	}
 
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -203,8 +200,6 @@ public class Estacionamento implements Serializable {
 	public void setQuantFileiras(int fileiras) {
 		this.fileiras = fileiras;
 	}
-
-	
 
 	public void setcoluna(int colunas) {
 		this.colunas = colunas;
