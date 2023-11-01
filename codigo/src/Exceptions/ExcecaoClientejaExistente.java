@@ -1,5 +1,5 @@
 package src.Exceptions;
-
+// Exception cliente ja existente
 import src.Cliente;
 
 public class ExcecaoClientejaExistente extends Exception{
