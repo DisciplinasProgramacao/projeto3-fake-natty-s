@@ -32,7 +32,7 @@ public class Veiculo {
                 if (vaga.disponivel()) {
                     vaga.estacionar();
                 } else {
-                    System.out.println("A vaga não está disponível.");
+                    throw new ExcecaoEstacionarSemSair(usoDeVaga.getVaga());
                 }
             }
 
