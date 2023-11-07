@@ -129,7 +129,7 @@ public class Estacionamento {
 	 * @param String idCli
 	 */
 
-    private Cliente encontrarClientePorId(String idCli) {
+    public Cliente encontrarClientePorId(String idCli) {
         for (Cliente cliente : clientes) {
             if (cliente.getId().equals(idCli)) {
                 return cliente;
