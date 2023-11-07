@@ -1,15 +1,16 @@
 package src;
 
 import java.util.List;
-
-import src.Exceptions.ExcecaoAddArray;
-
+import java.util.stream.Collectors;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
+
 
 /**
  * Classe que representa um cliente e seus veículos.
  */
-public class Cliente {
+public class Cliente implements Serializable {
 
     private String nome;
     private String id;
@@ -109,6 +110,87 @@ public class Cliente {
     }
 
     /**
+     * Obtém o histórico de usos de todas as vagas de estacionamento deste cliente.
+     * 
+     * @return Uma lista de usos de vaga do cliente.
+    */
+    public List<UsoDeVaga> obterHistoricoDeUsos() {
+        List<UsoDeVaga> historico = new ArrayList<>();
+        for (Veiculo veiculo : veiculos) {
+            historico.addAll(veiculo.getUsos());
+        }
+        return historico;
+    }
+
+
+   /**
+     * Adiciona uma lista de veículos à lista de veículos do cliente.
+     * 
+     * @param novosVeiculos Lista de veículos a serem adicionados.
+     */
+    public void adicionarVeiculos(List<Veiculo> novosVeiculos) {
+        veiculos.addAll(novosVeiculos);
+    }
+
+    /**
+     * Remove um veículo da lista de veículos do cliente com a placa especificada.
+     * 
+     * @param placa Placa do veículo a ser removido.
+     */
+    public void removerVeiculo(String placa) {
+        veiculos.removeIf(veiculo -> veiculo.getPlaca().equals(placa));
+    }
+
+    /**
+     * Busca e retorna uma lista de veículos com a placa especificada.
+     * 
+     * @param placa Placa do veículo a ser buscado.
+     * @return      Lista de veículos com a placa especificada.
+     */
+    public List<Veiculo> buscarVeiculosPorPlaca(String placa) {
+        return veiculos.stream()
+                .filter(veiculo -> veiculo.getPlaca().equalsIgnoreCase(placa))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Ordena os veículos com base no total de usos de forma decrescente.
+     * 
+     * @return Lista de veículos ordenados por total de usos.
+     */
+    public List<Veiculo> ordenarVeiculosPorTotalDeUso() {
+        return veiculos.stream()
+                .sorted(Comparator.comparing(Veiculo::totalDeUsos).reversed())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Busca e retorna uma lista de veículos com arrecadação no mês especificado.
+     * 
+     * @param mes Mês para o qual a arrecadação será verificada.
+     * @return    Lista de veículos com arrecadação no mês especificado.
+     */
+    public List<Veiculo> buscarVeiculosPorArrecadadoMes(int mes) {
+        return veiculos.stream()
+                .filter(veiculo -> veiculo.arrecadadoNoMes(mes) > 0)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Altera a placa de um veículo de uma placa antiga para uma nova placa.
+     * 
+     * @param placaAntiga Placa antiga a ser alterada.
+     * @param novaPlaca   Nova placa a ser atribuída ao veículo.
+     */
+    public void alterarPlacaDoVeiculo(String placaAntiga, String novaPlaca) {
+        for (Veiculo veiculo : veiculos) {
+            if (veiculo.getPlaca().equals(placaAntiga)) {
+                veiculo.setPlaca(novaPlaca);
+                break; 
+            }
+        }
+    }
+    /**
      * Obtém o nome do cliente.
      * 
      * @return O nome do cliente.
@@ -149,10 +231,10 @@ public class Cliente {
      * 
      * @return A lista de veículos do cliente.
      */
-    public ArrayList<Veiculo> getVeiculos() {
-        return (ArrayList<Veiculo>) veiculos;
+    public List<Veiculo> getVeiculos() {
+        return veiculos;
     }
-
+    
     /**
      * Define a lista de veículos do cliente.
      * 

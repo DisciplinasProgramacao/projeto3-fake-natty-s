@@ -1,113 +1,118 @@
 package src;
 
+import java.io.Serializable;
+import src.ManipuladorDeArquivo;
 
 //Classe estacionamento - Gabriel Pongelupe e Felipe Picinin
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import src.Exceptions.ExcecaoCadastrarVeiculoExistente;
 import src.Exceptions.ExcecaoClientejaExistente;
 import src.Exceptions.ExcecaoEstacionarSemSair;
+import src.Exceptions.ExcecaoSairFinalizada;
+import src.UsoDeVaga;
 
-public class Estacionamento {
+public class Estacionamento implements Serializable {
 
-    private String nome;
-    private List<Cliente> clientes;
-    private List<Vaga> vagas;
-    private int fileiras;
-    private int colunas;
-    private double valorArrecadado;
-    private int valorTotal;
-	  private int valorMes;
-	  private int valorUso;
-
-
-
-	/*Construtor Estacionamento
-	 * @param nome, fileiras, vagasPorFila
-	 */
-    public Estacionamento(String nome, int fileiras, int vagasPorFila) {
-        this.nome = nome;
-        this.fileiras = fileiras;
-        this.colunas = vagasPorFila;
-        this.clientes = new ArrayList<>();
-        this.vagas = new ArrayList<>();
-        this.valorArrecadado = 0;
-        this.valorTotal = 0;
-		    this.valorMes = 0;
-		    this.valorUso = 0;
-        gerarVagas();
-    }
-
+	private String nome;
+	private List<Cliente> clientes;
+	private List<Vaga> vagas;
+	private int fileiras;
+	private int colunas;
+	private double valorArrecadado;
+	private int valorTotal;
+	private int valorMes;
+	private int valorUso;
 
 	/*
-	 * Adiciona veiculo a um cliente (faz a verificação se aql cliente existe cadastrado e 
+	 * Construtor Estacionamento
+	 * 
+	 * @param nome, fileiras, vagasPorFila
+	 */
+	public Estacionamento(String nome, int fileiras, int vagasPorFila) {
+		this.nome = nome;
+		this.fileiras = fileiras;
+		this.colunas = vagasPorFila;
+		this.clientes = new ArrayList<>();
+		this.vagas = new ArrayList<>();
+		this.valorArrecadado = 0;
+		this.valorTotal = 0;
+		this.valorMes = 0;
+		this.valorUso = 0;
+		gerarVagas();
+	}
+
+	/*
+	 * Adiciona veiculo a um cliente (faz a verificação se aql cliente existe
+	 * cadastrado e
 	 * chama o medoto addVeiculo(veiculo) do cliente especifico)
 	 */
-    public void addVeiculo(Veiculo veiculo, String idCli) throws ExcecaoCadastrarVeiculoExistente{
-        Cliente cliente = encontrarClientePorId(idCli);
+	public void addVeiculo(Veiculo veiculo, String idCli) throws ExcecaoCadastrarVeiculoExistente {
+		Cliente cliente = encontrarClientePorId(idCli);
 		List<Veiculo> veiculos = cliente.getVeiculos();
 
-		if(veiculos.contains(veiculo)){
+		if (veiculos.contains(veiculo)) {
 			throw new ExcecaoCadastrarVeiculoExistente(veiculo);
-		}else{
+		} else {
 			cliente.addVeiculo(veiculo);
 		}
-		
-        
-    }
+
+	}
 
 	/*
 	 * Adiciona cliente na lista de clientes do estacionamento,
-	  @param cliente: Cliente
+	 * 
+	 * @param cliente: Cliente
 	 */
 
-    public void addCliente(Cliente cliente) throws ExcecaoClientejaExistente {
+	public void addCliente(Cliente cliente) throws ExcecaoClientejaExistente {
 
-        if(clientes.contains(cliente)){
-            throw new ExcecaoClientejaExistente(cliente);
-        }
-        else{
-        	clientes.add(cliente);
-        }
-    }
+		if (clientes.contains(cliente)) {
+			throw new ExcecaoClientejaExistente(cliente);
+		} else {
+			clientes.add(cliente);
+		}
+	}
 
-
-	/*Faz a verificação de vagas e fileiras e 
+	/*
+	 * Faz a verificação de vagas e fileiras e
 	 * adiciona uma vaga na lista de vagas
 	 * 
 	 */
 
-	 private void gerarVagas() {
-		
+	private void gerarVagas() {
+
 		char filaChar = 'A';
-	
+
 		for (int fila = 1; fila <= fileiras; fila++) {
 			for (int numero = 1; numero <= colunas; numero++) {
-				
-				int index_vaga = numero + (colunas * (fila - 1)); //pega a posição da lista em que esta
 
-				if(vagas.get(index_vaga) == null){
+				int index_vaga = numero + (colunas * (fila - 1)); // pega a posição da lista em que esta
+
+				if (vagas.get(index_vaga) == null) {
 					String filaString = String.valueOf(filaChar); // Converte char para String
 					Vaga vaga = new Vaga(filaString, numero);
 					vagas.add(vaga);
 					return;
 				}
-				
+
 			}
 			filaChar++; // Avança para a próxima letra da fila (B, C, ...)
 		}
 	}
 
-	/* Encontra vaga disponivel e chama metodo estacionar(placa) desta vaga
+	/*
+	 * Encontra vaga disponivel e chama metodo estacionar(placa) desta vaga
+	 * 
 	 * @param String placa
 	 */
 
-	 public void estacionar(String placa) throws ExcecaoEstacionarSemSair{
-		
+	public void estacionar(String placa) throws ExcecaoEstacionarSemSair {
+
 		for (Cliente cliente : clientes) {
 			if (cliente.possuiVeiculo(placa) != null) {
 				Veiculo veiculo = cliente.possuiVeiculo(placa);
@@ -115,7 +120,7 @@ public class Estacionamento {
 				for (Vaga vaga : vagas) { // procura vaga
 					if (vaga.disponivel()) {
 						veiculo.estacionar(vaga);
-						
+
 						break;
 					}
 				}
@@ -126,6 +131,7 @@ public class Estacionamento {
 
 	/*
 	 * Encontra cliente por um id e retorna este cliente
+	 * 
 	 * @param String idCli
 	 */
 
@@ -138,19 +144,38 @@ public class Estacionamento {
         return null; // Cliente não encontrado
     }
 
-	public double getValorArrecadado() {
-        return valorArrecadado;
-    }
 
-	public double sair(String placa) {
-		for (Vaga vaga : vagas){
-			if(vaga.disponivel()) {
-				vaga.sair()
-				break;
+	public double getValorArrecadado() {
+		return valorArrecadado;
+	}
+
+	/**
+	 * Método para permitir que um veículo saia de uma vaga com base na placa.
+	 * 
+	 * @param placa A placa do veículo que deseja sair.
+	 */
+	public void sair(String placa) throws ExcecaoSairFinalizada {
+		for (Cliente cliente : clientes) {
+			if (cliente.possuiVeiculo(placa) != null) {
+				Veiculo veiculo = cliente.possuiVeiculo(placa);
+
+				int size = veiculo.getUsos();
+
+				for (UsoDeVaga uso : veiculo.getUsos()) {
+					if (uso.getSaida() == null) {
+						veiculo.sair(uso.getVaga());
+					}
+				}
 			}
+
 		}
 	}
 
+	/**
+	 * Calcula o valor total arrecadado pela empresa a partir de todos os clientes.
+	 * 
+	 * @return O valor total arrecadado.
+	 */
 	public double totalArrecadado() {
 		for (Cliente cliente : clientes) {
 			valorTotal += cliente.arrecadadoTotal();
@@ -158,55 +183,89 @@ public class Estacionamento {
 		return valorTotal;
 	}
 
+	/**
+	 * Calcula a arrecadação da empresa para um mês específico.
+	 * 
+	 * @param mes O mês para o qual deseja calcular a arrecadação.
+	 * @return A arrecadação do mês especificado.
+	 */
 	public double arrecadacaoNoMes(int mes) {
+		double arrecadadoMes = 0.0;
 		for (Cliente cliente : clientes) {
-			 int mesCliente = cliente.GetData().getMonth();
-			 if (mesCliente == mes) {
-				 valorMes += cliente.arrecadadoNoMes(mes);
-			 }
-			 return valorMes;
+			arrecadadoMes += cliente.arrecadadoNoMes(mes);
 		}
+		return arrecadadoMes;
 	}
 
+	/**
+	 * Calcula o valor médio arrecadado por uso pelos clientes da empresa.
+	 * 
+	 * @return O valor médio por uso.
+	 */
 	public double valorMedioPorUso() {
 		for (Cliente cliente : clientes) {
-			valorUso = cliente.arrecadadoPorVeiculo() / cliente.getTotalDeUsos();
+			int totalUsos = cliente.totalDeUsos();
+			double arrecadacaoTotal = cliente.arrecadadoTotal();
+
+			if (totalUsos > 0) {
+				return arrecadacaoTotal / totalUsos;
+			} else {
+				return 0.0; // Evita divisão por zero.
+			}
 		}
 		return valorUso;
 	}
 
+	/**
+	 * Retorna os 5 principais clientes com base no número total de usos no mês
+	 * especificado.
+	 * 
+	 * @param mes O mês para o qual deseja listar os principais clientes.
+	 * @return Uma string que contém os nomes e o total de usos dos 5 principais
+	 *         clientes no mês especificado.
+	 */
 	public String top5Clientes(int mes) {
-		Cliente[] clientesOrdenados = Arrays.copyOf(clientes, clientes.length);
-    Arrays.sort(clientesOrdenados, new Comparator<Cliente>() {
-        @Override
-        public int compare(Cliente c1, Cliente c2) {
-            return c2.totalDeUsos() - c1.totalDeUsos();
-        }
-    });
-	StringBuilder top5 = new StringBuilder("Top 5 Clientes:\n");
-    for (int i = 0; i < 5 && i < clientesOrdenados.length; i++) {
-        Cliente cliente = clientesOrdenados[i];
-        top5.append("Nome: ").append(cliente.getNome()).append(", Total de Usos: ").append(cliente.totalDeUsos()).append("\n");
-    }
+		if (mes < 1 || mes > 12) {
+			return "Mês inválido. O mês deve estar entre 1 e 12.";
+		}
 
-    return top5.toString();
+		List<Cliente> clientesOrdenados = new ArrayList<>(clientes); // Crie uma nova lista para evitar a modificação da
+																		// lista original
+
+		// Ordene os clientes com base no total de usos em ordem decrescente
+		Collections.sort(clientesOrdenados, new Comparator<Cliente>() {
+			@Override
+			public int compare(Cliente c1, Cliente c2) {
+				return c2.totalDeUsos() - c1.totalDeUsos();
+			}
+		});
+
+		String result = "Top 5 Clientes no mês " + mes + ":\n";
+
+		int count = Math.min(5, clientesOrdenados.size());
+
+		for (int i = 0; i < count; i++) {
+			Cliente cliente = clientesOrdenados.get(i);
+			result += "Nome: " + cliente.getNome() + ", Total de Usos: " + cliente.totalDeUsos() + "\n";
+		}
+
+		return result;
 	}
-
-
-	
 
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
+
 	public void setQuantFileiras(int fileiras) {
 		this.fileiras = fileiras;
 	}
 
-	
-
 	public void setcoluna(int colunas) {
 		this.colunas = colunas;
 	}
-}
 
+	public List<Cliente> getClientes() {
+    return clientes;
+}
+	
+}
