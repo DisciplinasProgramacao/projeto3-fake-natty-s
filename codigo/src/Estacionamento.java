@@ -135,14 +135,15 @@ public class Estacionamento implements Serializable {
 	 * @param String idCli
 	 */
 
-	private Cliente encontrarClientePorId(String idCli) {
-		for (Cliente cliente : clientes) {
-			if (cliente.getId().equals(idCli)) {
-				return cliente;
-			}
-		}
-		return null; // Cliente não encontrado
-	}
+    public Cliente encontrarClientePorId(String idCli) {
+        for (Cliente cliente : clientes) {
+            if (cliente.getId().equals(idCli)) {
+                return cliente;
+            }
+        }
+        return null; // Cliente não encontrado
+    }
+
 
 	public double getValorArrecadado() {
 		return valorArrecadado;
