@@ -13,7 +13,7 @@ import java.util.Comparator;
 /**
  * Classe que representa um cliente e seus veículos.
  */
-public class Cliente {
+public class Cliente implements Serializable {
 
 
     private String nome;

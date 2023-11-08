@@ -3,13 +3,34 @@ package src;
 import java.io.*;
 
 public class ManipuladorDeArquivo {
-
+    /*
     public static final String ARQ_ESTACIONAMENTO1 = "codigo/files/estacionamento1.ser";
     public static final String ARQ_ESTACIONAMENTO2 = "codigo/files/estacionamento2.ser";
     public static final String ARQ_ESTACIONAMENTO3 = "codigo/files/estacionamento3.ser";
-    public static final String ARQ_CLIENTE = "codigo/files/cliente.ser";
+    */
+
+    public static final String ARQ_CLIENTES = "codigo/files/clientes.ser";
+    public static final String ARQ_ESTACIONAMENTOS = "codigo/files/estacionamentos.ser";
+    public static final String ARQ_VAGAS = "codigo/files/vagas.ser";
+    public static final String ARQ_VEICULOS = "codigo/files/veiculos.ser";
 
     
+    public static String getArqClientes() {
+        return ARQ_CLIENTES;
+    }
+
+    public static String getArqEstacionamentos() {
+        return ARQ_ESTACIONAMENTOS;
+    }
+
+    public static String getArqVagas() {
+        return ARQ_VAGAS;
+    }
+
+    public static String getArqVeiculos() {
+        return ARQ_VEICULOS;
+    }
+
     public static <T extends Serializable> void escreverObjeto(String nomeArquivo, T objeto) {
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(nomeArquivo))) {
             outputStream.writeObject(objeto);
@@ -19,14 +40,20 @@ public class ManipuladorDeArquivo {
         }
     }
 
-    public static <T extends Serializable> T lerObjeto(String nomeArquivo) {
+    public static <T> T lerObjeto(String nomeArquivo, Class<T> classeDoObjeto) {
         T objeto = null;
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(nomeArquivo))) {
-
-        } catch (IOException | ClassCastException e) {
+            Object obj = inputStream.readObject();
+            if (classeDoObjeto.isInstance(obj)) {
+                objeto = classeDoObjeto.cast(obj);
+            } else {
+                System.err.println("O objeto lido não é do tipo esperado: " + classeDoObjeto.getName());
+            }
+        } catch (IOException | ClassNotFoundException e) {
             System.err.println("Erro ao ler o objeto de " + nomeArquivo + ": " + e.getMessage());
         }
         return objeto;
     }
     
+
 }
