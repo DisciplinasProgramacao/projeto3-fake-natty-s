@@ -127,6 +127,33 @@ public class Estacionamento implements Serializable {
 
 	}
 
+	public void alterarPlacaDoCarro(String idCli, String placaAntiga, String placaNova) {
+    Cliente cliente = encontrarClientePorId(idCli);
+    if (cliente != null) {
+        Veiculo veiculo = cliente.possuiVeiculo(placaAntiga);
+        if (veiculo != null) {
+            veiculo.setPlaca(placaNova);
+        } else {
+            // Tratar o caso em que o veículo não foi encontrado
+            System.out.println("Veículo não encontrado para a placa antiga.");
+        }
+    } else {
+        // Tratar o caso em que o cliente não foi encontrado
+        System.out.println("Cliente não encontrado.");
+    }
+}
+
+	public void alterarNomeCliente(String idCli, String novoNome) {
+    Cliente cliente = encontrarClientePorId(idCli);
+    if (cliente != null) {
+        cliente.setNome(novoNome);
+    } else {
+        // Tratar o caso em que o cliente não foi encontrado
+        System.out.println("Cliente não encontrado.");
+    }
+}
+
+
 	/*
 	 * Encontra cliente por um id e retorna este cliente
 	 * 
