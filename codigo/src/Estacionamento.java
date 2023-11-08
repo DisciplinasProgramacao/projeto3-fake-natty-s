@@ -159,7 +159,7 @@ public class Estacionamento implements Serializable {
 			if (cliente.possuiVeiculo(placa) != null) {
 				Veiculo veiculo = cliente.possuiVeiculo(placa);
 
-				int size = veiculo.getUsos();
+				int size = veiculo.totalDeUsos();
 
 				for (UsoDeVaga uso : veiculo.getUsos()) {
 					if (uso.getSaida() == null) {

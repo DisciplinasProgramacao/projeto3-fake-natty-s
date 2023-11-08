@@ -47,30 +47,20 @@ public class Veiculo implements Serializable{
      * @return O valor a ser pago pelo uso da vaga.
      */
     public double sair(Vaga vaga) throws ExcecaoSairFinalizada {
-        boolean veiculoEstacionadoNaVaga = false;
         double valorPago = 0.0;
         for (UsoDeVaga usoDeVaga : usos) {
             if (usoDeVaga.getVaga() == vaga) {
                 if (usoDeVaga.getSaida().isBefore(LocalDateTime.now())) {
                     throw new ExcecaoSairFinalizada(vaga);
                 } else {
-                    veiculoEstacionadoNaVaga = true;
-
                     valorPago = usoDeVaga.sair();
-
                     return valorPago;
                 }
-
             }
-            return valorPago;
         }
-
-        if (!veiculoEstacionadoNaVaga) {
-            System.out.println("O veículo não está estacionado na vaga.");
-        }
-
-        return 0.0;
+        return valorPago; 
     }
+    
 
     /**
      * Calcula o valor total arrecadado pela empresa de estacionamento com este
