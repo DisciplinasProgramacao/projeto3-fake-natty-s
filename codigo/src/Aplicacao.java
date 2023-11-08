@@ -186,8 +186,9 @@ public class Aplicacao {
             scanner.nextLine();
 
             switch (escolha) {
+                Cliente cliente;
                 case 1:
-
+                ManipuladorDeArquivo.escreverObjeto(ManipuladorDeArquivo.ARQ_CLIENTE, cliente);
                     break;
 
                 case 2:

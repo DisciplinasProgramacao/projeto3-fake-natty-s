@@ -7,6 +7,8 @@ public class ManipuladorDeArquivo {
     public static final String ARQ_ESTACIONAMENTO1 = "codigo/files/estacionamento1.ser";
     public static final String ARQ_ESTACIONAMENTO2 = "codigo/files/estacionamento2.ser";
     public static final String ARQ_ESTACIONAMENTO3 = "codigo/files/estacionamento3.ser";
+    public static final String ARQ_CLIENTE = "codigo/files/cliente.ser";
+
     
     public static <T extends Serializable> void escreverObjeto(String nomeArquivo, T objeto) {
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(nomeArquivo))) {
