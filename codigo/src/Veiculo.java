@@ -3,11 +3,11 @@ package src;
 import java.util.List;
 import src.Exceptions.ExcecaoEstacionarSemSair;
 import src.Exceptions.ExcecaoSairFinalizada;
-import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class Veiculo implements Serializable {
+public class Veiculo implements Serializable{
 
     private String placa;
     private List<UsoDeVaga> usos;
@@ -31,7 +31,7 @@ public class Veiculo implements Serializable {
                 if (vaga.disponivel()) {
                     vaga.estacionar();
                 } else {
-                    System.out.println("A vaga não está disponível.");
+                    throw new ExcecaoEstacionarSemSair(usoDeVaga.getVaga());
                 }
             }
 
@@ -46,28 +46,20 @@ public class Veiculo implements Serializable {
      * @return O valor a ser pago pelo uso da vaga.
      */
     public double sair(Vaga vaga) throws ExcecaoSairFinalizada {
-        boolean veiculoEstacionadoNaVaga = false;
+        double valorPago = 0.0;
         for (UsoDeVaga usoDeVaga : usos) {
             if (usoDeVaga.getVaga() == vaga) {
                 if (usoDeVaga.getSaida().isBefore(LocalDateTime.now())) {
                     throw new ExcecaoSairFinalizada(vaga);
                 } else {
-                    veiculoEstacionadoNaVaga = true;
-
-                    double valorPago = usoDeVaga.sair();
-
+                    valorPago = usoDeVaga.sair();
                     return valorPago;
                 }
-
             }
         }
-
-        if (!veiculoEstacionadoNaVaga) {
-            System.out.println("O veículo não está estacionado na vaga.");
-        }
-
-        return 0.0;
+        return valorPago; 
     }
+    
 
     /**
      * Calcula o valor total arrecadado pela empresa de estacionamento com este
