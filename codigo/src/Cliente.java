@@ -7,9 +7,6 @@ import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-
-
-
 /**
  * Classe que representa um cliente e seus veículos.
  */

@@ -1,8 +1,6 @@
 package src;
 
-import java.io.Serializable;
-
-public enum ServicosAdicionais implements Serializable {
+public enum ServicosAdicionais {
     MANOBRISTA("Manobrista", 5.0, 0),
     LAVAGEM("Lavagem", 20.0, 60),
     POLIMENTO("Polimento (inclui lavagem)", 45.0, 120);

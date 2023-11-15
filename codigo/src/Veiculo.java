@@ -3,7 +3,6 @@ package src;
 import java.util.List;
 import src.Exceptions.ExcecaoEstacionarSemSair;
 import src.Exceptions.ExcecaoSairFinalizada;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
