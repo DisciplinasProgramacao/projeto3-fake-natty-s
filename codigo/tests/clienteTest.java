@@ -1,5 +1,7 @@
 package tests;
 import src.*;
+import src.entities.Cliente;
+import src.entities.Veiculo;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

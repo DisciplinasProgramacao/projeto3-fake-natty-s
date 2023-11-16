@@ -1,8 +1,11 @@
 package tests;
-import src.*;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import src.entities.Cliente;
+import src.entities.Estacionamento;
+import src.entities.Veiculo;
+
 import static org.junit.Assert.*;
 
 

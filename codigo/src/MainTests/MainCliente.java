@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 import src.*;
+import src.entities.Cliente;
+import src.entities.Estacionamento;
 
 public class MainCliente {
 

@@ -1,5 +1,5 @@
-package src.Exceptions;
-import src.Vaga;
+package src.exceptions;
+import src.entities.Vaga;
 
 public class ExcecaoSairFinalizada extends Exception{
     public ExcecaoSairFinalizada (Vaga vaga){

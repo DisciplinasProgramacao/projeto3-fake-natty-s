@@ -3,11 +3,12 @@ package tests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
-import src.Veiculo;
-import src.Vaga;
-import src.UsoDeVaga;
+import src.entities.UsoDeVaga;
+import src.entities.Vaga;
+import src.entities.Veiculo;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 

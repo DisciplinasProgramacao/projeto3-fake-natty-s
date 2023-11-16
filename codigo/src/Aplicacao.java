@@ -1,22 +1,32 @@
 package src;
 
-// classe aplicação para rodar Estacionamento 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import src.entities.*;
 import java.util.Scanner;
-import src.Exceptions.ExcecaoCadastrarVeiculoExistente;
-import src.Exceptions.ExcecaoClientejaExistente;
-import src.Exceptions.ExcecaoEstacionarSemSair;
-import src.Exceptions.ExcecaoSairFinalizada;
-import src.ManipuladorDeArquivo;
-import src.Estacionamento;
+import src.dao.GenericDAO;
+
+import src.exceptions.*;
+import java.io.IOException;
+import java.io.FileNotFoundException;
 
 public class Aplicacao {
-    
     
     public static void main(String[] args) {
         
         Scanner scanner = new Scanner(System.in);
+
+        GenericDAO<Cliente, String> clienteDAO;
+        GenericDAO<Estacionamento, String> estacionamentoDAO;
+        GenericDAO<Vaga, String> vagaDAO;
+        GenericDAO<Veiculo, String> veiculoDAO;
+
+        try {
+            clienteDAO = new GenericDAO<>("codigo/files/clientes.ser");
+            estacionamentoDAO = new GenericDAO<>("codigo/files/estacionamentos.ser");
+            vagaDAO = new GenericDAO<>("codigo/files/vagas.ser");
+            veiculoDAO = new GenericDAO<>("codigo/files/veiculos.ser");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         while (true) {
     
