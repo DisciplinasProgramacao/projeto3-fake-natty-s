@@ -1,17 +1,19 @@
-package src;
+package src.entities;
 
 import java.util.List;
 import java.util.Optional;
 import java.io.Serializable;
 import java.util.stream.Collectors;
+
+import src.interfaces.Entidade;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 
 /**
  * Classe que representa um cliente e seus veículos.
  */
-public class Cliente implements Serializable {
-
+public class Cliente implements Serializable, Entidade {
 
     private String nome;
     private String id;

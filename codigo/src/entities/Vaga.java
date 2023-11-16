@@ -1,11 +1,11 @@
-package src;
+package src.entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * A classe Vaga representa uma vaga de estacionamento em um estacionamento.
  */
-public class Vaga implements Serializable{
+public class Vaga implements Serializable {
 
     private String fila;
     private int numero;

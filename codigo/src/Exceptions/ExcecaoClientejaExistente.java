@@ -1,6 +1,6 @@
-package src.Exceptions;
-// Exception cliente ja existente
-import src.Cliente;
+package src.exceptions;
+
+import src.entities.Cliente;
 
 public class ExcecaoClientejaExistente extends Exception{
 

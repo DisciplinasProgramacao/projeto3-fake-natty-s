@@ -1,13 +1,15 @@
-package src;
+package src.entities;
 
 import java.util.List;
-import src.Exceptions.ExcecaoEstacionarSemSair;
-import src.Exceptions.ExcecaoSairFinalizada;
+import src.exceptions.ExcecaoEstacionarSemSair;
+import src.exceptions.ExcecaoSairFinalizada;
+import src.interfaces.Entidade;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class Veiculo implements Serializable{
+public class Veiculo implements Serializable, Entidade{
 
     private String placa;
     private List<UsoDeVaga> usos;
@@ -115,5 +117,10 @@ public class Veiculo implements Serializable{
 
     public void setUsos(List<UsoDeVaga> usos) {
         this.usos = usos;
+    }
+
+    @Override
+    public String getId() {
+        return this.placa;
     }
 }

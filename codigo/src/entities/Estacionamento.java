@@ -1,7 +1,13 @@
-package src;
+package src.entities;
 
 import java.io.Serializable;
 import src.ManipuladorDeArquivo;
+
+import src.exceptions.ExcecaoCadastrarVeiculoExistente;
+import src.exceptions.ExcecaoClientejaExistente;
+import src.exceptions.ExcecaoEstacionarSemSair;
+import src.exceptions.ExcecaoSairFinalizada;
+import src.interfaces.Entidade;
 
 //Classe estacionamento - Gabriel Pongelupe e Felipe Picinin
 
@@ -10,13 +16,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import src.Exceptions.ExcecaoCadastrarVeiculoExistente;
-import src.Exceptions.ExcecaoClientejaExistente;
-import src.Exceptions.ExcecaoEstacionarSemSair;
-import src.Exceptions.ExcecaoSairFinalizada;
-import src.UsoDeVaga;
 
-public class Estacionamento implements Serializable {
+public class Estacionamento implements Serializable, Entidade {
 
 	private String nome;
 	private List<Cliente> clientes;
@@ -265,7 +266,12 @@ public class Estacionamento implements Serializable {
 	}
 
 	public List<Cliente> getClientes() {
-    return clientes;
-}
+    	return clientes;
+	}
+
+	@Override
+	public String getId() {
+		return this.nome;
+	}
 	
 }

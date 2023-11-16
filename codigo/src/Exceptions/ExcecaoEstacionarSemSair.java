@@ -1,6 +1,6 @@
-package src.Exceptions;
+package src.exceptions;
 
-import src.Vaga;
+import src.entities.Vaga;
 
 public class ExcecaoEstacionarSemSair extends Exception{
     public ExcecaoEstacionarSemSair(Vaga vaga){

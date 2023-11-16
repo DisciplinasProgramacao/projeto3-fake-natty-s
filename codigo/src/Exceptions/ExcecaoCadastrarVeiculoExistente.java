@@ -1,6 +1,6 @@
-package src.Exceptions;
+package src.exceptions;
 
-import src.Veiculo;
+import src.entities.Veiculo;
 
 public class ExcecaoCadastrarVeiculoExistente extends Exception{
 

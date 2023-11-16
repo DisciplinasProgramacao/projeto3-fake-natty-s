@@ -1,6 +1,8 @@
 package tests;
 import src.*;
- 
+import src.entities.UsoDeVaga;
+import src.entities.Vaga;
+
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;

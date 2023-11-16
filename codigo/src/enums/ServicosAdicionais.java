@@ -1,4 +1,4 @@
-package src;
+package src.enums;
 
 public enum ServicosAdicionais {
     MANOBRISTA("Manobrista", 5.0, 0),
