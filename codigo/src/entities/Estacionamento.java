@@ -1,13 +1,7 @@
-package src.entities;
+package src;
 
 import java.io.Serializable;
 import src.ManipuladorDeArquivo;
-
-import src.exceptions.ExcecaoCadastrarVeiculoExistente;
-import src.exceptions.ExcecaoClientejaExistente;
-import src.exceptions.ExcecaoEstacionarSemSair;
-import src.exceptions.ExcecaoSairFinalizada;
-import src.interfaces.Entidade;
 
 //Classe estacionamento - Gabriel Pongelupe e Felipe Picinin
 
@@ -16,8 +10,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import src.Exceptions.ExcecaoCadastrarVeiculoExistente;
+import src.Exceptions.ExcecaoClientejaExistente;
+import src.Exceptions.ExcecaoEstacionarSemSair;
+import src.Exceptions.ExcecaoSairFinalizada;
+import src.UsoDeVaga;
 
-public class Estacionamento implements Serializable, Entidade {
+public class Estacionamento implements Serializable {
 
 	private String nome;
 	private List<Cliente> clientes;
@@ -52,7 +51,7 @@ public class Estacionamento implements Serializable, Entidade {
 	 * cadastrado e
 	 * chama o medoto addVeiculo(veiculo) do cliente especifico)
 	 */
-	public void addVeiculo(Veiculo veiculo, String idCli) throws ExcecaoCadastrarVeiculoExistente {
+	public void addVeiculo(Veiculo veiculo, String idCli) throws ExcecaoCadastrarVeiculoExistente, ExcecaoClientejaExistente {
 		Cliente cliente = encontrarClientePorId(idCli);
 		List<Veiculo> veiculos = cliente.getVeiculos();
 
@@ -136,13 +135,19 @@ public class Estacionamento implements Serializable, Entidade {
 	 * @param String idCli
 	 */
 
-    public Cliente encontrarClientePorId(String idCli) {
+    public Cliente encontrarClientePorId(String idCli) throws ExcecaoClientejaExistente {
+		boolean encontrado = false;
+		Cliente clienteEncontrado = null;
         for (Cliente cliente : clientes) {
             if (cliente.getId().equals(idCli)) {
-                return cliente;
+                clienteEncontrado = cliente;
+				encontrado = true;
             }
         }
-        return null; // Cliente não encontrado
+		if(!encontrado){
+			throw new ExcecaoClientejaExistente("O cliente nao pode ser encontrado");
+		}
+        return clienteEncontrado; // Cliente não encontrado
     }
 
 
@@ -160,7 +165,7 @@ public class Estacionamento implements Serializable, Entidade {
 			if (cliente.possuiVeiculo(placa) != null) {
 				Veiculo veiculo = cliente.possuiVeiculo(placa);
 
-				int size = veiculo.totalDeUsos();
+				
 
 				for (UsoDeVaga uso : veiculo.getUsos()) {
 					if (uso.getSaida() == null) {
@@ -266,12 +271,7 @@ public class Estacionamento implements Serializable, Entidade {
 	}
 
 	public List<Cliente> getClientes() {
-    	return clientes;
-	}
-
-	@Override
-	public String getId() {
-		return this.nome;
-	}
+    return clientes;
+}
 	
 }
