@@ -37,7 +37,7 @@ public class MainCliente {
             switch (opcao) {
                 case 1:
                     System.out.print("Digite a placa do veículo: ");
-                    String placa = scanner.next();
+                    String placa = scanner.nextLine();
                     
                     
                     System.out.println("O cliente " + cliente.getNome() + (possuiVeiculo(placa, cliente) ? " possui este veículo" : " não possui este veículo"));

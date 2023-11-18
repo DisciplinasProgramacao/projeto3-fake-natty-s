@@ -51,7 +51,7 @@ public class Estacionamento implements Serializable {
 	 * cadastrado e
 	 * chama o medoto addVeiculo(veiculo) do cliente especifico)
 	 */
-	public void addVeiculo(Veiculo veiculo, String idCli) throws ExcecaoCadastrarVeiculoExistente {
+	public void addVeiculo(Veiculo veiculo, String idCli) throws ExcecaoCadastrarVeiculoExistente, ExcecaoClientejaExistente {
 		Cliente cliente = encontrarClientePorId(idCli);
 		List<Veiculo> veiculos = cliente.getVeiculos();
 
@@ -135,13 +135,19 @@ public class Estacionamento implements Serializable {
 	 * @param String idCli
 	 */
 
-    public Cliente encontrarClientePorId(String idCli) {
+    public Cliente encontrarClientePorId(String idCli) throws ExcecaoClientejaExistente {
+		boolean encontrado = false;
+		Cliente clienteEncontrado = null;
         for (Cliente cliente : clientes) {
             if (cliente.getId().equals(idCli)) {
-                return cliente;
+                clienteEncontrado = cliente;
+				encontrado = true;
             }
         }
-        return null; // Cliente não encontrado
+		if(!encontrado){
+			throw new ExcecaoClientejaExistente("O cliente nao pode ser encontrado");
+		}
+        return clienteEncontrado; // Cliente não encontrado
     }
 
 
@@ -159,7 +165,7 @@ public class Estacionamento implements Serializable {
 			if (cliente.possuiVeiculo(placa) != null) {
 				Veiculo veiculo = cliente.possuiVeiculo(placa);
 
-				int size = veiculo.getUsos();
+				
 
 				for (UsoDeVaga uso : veiculo.getUsos()) {
 					if (uso.getSaida() == null) {
