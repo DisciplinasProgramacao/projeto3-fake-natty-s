@@ -5,6 +5,7 @@ import java.util.Scanner;
 import src.Cliente;
 import src.Estacionamento;
 import src.Veiculo;
+import src.Exceptions.ExcecaoClientejaExistente;
 
 public class MainCliente {
 
@@ -15,10 +16,19 @@ public class MainCliente {
         int opcao;
         
         //Escolhendo cliente
+        Cliente cliente = null;
 
         System.out.println("Digite o codigo de Cliente que você deseja verificar: ");
         String id = scanner.nextLine();
-        Cliente cliente = estacionamento.encontrarClientePorId(id);
+        do{
+            try {
+                cliente = estacionamento.encontrarClientePorId(id);
+            } catch (ExcecaoClientejaExistente e) {
+                System.out.println(e.getMessage());
+            }
+        }while(cliente == null);
+        
+        
 
         do {
             System.out.println("MENU CLIENTE:");
@@ -77,7 +87,7 @@ public class MainCliente {
         
     }
 
-    public static boolean possuiVeiculo(String placa, Cliente cliente){
+    public static boolean possuiVeiculo(String placa, Cliente cliente) {
         return (cliente.possuiVeiculo(placa) != null);
     }
 }
