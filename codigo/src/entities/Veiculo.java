@@ -25,21 +25,17 @@ public class Veiculo implements Serializable, Entidade{
      * @param vaga A vaga onde o veículo deve estacionar.
      */
     public void estacionar(Vaga vaga) throws ExcecaoEstacionarSemSair {
-        for (UsoDeVaga usoDeVaga : usos) {
-
-            if (!usoDeVaga.getSaida().isBefore(LocalDateTime.now()) || usoDeVaga.getSaida() == null) {
-                throw new ExcecaoEstacionarSemSair(usoDeVaga.getVaga());
-            } else {
-                if (vaga.disponivel()) {
-                    vaga.estacionar();
-                } else {
-                    throw new ExcecaoEstacionarSemSair(usoDeVaga.getVaga());
-                }
-            }
-
+        if (usos.stream().anyMatch(uso -> !uso.getSaida().isBefore(LocalDateTime.now()) || uso.getSaida() == null)) {
+            throw new ExcecaoEstacionarSemSair(vaga);
         }
-
+    
+        if (vaga.disponivel()) {
+            vaga.estacionar();
+        } else {
+            throw new ExcecaoEstacionarSemSair(vaga);
+        }
     }
+    
 
     /**
      * Registra a saída do veículo de uma vaga e calcula o valor a ser pago.
@@ -48,19 +44,18 @@ public class Veiculo implements Serializable, Entidade{
      * @return O valor a ser pago pelo uso da vaga.
      */
     public double sair(Vaga vaga) throws ExcecaoSairFinalizada {
-        double valorPago = 0.0;
-        for (UsoDeVaga usoDeVaga : usos) {
-            if (usoDeVaga.getVaga() == vaga) {
-                if (usoDeVaga.getSaida().isBefore(LocalDateTime.now())) {
-                    throw new ExcecaoSairFinalizada(vaga);
-                } else {
-                    valorPago = usoDeVaga.sair();
-                    return valorPago;
-                }
-            }
+        UsoDeVaga usoEncontrado = usos.stream()
+                .filter(uso -> uso.getVaga() == vaga)
+                .findFirst()
+                .orElseThrow(() -> new ExcecaoSairFinalizada(vaga));
+    
+        if (usoEncontrado.getSaida().isBefore(LocalDateTime.now())) {
+            throw new ExcecaoSairFinalizada(vaga);
         }
-        return valorPago; 
+    
+        return usoEncontrado.sair();
     }
+    
     
 
     /**
@@ -70,12 +65,9 @@ public class Veiculo implements Serializable, Entidade{
      * @return O valor total arrecadado.
      */
     public double totalArrecadado() {
-        double totalValor = 0.0;
-        for (UsoDeVaga usoDeVaga : usos) {
-            totalValor += usoDeVaga.valorPago();
-        }
-        return totalValor;
+        return usos.stream().mapToDouble(UsoDeVaga::valorPago).sum();
     }
+    
 
     /**
      * Calcula o valor arrecadado pela empresa de estacionamento com este veículo em
@@ -85,14 +77,12 @@ public class Veiculo implements Serializable, Entidade{
      * @return O valor arrecadado no mês especificado.
      */
     public double arrecadadoNoMes(int mes) {
-        double totalArrecadadoNoMes = 0.0;
-        for (UsoDeVaga usoDeVaga : usos) {
-            if (usoDeVaga.getEntrada().getMonthValue() == mes) {
-                totalArrecadadoNoMes += usoDeVaga.valorPago();
-            }
-        }
-        return totalArrecadadoNoMes;
+        return usos.stream()
+                .filter(uso -> uso.getEntrada().getMonthValue() == mes)
+                .mapToDouble(UsoDeVaga::valorPago)
+                .sum();
     }
+    
 
     /**
      * Obtém o número total de usos de vaga feitos por este veículo.
