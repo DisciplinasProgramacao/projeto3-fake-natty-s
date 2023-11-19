@@ -34,8 +34,8 @@ public class Cliente implements Serializable {
      * 
      * @param veiculo Veículo a ser adicionado.
      */
-    public void addVeiculo(Veiculo veiculo) {
-        veiculos.add(veiculo);
+    public void addVeiculo(Veiculo veiculo, String arq) {
+        ManipuladorDeArquivo.escreverObjeto(arq, veiculo);
     }
 
     /**
