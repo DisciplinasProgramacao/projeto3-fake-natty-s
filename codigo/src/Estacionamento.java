@@ -51,14 +51,14 @@ public class Estacionamento implements Serializable {
 	 * cadastrado e
 	 * chama o medoto addVeiculo(veiculo) do cliente especifico)
 	 */
-	public void addVeiculo(Veiculo veiculo, String idCli) throws ExcecaoCadastrarVeiculoExistente, ExcecaoClientejaExistente {
+	public void addVeiculo(Veiculo veiculo, String idCli, String arq) throws ExcecaoCadastrarVeiculoExistente, ExcecaoClientejaExistente {
 		Cliente cliente = encontrarClientePorId(idCli);
 		List<Veiculo> veiculos = cliente.getVeiculos();
 
 		if (veiculos.contains(veiculo)) {
 			throw new ExcecaoCadastrarVeiculoExistente(veiculo);
 		} else {
-			cliente.addVeiculo(veiculo);
+			cliente.addVeiculo(veiculo, arq);
 		}
 
 	}
@@ -69,12 +69,12 @@ public class Estacionamento implements Serializable {
 	 * @param cliente: Cliente
 	 */
 
-	public void addCliente(Cliente cliente) throws ExcecaoClientejaExistente {
+	public void addCliente(Cliente cliente, String arq) throws ExcecaoClientejaExistente {
 
 		if (clientes.contains(cliente)) {
 			throw new ExcecaoClientejaExistente(cliente);
 		} else {
-			clientes.add(cliente);
+			ManipuladorDeArquivo.escreverObjeto(arq, cliente);
 		}
 	}
 
