@@ -74,7 +74,7 @@ public class Estacionamento implements Serializable {
 		if (clientes.contains(cliente)) {
 			throw new ExcecaoClientejaExistente(cliente);
 		} else {
-			clientes.add(cliente);
+			ManipuladorDeArquivo.escreverObjeto(arq, cliente);
 		}
 	}
 
