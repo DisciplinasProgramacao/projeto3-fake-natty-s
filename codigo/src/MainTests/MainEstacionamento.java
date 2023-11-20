@@ -10,6 +10,7 @@ import src.Exceptions.ExcecaoSairFinalizada;
 public class MainEstacionamento {
 
     public static void main(String[] args) {
+        String arq = "codigo/files/estacionamento1.ser";
         Estacionamento estacionamento = new Estacionamento("Estacionamento Teste", 5, 10);
         Scanner scanner = new Scanner(System.in);
         int opcao;
@@ -39,7 +40,7 @@ public class MainEstacionamento {
                     String idCliente = scanner.nextLine();
                     Cliente novoCliente = new Cliente(nomeCliente, idCliente);
                     try {
-                        estacionamento.addCliente(novoCliente);
+                        estacionamento.addCliente(novoCliente, arq);
                         System.out.println("Cliente adicionado com sucesso!");
                     } catch (ExcecaoClientejaExistente e) {
                         System.out.println("Erro ao adicionar cliente: " + e.getMessage());
@@ -52,7 +53,7 @@ public class MainEstacionamento {
                     placa = scanner.nextLine();
                     Veiculo veiculo = new Veiculo(placa);
                     try {
-                        estacionamento.addVeiculo(veiculo, id);
+                        estacionamento.addVeiculo(veiculo, id, arq);
                     } catch (ExcecaoClientejaExistente e) {
                         System.out.println(e.getMessage());
                     } catch (ExcecaoCadastrarVeiculoExistente e){
