@@ -39,7 +39,7 @@ public class Cliente implements Serializable, Entidade {
      * @param veiculo Veículo a ser adicionado.
      */
     public void addVeiculo(Veiculo veiculo) {
-        veiculos.add(veiculo);
+        ManipuladorDeArquivo.escreverObjeto(arq, veiculo);
     }
 
 
