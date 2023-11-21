@@ -12,7 +12,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.time.LocalDateTime;
 
 import src.Exceptions.ExcecaoCadastrarVeiculoExistente;
 import src.Exceptions.ExcecaoClientejaExistente;
@@ -210,22 +209,6 @@ public class Estacionamento implements Serializable {
                 .average()
                 .orElse(0.0);
     }
-	 /**
-     * Calcula a média de usos mensais para clientes mensalistas no mês corrente.
-     *
-     * @return A média de usos mensais para clientes mensalistas.
-     */
-    public double mediaUsosMensaisClientesMensalistas() {
-        int mesCorrente = LocalDate.now().getMonthValue();
-
-        double media = clientes.stream()
-                .filter(cliente -> ModalidadeCliente.MENSALISTA.equals(cliente.getModalidade()))
-                .mapToInt(cliente -> cliente.totalDeUsosNoMes(mesCorrente))
-                .average()
-                .orElse(0.0);
-
-        return media;
-	}
 
     /**
      * Retorna os 5 principais clientes com base no número total de usos no mês especificado usando Streams.
@@ -233,17 +216,13 @@ public class Estacionamento implements Serializable {
      * @param mes O mês para o qual deseja listar os principais clientes.
      * @return Uma string que contém os nomes e o total de usos dos 5 principais clientes no mês especificado.
      */
-    public String top5Clientes(int mes) {
+public String top5Clientes(int mes) {
         if (mes < 1 || mes > 12) {
             return "Mês inválido. O mês deve estar entre 1 e 12.";
         }
-
-        Map<String, Integer> topClients = clientes.stream()
-                .collect(Collectors.toMap(Cliente::getNome, cliente -> cliente.totalDeUsosNoMes(mes)));
-
-        return topClients.entrySet().stream()
-                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-                .limit(5)
+        Map<String, Object> topClients = clientes.stream()
+                .collect(Collectors.toMap(Cliente::getNome, cliente -> cliente.totalDeUsos()));
+        return topClients.entrySet().stream().sorted().limit(5)
                 .map(entry -> "Nome: " + entry.getKey() + ", Total de Usos: " + entry.getValue())
                 .collect(Collectors.joining("\n", "Top 5 Clientes no mês " + mes + ":\n", ""));
     }
