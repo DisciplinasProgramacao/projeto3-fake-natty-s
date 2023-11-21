@@ -7,11 +7,16 @@ import src.ManipuladorDeArquivo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import src.Exceptions.ExcecaoCadastrarVeiculoExistente;
 import src.Exceptions.ExcecaoClientejaExistente;
 import src.Exceptions.ExcecaoEstacionarSemSair;
+import src.Exceptions.ExcecaoSairFinalizada;
 import src.UsoDeVaga;
 
 public class Estacionamento implements Serializable {
@@ -49,7 +54,7 @@ public class Estacionamento implements Serializable {
 	 * cadastrado e
 	 * chama o medoto addVeiculo(veiculo) do cliente especifico)
 	 */
-	public void addVeiculo(Veiculo veiculo, String idCli) throws ExcecaoCadastrarVeiculoExistente {
+	public void addVeiculo(Veiculo veiculo, String idCli) throws ExcecaoCadastrarVeiculoExistente, ExcecaoClientejaExistente {
 		Cliente cliente = encontrarClientePorId(idCli);
 		List<Veiculo> veiculos = cliente.getVeiculos();
 
@@ -72,7 +77,7 @@ public class Estacionamento implements Serializable {
 		if (clientes.contains(cliente)) {
 			throw new ExcecaoClientejaExistente(cliente);
 		} else {
-			clientes.add(cliente);
+			ManipuladorDeArquivo.escreverObjeto(arq, cliente);
 		}
 	}
 
@@ -127,47 +132,27 @@ public class Estacionamento implements Serializable {
 
 	}
 
-	public void alterarPlacaDoCarro(String idCli, String placaAntiga, String placaNova) {
-    Cliente cliente = encontrarClientePorId(idCli);
-    if (cliente != null) {
-        Veiculo veiculo = cliente.possuiVeiculo(placaAntiga);
-        if (veiculo != null) {
-            veiculo.setPlaca(placaNova);
-        } else {
-            // Tratar o caso em que o veículo não foi encontrado
-            System.out.println("Veículo não encontrado para a placa antiga.");
-        }
-    } else {
-        // Tratar o caso em que o cliente não foi encontrado
-        System.out.println("Cliente não encontrado.");
-    }
-}
-
-	public void alterarNomeCliente(String idCli, String novoNome) {
-    Cliente cliente = encontrarClientePorId(idCli);
-    if (cliente != null) {
-        cliente.setNome(novoNome);
-    } else {
-        // Tratar o caso em que o cliente não foi encontrado
-        System.out.println("Cliente não encontrado.");
-    }
-}
-
-
 	/*
 	 * Encontra cliente por um id e retorna este cliente
 	 * 
 	 * @param String idCli
 	 */
 
-	private Cliente encontrarClientePorId(String idCli) {
-		for (Cliente cliente : clientes) {
-			if (cliente.getId().equals(idCli)) {
-				return cliente;
-			}
+    public Cliente encontrarClientePorId(String idCli) throws ExcecaoClientejaExistente {
+		boolean encontrado = false;
+		Cliente clienteEncontrado = null;
+        for (Cliente cliente : clientes) {
+            if (cliente.getId().equals(idCli)) {
+                clienteEncontrado = cliente;
+				encontrado = true;
+            }
+        }
+		if(!encontrado){
+			throw new ExcecaoClientejaExistente("O cliente nao pode ser encontrado");
 		}
-		return null; // Cliente não encontrado
-	}
+        return clienteEncontrado; // Cliente não encontrado
+    }
+
 
 	public double getValorArrecadado() {
 		return valorArrecadado;
@@ -178,13 +163,16 @@ public class Estacionamento implements Serializable {
 	 * 
 	 * @param placa A placa do veículo que deseja sair.
 	 */
-	public void sair(String placa) {
+	public void sair(String placa) throws ExcecaoSairFinalizada {
 		for (Cliente cliente : clientes) {
 			if (cliente.possuiVeiculo(placa) != null) {
 				Veiculo veiculo = cliente.possuiVeiculo(placa);
+
+				
+
 				for (UsoDeVaga uso : veiculo.getUsos()) {
-					if (usoDeVaga.getSaida() == null) {
-						veiculo.sair(uso.getVaga);
+					if (uso.getSaida() == null) {
+						veiculo.sair(uso.getVaga());
 					}
 				}
 			}
@@ -192,86 +180,63 @@ public class Estacionamento implements Serializable {
 		}
 	}
 
+	  public double totalArrecadado() {
+        return clientes.stream()
+                .mapToDouble(Cliente::arrecadadoTotal)
+                .sum();
+    }
+
+    /**
+     * Calcula a arrecadação da empresa para um mês específico usando Streams.
+     *
+     * @param mes O mês para o qual deseja calcular a arrecadação.
+     * @return A arrecadação do mês especificado.
+     */
+    public double arrecadacaoNoMes(int mes) {
+        return clientes.stream()
+                .mapToDouble(cliente -> cliente.arrecadadoNoMes(mes))
+                .sum();
+    }
+
+    /**
+     * Calcula o valor médio arrecadado por uso pelos clientes da empresa usando Streams.
+     *
+     * @return O valor médio por uso.
+     */
+    public double valorMedioPorUso() {
+        return clientes.stream()
+                .mapToInt(Cliente::totalDeUsos)
+                .average()
+                .orElse(0.0);
+    }
+
+    /**
+     * Retorna os 5 principais clientes com base no número total de usos no mês especificado usando Streams.
+     *
+     * @param mes O mês para o qual deseja listar os principais clientes.
+     * @return Uma string que contém os nomes e o total de usos dos 5 principais clientes no mês especificado.
+     */
+    public String top5Clientes(int mes) {
+        if (mes < 1 || mes > 12) {
+            return "Mês inválido. O mês deve estar entre 1 e 12.";
+        }
+
+        Map<String, Integer> topClients = clientes.stream()
+                .collect(Collectors.toMap(Cliente::getNome, cliente -> cliente.totalDeUsosNoMes(mes)));
+
+        return topClients.entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .limit(5)
+                .map(entry -> "Nome: " + entry.getKey() + ", Total de Usos: " + entry.getValue())
+                .collect(Collectors.joining("\n", "Top 5 Clientes no mês " + mes + ":\n", ""));
+    }
+
 	/**
 	 * Calcula o valor total arrecadado pela empresa a partir de todos os clientes.
 	 * 
 	 * @return O valor total arrecadado.
 	 */
-	public double totalArrecadado() {
-		for (Cliente cliente : clientes) {
-			valorTotal += cliente.arrecadadoTotal();
-		}
-		return valorTotal;
-	}
 
-	/**
-	 * Calcula a arrecadação da empresa para um mês específico.
-	 * 
-	 * @param mes O mês para o qual deseja calcular a arrecadação.
-	 * @return A arrecadação do mês especificado.
-	 */
-	public double arrecadacaoNoMes(int mes) {
-		double arrecadadoMes = 0.0;
-		for (Cliente cliente : clientes) {
-			arrecadadoMes += cliente.arrecadadoNoMes(mes);
-		}
-		return arrecadadoMes;
-	}
-
-	/**
-	 * Calcula o valor médio arrecadado por uso pelos clientes da empresa.
-	 * 
-	 * @return O valor médio por uso.
-	 */
-	public double valorMedioPorUso() {
-		for (Cliente cliente : clientes) {
-			int totalUsos = cliente.totalDeUsos();
-			double arrecadacaoTotal = cliente.arrecadadoTotal();
-
-			if (totalUsos > 0) {
-				return arrecadacaoTotal / totalUsos;
-			} else {
-				return 0.0; // Evita divisão por zero.
-			}
-		}
-		return valorUso;
-	}
-
-	/**
-	 * Retorna os 5 principais clientes com base no número total de usos no mês
-	 * especificado.
-	 * 
-	 * @param mes O mês para o qual deseja listar os principais clientes.
-	 * @return Uma string que contém os nomes e o total de usos dos 5 principais
-	 *         clientes no mês especificado.
-	 */
-	public String top5Clientes(int mes) {
-		if (mes < 1 || mes > 12) {
-			return "Mês inválido. O mês deve estar entre 1 e 12.";
-		}
-
-		List<Cliente> clientesOrdenados = new ArrayList<>(clientes); // Crie uma nova lista para evitar a modificação da
-																		// lista original
-
-		// Ordene os clientes com base no total de usos em ordem decrescente
-		Collections.sort(clientesOrdenados, new Comparator<Cliente>() {
-			@Override
-			public int compare(Cliente c1, Cliente c2) {
-				return c2.totalDeUsos() - c1.totalDeUsos();
-			}
-		});
-
-		String result = "Top 5 Clientes no mês " + mes + ":\n";
-
-		int count = Math.min(5, clientesOrdenados.size());
-
-		for (int i = 0; i < count; i++) {
-			Cliente cliente = clientesOrdenados.get(i);
-			result += "Nome: " + cliente.getNome() + ", Total de Usos: " + cliente.totalDeUsos() + "\n";
-		}
-
-		return result;
-	}
 
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -284,4 +249,9 @@ public class Estacionamento implements Serializable {
 	public void setcoluna(int colunas) {
 		this.colunas = colunas;
 	}
+
+	public List<Cliente> getClientes() {
+    return clientes;
+}
+	
 }
