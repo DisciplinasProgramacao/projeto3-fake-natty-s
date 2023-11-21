@@ -192,24 +192,57 @@ public class Estacionamento implements Serializable {
      * @param mes O mês para o qual deseja calcular a arrecadação.
      * @return A arrecadação do mês especificado.
      */
-    public double arrecadacaoNoMes(int mes) {
-        return clientes.stream()
-                .mapToDouble(cliente -> cliente.arrecadadoNoMes(mes))
-                .sum();
-    }
+public double arrecadacaoNoMes(int mes) {
+		double arrecadadoMes = 0.0;
+		for (Cliente cliente : clientes) {
+			arrecadadoMes += cliente.arrecadadoNoMes(mes);
+		}
+		return arrecadadoMes;
+	}
+	
+	/**
+	 * Calcula o valor médio arrecadado por uso pelos clientes da empresa.
+	 * 
+	 * @return O valor médio por uso.
+	 */
+	public double valorMedioPorUso() {
+		for (Cliente cliente : clientes) {
+			int totalUsos = cliente.totalDeUsos();
+			double arrecadacaoTotal = cliente.arrecadadoTotal();
 
-    /**
-     * Calcula o valor médio arrecadado por uso pelos clientes da empresa usando Streams.
-     *
-     * @return O valor médio por uso.
-     */
-    public double valorMedioPorUso() {
-        return clientes.stream()
-                .mapToInt(Cliente::totalDeUsos)
+			if (totalUsos > 0) {
+				return arrecadacaoTotal / totalUsos;
+			} else {
+				return 0.0; // Evita divisão por zero.
+			}
+		}
+		return valorUso;
+	}
+
+ public double mediaMensalClientesHorista() {
+        int mesCorrente = LocalDate.now().getMonthValue();
+
+        double media = clientes.stream()
+           .filter(cliente -> "ModalidadeCliente.HORISTA".equals(cliente.getModalidade())) 
+           .mapToInt(cliente -> cliente.valorpago(mesCorrente))
+           .average()
+           .orElse(0.0);
+
+
+        return media;
+	}
+	
+	 public double mediaUsosMensaisClientesMensalistas() {
+        int mesCorrente = LocalDate.now().getMonthValue();
+
+        double media = clientes.stream()
+                .filter(cliente -> ModalidadeCliente.MENSALISTA.equals(cliente.getModalidade()))
+                .mapToInt(cliente -> cliente.totalDeUsosNoMes(mesCorrente))
                 .average()
                 .orElse(0.0);
-    }
 
+        return media;
+	}
     /**
      * Retorna os 5 principais clientes com base no número total de usos no mês especificado usando Streams.
      *
@@ -227,6 +260,7 @@ public String top5Clientes(int mes) {
                 .collect(Collectors.joining("\n", "Top 5 Clientes no mês " + mes + ":\n", ""));
     }
 
+	
 	/**
 	 * Calcula o valor total arrecadado pela empresa a partir de todos os clientes.
 	 * 
@@ -234,6 +268,7 @@ public String top5Clientes(int mes) {
 	 */
 
 
+	
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
