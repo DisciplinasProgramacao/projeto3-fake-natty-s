@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.time.LocalDateTime;
 
 import src.Exceptions.ExcecaoCadastrarVeiculoExistente;
 import src.Exceptions.ExcecaoClientejaExistente;
@@ -209,6 +210,22 @@ public class Estacionamento implements Serializable {
                 .average()
                 .orElse(0.0);
     }
+	 /**
+     * Calcula a média de usos mensais para clientes mensalistas no mês corrente.
+     *
+     * @return A média de usos mensais para clientes mensalistas.
+     */
+    public double mediaUsosMensaisClientesMensalistas() {
+        int mesCorrente = LocalDate.now().getMonthValue();
+
+        double media = clientes.stream()
+                .filter(cliente -> ModalidadeCliente.MENSALISTA.equals(cliente.getModalidade()))
+                .mapToInt(cliente -> cliente.totalDeUsosNoMes(mesCorrente))
+                .average()
+                .orElse(0.0);
+
+        return media;
+	}
 
     /**
      * Retorna os 5 principais clientes com base no número total de usos no mês especificado usando Streams.
