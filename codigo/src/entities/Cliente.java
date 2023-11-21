@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.io.Serializable;
 import java.util.stream.Collectors;
-import java.time.LocalDateTime;
 
 import src.interfaces.Entidade;
 
