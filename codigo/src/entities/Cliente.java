@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.io.Serializable;
 import java.util.stream.Collectors;
 
+import src.enums.ModalidadeCliente;
+import src.enums.Turno;
 import src.interfaces.Entidade;
 
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ public class Cliente implements Serializable, Entidade {
 
     private String nome;
     private String id;
+    private ModalidadeCliente modalidade;
+    private Turno turnoEscolhido;
     private List<Veiculo> veiculos;
 
 
@@ -30,6 +34,7 @@ public class Cliente implements Serializable, Entidade {
         this.nome = nome;
         this.id = id;
         this.veiculos = new ArrayList<Veiculo>();
+        this.modalidade = modalidade;
     }
 
 
@@ -305,7 +310,27 @@ public class Cliente implements Serializable, Entidade {
     public void setVeiculos(ArrayList<Veiculo> veiculos) {
         this.veiculos = veiculos;
     }
+
+    public ModalidadeCliente getModalidade() {
+        return modalidade;
+    }
+
+    public void setModalidade(ModalidadeCliente modalidade) {
+        this.modalidade = modalidade;
+    }
+
+     public Turno getTurnoEscolhido() {
+        return turnoEscolhido;
+    }
+
+    public void setTurnoEscolhido(Turno turnoEscolhido) {
+        this.turnoEscolhido = turnoEscolhido;
+    }
 }
+
+
+    
+
 
 
 
