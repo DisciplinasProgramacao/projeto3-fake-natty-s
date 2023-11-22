@@ -1,8 +1,8 @@
 package src.entities;
 
 import java.util.List;
-import src.exceptions.ExcecaoEstacionarSemSair;
-import src.exceptions.ExcecaoSairFinalizada;
+import src.Exceptions.ExcecaoEstacionarSemSair;
+import src.Exceptions.ExcecaoSairFinalizada;
 import src.interfaces.Entidade;
 
 import java.io.Serializable;
@@ -13,6 +13,7 @@ public class Veiculo implements Serializable, Entidade{
 
     private String placa;
     private List<UsoDeVaga> usos;
+    private Cliente cliente;
 
     public Veiculo(String placa) {
         this.placa = placa;
@@ -25,17 +26,21 @@ public class Veiculo implements Serializable, Entidade{
      * @param vaga A vaga onde o veículo deve estacionar.
      */
     public void estacionar(Vaga vaga) throws ExcecaoEstacionarSemSair {
-        if (usos.stream().anyMatch(uso -> !uso.getSaida().isBefore(LocalDateTime.now()) || uso.getSaida() == null)) {
-            throw new ExcecaoEstacionarSemSair(vaga);
+        for (UsoDeVaga usoDeVaga : usos) {
+
+            if (!usoDeVaga.getSaida().isBefore(LocalDateTime.now()) || usoDeVaga.getSaida() == null) {
+                throw new ExcecaoEstacionarSemSair(usoDeVaga.getVaga());
+            } else {
+                if (vaga.disponivel()) {
+                    vaga.estacionar();
+                } else {
+                    throw new ExcecaoEstacionarSemSair(usoDeVaga.getVaga());
+                }
+            }
+
         }
-    
-        if (vaga.disponivel()) {
-            vaga.estacionar();
-        } else {
-            throw new ExcecaoEstacionarSemSair(vaga);
-        }
+
     }
-    
 
     /**
      * Registra a saída do veículo de uma vaga e calcula o valor a ser pago.
@@ -44,18 +49,19 @@ public class Veiculo implements Serializable, Entidade{
      * @return O valor a ser pago pelo uso da vaga.
      */
     public double sair(Vaga vaga) throws ExcecaoSairFinalizada {
-        UsoDeVaga usoEncontrado = usos.stream()
-                .filter(uso -> uso.getVaga() == vaga)
-                .findFirst()
-                .orElseThrow(() -> new ExcecaoSairFinalizada(vaga));
-    
-        if (usoEncontrado.getSaida().isBefore(LocalDateTime.now())) {
-            throw new ExcecaoSairFinalizada(vaga);
+        double valorPago = 0.0;
+        for (UsoDeVaga usoDeVaga : usos) {
+            if (usoDeVaga.getVaga() == vaga) {
+                if (usoDeVaga.getSaida().isBefore(LocalDateTime.now())) {
+                    throw new ExcecaoSairFinalizada(vaga);
+                } else {
+                    valorPago = usoDeVaga.sair();
+                    return valorPago;
+                }
+            }
         }
-    
-        return usoEncontrado.sair();
+        return valorPago; 
     }
-    
     
 
     /**
@@ -65,9 +71,12 @@ public class Veiculo implements Serializable, Entidade{
      * @return O valor total arrecadado.
      */
     public double totalArrecadado() {
-        return usos.stream().mapToDouble(UsoDeVaga::valorPago).sum();
+        double totalValor = 0.0;
+        for (UsoDeVaga usoDeVaga : usos) {
+            totalValor += usoDeVaga.valorPago();
+        }
+        return totalValor;
     }
-    
 
     /**
      * Calcula o valor arrecadado pela empresa de estacionamento com este veículo em
@@ -77,12 +86,14 @@ public class Veiculo implements Serializable, Entidade{
      * @return O valor arrecadado no mês especificado.
      */
     public double arrecadadoNoMes(int mes) {
-        return usos.stream()
-                .filter(uso -> uso.getEntrada().getMonthValue() == mes)
-                .mapToDouble(UsoDeVaga::valorPago)
-                .sum();
+        double totalArrecadadoNoMes = 0.0;
+        for (UsoDeVaga usoDeVaga : usos) {
+            if (usoDeVaga.getEntrada().getMonthValue() == mes) {
+                totalArrecadadoNoMes += usoDeVaga.valorPago();
+            }
+        }
+        return totalArrecadadoNoMes;
     }
-    
 
     /**
      * Obtém o número total de usos de vaga feitos por este veículo.
@@ -112,5 +123,13 @@ public class Veiculo implements Serializable, Entidade{
     @Override
     public String getId() {
         return this.placa;
+    }
+
+    public Cliente getCliente(){
+        return this.cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 }
