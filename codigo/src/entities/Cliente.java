@@ -18,6 +18,7 @@ public class Cliente implements Serializable, Entidade {
     private String nome;
     private String id;
     private List<Veiculo> veiculos;
+    private List<Estacionamento> estacionamentos = new ArrayList<>();
 
 
     /**
@@ -39,7 +40,7 @@ public class Cliente implements Serializable, Entidade {
      * @param veiculo Veículo a ser adicionado.
      */
     public void addVeiculo(Veiculo veiculo) {
-        veiculos.add(veiculo);
+       this.veiculos.add(veiculo);
     }
 
 
@@ -53,6 +54,10 @@ public class Cliente implements Serializable, Entidade {
         return veiculos.stream().filter(veiculo -> veiculo.getPlaca().equals(placa)).findFirst().orElse(null);
     }
 
+/* 
+    public int totalDeUsosNoMes(int mes){
+        
+    }*/
 
     /**
      * Calcula o total de usos de todos os veículos do cliente.
@@ -302,9 +307,18 @@ public class Cliente implements Serializable, Entidade {
      *
      * @param veiculos Nova lista de veículos do cliente.
      */
-    public void setVeiculos(ArrayList<Veiculo> veiculos) {
+    public void setVeiculos(List<Veiculo> veiculos) {
         this.veiculos = veiculos;
     }
+
+    public List<Estacionamento> getEstacionamento(){
+        return this.estacionamentos;
+    }
+
+    public void addEstacionamento(Estacionamento estacionamento){
+        estacionamentos.add(estacionamento);
+    }
+    
 }
 
 
