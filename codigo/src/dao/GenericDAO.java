@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import src.Exceptions.*;
 import src.interfaces.DAO;
 import src.interfaces.Entidade;
 
@@ -39,7 +40,7 @@ public class GenericDAO<T extends Serializable, K> implements DAO<T, K>, Closeab
      * @throws IOException Se ocorrer um erro de I/O ao gravar o objeto no disco.
      */
     @Override
-    public void add(T object) {
+    public void add(T object) throws ExcecaoCadastrarVeiculoExistente, ExcecaoClientejaExistente {
         try {
             outputStream.writeObject(object);
             outputStream.flush();
