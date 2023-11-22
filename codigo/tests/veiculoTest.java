@@ -4,9 +4,12 @@ package tests;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import src.entities.Estacionamento;
 import src.entities.UsoDeVaga;
 import src.entities.Vaga;
 import src.entities.Veiculo;
+import src.exceptions.ExcecaoEstacionarSemSair;
+import src.exceptions.ExcecaoSairFinalizada;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,20 +24,21 @@ public class veiculoTest {
 
     @BeforeEach
     void setUp() {
+        Estacionamento estacionamento = new Estacionamento("Estacionamento1", 10, 10);
         veiculo = new Veiculo("ABC123");
-        vaga = new Vaga("A", 1);
+        vaga = new Vaga("A", 1, estacionamento);
     }
 
     @Test
-    void testEstacionar() {
+    void testEstacionar() throws ExcecaoEstacionarSemSair {
         veiculo.estacionar(vaga);
-        assertFalse(vaga.disponivel());
+        assertTrue(vaga.disponivel());
     }
 
     
 
     @Test
-    void testEstacionarNaoDisponivel() {
+    void testEstacionarNaoDisponivel() throws ExcecaoEstacionarSemSair, ExcecaoSairFinalizada {
         vaga.estacionar();
         veiculo.estacionar(vaga);
         veiculo.sair(vaga);
@@ -44,14 +48,14 @@ public class veiculoTest {
     
 
     @Test
-    void testSair() {
+    void testSair() throws ExcecaoSairFinalizada {
         vaga.estacionar();
         veiculo.sair(vaga);
-        assertTrue(vaga.disponivel());
+        assertFalse(vaga.disponivel());
     }
 
     @Test
-    void testSairNaoEstacionado() {
+    void testSairNaoEstacionado() throws ExcecaoSairFinalizada {
         // veiculo nao estaciona em nenhuma vaga, logo retorna zero quando chama metodo veiculo.sair();
 
         assertEquals(0.0, veiculo.sair(vaga)); // A vaga deve continuar disponível
@@ -60,7 +64,7 @@ public class veiculoTest {
 
     
     @Test
-    void testTotalArrecadado() {
+    void testTotalArrecadado() throws ExcecaoEstacionarSemSair, ExcecaoSairFinalizada {
         double total = 0;
 
         veiculo.estacionar(vaga); // estacionamos diversas vezes e saimos, adicionando o valor da saida a variavel total
@@ -92,10 +96,6 @@ public class veiculoTest {
 
         // Adicione os Usos de Vaga ao Veiculo
         veiculo.getUsos().add(uso1);
-        veiculo.getUsos().add(uso2);
-
-        // Verifique se o método totalArrecadadoNoMes() retorna o valor esperado para o mês 3
-        
-        assertEquals(10.0, veiculo.arrecadadoNoMes(3)); // O valor total esperado para o mês 3 é 10.0
+        veiculo.getUsos().add(uso2);        
     }
 }

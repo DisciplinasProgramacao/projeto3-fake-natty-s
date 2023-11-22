@@ -1,4 +1,4 @@
-package src.Exceptions;
+package src.exceptions;
 
 import src.entities.Cliente;
 

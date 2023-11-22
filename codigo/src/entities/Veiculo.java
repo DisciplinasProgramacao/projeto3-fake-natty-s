@@ -1,9 +1,8 @@
 package src.entities;
 
 import java.util.List;
-import src.Exceptions.ExcecaoEstacionarSemSair;
-import src.Exceptions.ExcecaoSairFinalizada;
 import src.interfaces.Entidade;
+import src.exceptions.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

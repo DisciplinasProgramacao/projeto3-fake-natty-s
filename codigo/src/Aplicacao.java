@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import src.dao.GenericDAO;
 
-import src.Exceptions.*;
+import src.exceptions.*;
 
 public class Aplicacao {
 

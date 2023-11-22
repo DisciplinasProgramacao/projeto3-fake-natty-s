@@ -1,11 +1,11 @@
+package src.MainTests;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
-import src.Cliente;
-import src.Estacionamento;
-import src.Veiculo;
-import src.Exceptions.ExcecaoClientejaExistente;
+import src.entities.*;
+import src.exceptions.*;
+
 
 public class MainCliente {
 

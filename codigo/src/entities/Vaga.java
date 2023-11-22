@@ -1,7 +1,5 @@
 package src.entities;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A classe Vaga representa uma vaga de estacionamento em um estacionamento.

@@ -1,11 +1,9 @@
+package src.MainTests;
+
 import java.util.Scanner;
-import src.Cliente;
-import src.Estacionamento;
-import src.Veiculo;
-import src.Exceptions.ExcecaoCadastrarVeiculoExistente;
-import src.Exceptions.ExcecaoClientejaExistente;
-import src.Exceptions.ExcecaoEstacionarSemSair;
-import src.Exceptions.ExcecaoSairFinalizada;
+
+import src.entities.*;
+import src.exceptions.*;
 
 public class MainEstacionamento {
 

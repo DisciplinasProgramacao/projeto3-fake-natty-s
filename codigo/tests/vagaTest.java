@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import src.entities.Estacionamento;
 import src.entities.Vaga;
 
 
@@ -13,19 +14,20 @@ public class vagaTest {
     
         @BeforeEach
         public void setUp() {
-            vaga = new Vaga("A", 1);
+            Estacionamento estacionamento = new Estacionamento("Estacionamento1", 10, 10);
+            vaga = new Vaga("A", 1, estacionamento);
         }
     
         @Test
         public void testEstacionar() {
-            assertFalse(vaga.estacionar());
+            assertTrue(vaga.estacionar());
         }
     
         @Test
         public void testSair() {
             assertFalse(vaga.sair());
             vaga.estacionar();
-            assertTrue(vaga.disponivel());
+            assertFalse(vaga.disponivel());
         }
     
         @Test
