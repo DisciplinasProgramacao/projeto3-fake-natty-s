@@ -19,6 +19,8 @@ public class Cliente implements Serializable, Entidade {
     private String id;
     private List<Veiculo> veiculos;
     private List<Estacionamento> estacionamentos = new ArrayList<>();
+    private ModalidadeCliente modalidade;
+    private Turno turnoEscolhido;
 
 
     /**
