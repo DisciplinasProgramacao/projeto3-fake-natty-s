@@ -202,7 +202,7 @@ public class Aplicacao {
                     System.out.println("Calcular top5 clientes no mes de: ");
                     System.out.println(" 1- Janeiro \n 2- Fevereiro \n 3- Março... ");
                     mes = scanner.nextInt();
-                    estacionamento.top5Clientes(mes);
+                    //estacionamento.top5Clientes(mes);
                     break;
                 case 7:
                     scanner.close();
