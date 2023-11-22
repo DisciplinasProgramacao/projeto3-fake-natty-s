@@ -1,7 +1,6 @@
-package src;
+package src.entities;
 
 import java.io.Serializable;
-import src.ManipuladorDeArquivo;
 
 //Classe estacionamento - Gabriel Pongelupe e Felipe Picinin
 
@@ -17,9 +16,10 @@ import src.Exceptions.ExcecaoCadastrarVeiculoExistente;
 import src.Exceptions.ExcecaoClientejaExistente;
 import src.Exceptions.ExcecaoEstacionarSemSair;
 import src.Exceptions.ExcecaoSairFinalizada;
-import src.UsoDeVaga;
+import src.entities.UsoDeVaga;
+import src.interfaces.Entidade;
 
-public class Estacionamento implements Serializable {
+public class Estacionamento implements Serializable, Entidade {
 
 	private String nome;
 	private List<Cliente> clientes;
@@ -46,7 +46,7 @@ public class Estacionamento implements Serializable {
 		this.valorTotal = 0;
 		this.valorMes = 0;
 		this.valorUso = 0;
-		gerarVagas();
+		//gerarVagas();
 	}
 
 	/*
@@ -54,7 +54,8 @@ public class Estacionamento implements Serializable {
 	 * cadastrado e
 	 * chama o medoto addVeiculo(veiculo) do cliente especifico)
 	 */
-	public void addVeiculo(Veiculo veiculo, String idCli) throws ExcecaoCadastrarVeiculoExistente, ExcecaoClientejaExistente {
+	public void addVeiculo(Veiculo veiculo, String idCli)
+			throws ExcecaoCadastrarVeiculoExistente, ExcecaoClientejaExistente {
 		Cliente cliente = encontrarClientePorId(idCli);
 		List<Veiculo> veiculos = cliente.getVeiculos();
 
@@ -77,7 +78,7 @@ public class Estacionamento implements Serializable {
 		if (clientes.contains(cliente)) {
 			throw new ExcecaoClientejaExistente(cliente);
 		} else {
-			ManipuladorDeArquivo.escreverObjeto(arq, cliente);
+			this.clientes.add(cliente);
 		}
 	}
 
@@ -98,7 +99,7 @@ public class Estacionamento implements Serializable {
 
 				if (vagas.get(index_vaga) == null) {
 					String filaString = String.valueOf(filaChar); // Converte char para String
-					Vaga vaga = new Vaga(filaString, numero);
+					Vaga vaga = new Vaga(filaString, numero, this);
 					vagas.add(vaga);
 					return;
 				}
@@ -138,21 +139,20 @@ public class Estacionamento implements Serializable {
 	 * @param String idCli
 	 */
 
-    public Cliente encontrarClientePorId(String idCli) throws ExcecaoClientejaExistente {
+	public Cliente encontrarClientePorId(String idCli) throws ExcecaoClientejaExistente {
 		boolean encontrado = false;
 		Cliente clienteEncontrado = null;
-        for (Cliente cliente : clientes) {
-            if (cliente.getId().equals(idCli)) {
-                clienteEncontrado = cliente;
+		for (Cliente cliente : clientes) {
+			if (cliente.getId().equals(idCli)) {
+				clienteEncontrado = cliente;
 				encontrado = true;
-            }
-        }
-		if(!encontrado){
+			}
+		}
+		if (!encontrado) {
 			throw new ExcecaoClientejaExistente("O cliente nao pode ser encontrado");
 		}
-        return clienteEncontrado; // Cliente não encontrado
-    }
-
+		return clienteEncontrado; // Cliente não encontrado
+	}
 
 	public double getValorArrecadado() {
 		return valorArrecadado;
@@ -168,8 +168,6 @@ public class Estacionamento implements Serializable {
 			if (cliente.possuiVeiculo(placa) != null) {
 				Veiculo veiculo = cliente.possuiVeiculo(placa);
 
-				
-
 				for (UsoDeVaga uso : veiculo.getUsos()) {
 					if (uso.getSaida() == null) {
 						veiculo.sair(uso.getVaga());
@@ -180,95 +178,67 @@ public class Estacionamento implements Serializable {
 		}
 	}
 
-	  public double totalArrecadado() {
-        return clientes.stream()
-                .mapToDouble(Cliente::arrecadadoTotal)
-                .sum();
-    }
-
-    /**
-     * Calcula a arrecadação da empresa para um mês específico usando Streams.
-     *
-     * @param mes O mês para o qual deseja calcular a arrecadação.
-     * @return A arrecadação do mês especificado.
-     */
-public double arrecadacaoNoMes(int mes) {
-		double arrecadadoMes = 0.0;
-		for (Cliente cliente : clientes) {
-			arrecadadoMes += cliente.arrecadadoNoMes(mes);
-		}
-		return arrecadadoMes;
+	public double totalArrecadado() {
+		return clientes.stream()
+				.mapToDouble(Cliente::arrecadadoTotal)
+				.sum();
 	}
-	
+
 	/**
-	 * Calcula o valor médio arrecadado por uso pelos clientes da empresa.
-	 * 
+	 * Calcula a arrecadação da empresa para um mês específico usando Streams.
+	 *
+	 * @param mes O mês para o qual deseja calcular a arrecadação.
+	 * @return A arrecadação do mês especificado.
+	 */
+	public double arrecadacaoNoMes(int mes) {
+		return clientes.stream()
+				.mapToDouble(cliente -> cliente.arrecadadoNoMes(mes))
+				.sum();
+	}
+
+	/**
+	 * Calcula o valor médio arrecadado por uso pelos clientes da empresa usando
+	 * Streams.
+	 *
 	 * @return O valor médio por uso.
 	 */
 	public double valorMedioPorUso() {
-		for (Cliente cliente : clientes) {
-			int totalUsos = cliente.totalDeUsos();
-			double arrecadacaoTotal = cliente.arrecadadoTotal();
+		return clientes.stream()
+				.mapToInt(Cliente::totalDeUsos)
+				.average()
+				.orElse(0.0);
+	}
 
-			if (totalUsos > 0) {
-				return arrecadacaoTotal / totalUsos;
-			} else {
-				return 0.0; // Evita divisão por zero.
-			}
+	/**
+	 * Retorna os 5 principais clientes com base no número total de usos no mês
+	 * especificado usando Streams.
+	 *
+	 * @param mes O mês para o qual deseja listar os principais clientes.
+	 * @return Uma string que contém os nomes e o total de usos dos 5 principais
+	 *         clientes no mês especificado.
+	 */
+	public String top5Clientes(int mes) {
+		if (mes < 1 || mes > 12) {
+			return "Mês inválido. O mês deve estar entre 1 e 12.";
 		}
-		return valorUso;
+
+		Map<String, Integer> topClients = clientes.stream()
+				.collect(Collectors.toMap(Cliente::getNome, cliente -> cliente.totalDeUsosNoMes(mes)));
+
+		return topClients.entrySet().stream()
+				.sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+				.limit(5)
+				.map(entry -> "Nome: " + entry.getKey() + ", Total de Usos: " + entry.getValue())
+				.collect(Collectors.joining("\n", "Top 5 Clientes no mês " + mes + ":\n", "")); */
+			return "oi";
 	}
 
- public double mediaMensalClientesHorista() {
-        int mesCorrente = LocalDate.now().getMonthValue();
-
-        double media = clientes.stream()
-           .filter(cliente -> "ModalidadeCliente.HORISTA".equals(cliente.getModalidade())) 
-           .mapToInt(cliente -> cliente.valorpago(mesCorrente))
-           .average()
-           .orElse(0.0);
-
-
-        return media;
-	}
-	
-	 public double mediaUsosMensaisClientesMensalistas() {
-        int mesCorrente = LocalDate.now().getMonthValue();
-
-        double media = clientes.stream()
-                .filter(cliente -> ModalidadeCliente.MENSALISTA.equals(cliente.getModalidade()))
-                .mapToInt(cliente -> cliente.totalDeUsosNoMes(mesCorrente))
-                .average()
-                .orElse(0.0);
-
-        return media;
-	}
-    /**
-     * Retorna os 5 principais clientes com base no número total de usos no mês especificado usando Streams.
-     *
-     * @param mes O mês para o qual deseja listar os principais clientes.
-     * @return Uma string que contém os nomes e o total de usos dos 5 principais clientes no mês especificado.
-     */
-public String top5Clientes(int mes) {
-        if (mes < 1 || mes > 12) {
-            return "Mês inválido. O mês deve estar entre 1 e 12.";
-        }
-        Map<String, Object> topClients = clientes.stream()
-                .collect(Collectors.toMap(Cliente::getNome, cliente -> cliente.totalDeUsos()));
-        return topClients.entrySet().stream().sorted().limit(5)
-                .map(entry -> "Nome: " + entry.getKey() + ", Total de Usos: " + entry.getValue())
-                .collect(Collectors.joining("\n", "Top 5 Clientes no mês " + mes + ":\n", ""));
-    }
-
-	
 	/**
 	 * Calcula o valor total arrecadado pela empresa a partir de todos os clientes.
 	 * 
 	 * @return O valor total arrecadado.
 	 */
 
-
-	
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
@@ -283,6 +253,25 @@ public String top5Clientes(int mes) {
 
 	public List<Cliente> getClientes() {
     return clientes;
-}
+
 	
+	}
+
+	public void setClientes(List<Cliente> clienteNovos){
+		this.clientes = clienteNovos;
+	}
+
+	public void setVagas(List<Vaga> vagas) {
+        this.vagas = vagas;
+    }
+
+	public String getNome() {
+		return nome;
+	}
+
+	@Override
+	public String getId() {
+		return this.nome;
+	}
+
 }
