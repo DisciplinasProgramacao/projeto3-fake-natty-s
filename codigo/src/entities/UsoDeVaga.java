@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import src.enums.ServicosAdicionais;
+import src.enums.*;
 
 /**
  * Classe que representa o uso de uma vaga de estacionamento.

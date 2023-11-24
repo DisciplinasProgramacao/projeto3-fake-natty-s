@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.stream.Collectors;
 
 import src.interfaces.Entidade;
+import src.enums.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
