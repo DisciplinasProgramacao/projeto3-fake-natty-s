@@ -320,6 +320,22 @@ public class Cliente implements Serializable, Entidade {
     public void addEstacionamento(Estacionamento estacionamento){
         estacionamentos.add(estacionamento);
     }
+
+ public ModalidadeCliente getModalidade() {
+        return modalidade;
+    }
+
+    public void setModalidade(ModalidadeCliente modalidade) {
+        this.modalidade = modalidade;
+    }
+
+     public Turno getTurnoEscolhido() {
+        return turnoEscolhido;
+    }
+
+    public void setTurnoEscolhido(Turno turnoEscolhido) {
+        this.turnoEscolhido = turnoEscolhido;
+    }
     
 }
 
