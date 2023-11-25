@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import src.enums.ServicosAdicionais;
+import src.enums.*;
 
 /**
  * Classe que representa o uso de uma vaga de estacionamento.
@@ -41,11 +42,11 @@ public class UsoDeVaga implements Serializable {
 	 * 
 	 * @return O valor a ser pago pelo uso da vaga.
 	 */
-	public double sair() throws RuntimeException{
-		this.saida = LocalDateTime.now();
-		long minutosEstacionado = Duration.between(entrada, saida).toMinutes();
-	
-		for (ServicosAdicionais servico : servicosAdicionais) {
+	public double sair(Cliente cliente) throws RuntimeException {
+    this.saida = LocalDateTime.now();
+    long minutosEstacionado = Duration.between(entrada, saida).toMinutes();
+
+	for (ServicosAdicionais servico : servicosAdicionais) {
 			if (servico == ServicosAdicionais.POLIMENTO && minutosEstacionado < 120) {
 				throw new RuntimeException("Tempo mínimo de permanência para polimento não atendido.");
 			} else if (servico == ServicosAdicionais.LAVAGEM && minutosEstacionado < 60) {
@@ -53,19 +54,46 @@ public class UsoDeVaga implements Serializable {
 			}
 		}
 
-		double valorAPagar = (minutosEstacionado / 15) * VALOR_FRACAO;
-		valorAPagar = Math.min(valorAPagar, VALOR_MAXIMO);
-	
-		// Adicione o valor dos serviços adicionais
-		double valorServicosAdicionais = servicosAdicionais.stream()
-				.mapToDouble(ServicosAdicionais::getValor)
-				.sum();
-	
-		valorAPagar += valorServicosAdicionais;
-	
-		this.valorPago = valorAPagar;
-		return valorAPagar;
-	}
+
+    double valorAPagar;
+
+    switch (cliente.getModalidade()) {
+        case HORISTA:
+            valorAPagar = calcularValorHorista(minutosEstacionado);
+            break;
+        case DE_TURNO:
+            valorAPagar = calcularValorDeTurno(minutosEstacionado, cliente.getTurnoEscolhido());
+            break;
+        case MENSALISTA:
+            valorAPagar = 0.0; // Mensalistas não pagam pelo estacionamento por tempo.
+            break;
+        default:
+            throw new RuntimeException("Modalidade de cliente desconhecida.");
+    }
+
+    // Adicione o valor dos serviços adicionais
+    double valorServicosAdicionais = servicosAdicionais.stream()
+            .mapToDouble(ServicosAdicionais::getValor)
+            .sum();
+
+    valorAPagar += valorServicosAdicionais;
+
+    this.valorPago = valorAPagar;
+    return valorAPagar;
+}
+
+private double calcularValorHorista(long minutosEstacionado) {
+    return (minutosEstacionado / 15) * VALOR_FRACAO;
+}
+
+private double calcularValorDeTurno(long minutosEstacionado, Turno turnoEscolhido) {
+    if (minutosEstacionado <= Duration.between(turnoEscolhido.getInicio(), turnoEscolhido.getFim()).toMinutes()) {
+        return 0.0; // Está dentro do turno, não paga estacionamento.
+    } else {
+        return calcularValorHorista(minutosEstacionado);
+    }
+}
+
 	
 	public void adicionarServicos(ServicosAdicionais servico) {
 		servicosAdicionais.add(servico);

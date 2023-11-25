@@ -54,7 +54,7 @@ public class Veiculo implements Serializable, Entidade{
                 if (usoDeVaga.getSaida().isBefore(LocalDateTime.now())) {
                     throw new ExcecaoSairFinalizada(vaga);
                 } else {
-                    valorPago = usoDeVaga.sair();
+                    valorPago = usoDeVaga.sair(this.cliente);
                     return valorPago;
                 }
             }
