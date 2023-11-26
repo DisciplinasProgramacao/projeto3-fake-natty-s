@@ -1,8 +1,9 @@
 package src.entities;
 
 import java.util.List;
+import src.Exceptions.ExcecaoEstacionarSemSair;
+import src.Exceptions.ExcecaoSairFinalizada;
 import src.interfaces.Entidade;
-import src.exceptions.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -12,7 +13,7 @@ public class Veiculo implements Serializable, Entidade{
 
     private String placa;
     private List<UsoDeVaga> usos;
-    private Cliente cliente;
+    
 
     public Veiculo(String placa) {
         this.placa = placa;
@@ -54,7 +55,7 @@ public class Veiculo implements Serializable, Entidade{
                 if (usoDeVaga.getSaida().isBefore(LocalDateTime.now())) {
                     throw new ExcecaoSairFinalizada(vaga);
                 } else {
-                    valorPago = usoDeVaga.sair(this.cliente);
+                    valorPago = usoDeVaga.sair();
                     return valorPago;
                 }
             }
@@ -124,11 +125,9 @@ public class Veiculo implements Serializable, Entidade{
         return this.placa;
     }
 
-    public Cliente getCliente(){
-        return this.cliente;
+    public void addUsos(UsoDeVaga uso){
+        this.usos.add(uso);
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
+    
 }
