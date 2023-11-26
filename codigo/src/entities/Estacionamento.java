@@ -58,6 +58,15 @@ public class Estacionamento implements Serializable, Entidade {
 
 	}
 
+	public Vaga getVagaDisponivel() {
+		for (Vaga vaga : vagas) {
+			if (vaga.disponivel()) {
+				return vaga;
+			}
+		}
+		return null; // Retorna null se não houver vaga disponível
+	}
+
 	/*
 	 * Adiciona cliente na lista de clientes do estacionamento,
 	 * 
