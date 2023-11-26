@@ -5,9 +5,18 @@ import java.io.Serializable;
 //Classe estacionamento - Gabriel Pongelupe e Felipe Picinin
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import src.exceptions.*;
+import src.Exceptions.ExcecaoCadastrarVeiculoExistente;
+import src.Exceptions.ExcecaoClientejaExistente;
+import src.Exceptions.ExcecaoEstacionarSemSair;
+import src.Exceptions.ExcecaoSairFinalizada;
+import src.entities.UsoDeVaga;
 import src.interfaces.Entidade;
 
 public class Estacionamento implements Serializable, Entidade {
@@ -68,20 +77,12 @@ public class Estacionamento implements Serializable, Entidade {
 
 	}
 
-	public Vaga getVagaDisponivel() {
-		for (Vaga vaga : vagas) {
-			if (vaga.disponivel()) {
-				return vaga;
-			}
-		}
-		return null; // Retorna null se não houver vaga disponível
-	}
-
 	/*
 	 * Adiciona cliente na lista de clientes do estacionamento,
 	 * 
 	 * @param cliente: Cliente
 	 */
+
 
 	public void addCliente(Cliente cliente) throws ExcecaoClientejaExistente {
 
@@ -109,7 +110,7 @@ public class Estacionamento implements Serializable, Entidade {
 
 				if (vagas.get(index_vaga) == null) {
 					String filaString = String.valueOf(filaChar); // Converte char para String
-					Vaga vaga = new Vaga(filaString, numero, this);
+					Vaga vaga = new Vaga(filaString, numero);
 					vagas.add(vaga);
 					return;
 				}
@@ -188,6 +189,17 @@ public class Estacionamento implements Serializable, Entidade {
 		}
 	}
 
+	public Vaga getVagaDisponivel() {
+		for (Vaga vaga : vagas) {
+			if (vaga.disponivel()) {
+				return vaga;
+			}
+		}
+		return null; // Retorna null se não houver vaga disponível
+	}
+
+	
+
 	public double totalArrecadado() {
 		return clientes.stream()
 				.mapToDouble(Cliente::arrecadadoTotal)
@@ -227,9 +239,8 @@ public class Estacionamento implements Serializable, Entidade {
 	 * @return Uma string que contém os nomes e o total de usos dos 5 principais
 	 *         clientes no mês especificado.
 	 */
-	/*
 	public String top5Clientes(int mes) {
-		if (mes < 1 || mes > 12) {
+		/*if (mes < 1 || mes > 12) {
 			return "Mês inválido. O mês deve estar entre 1 e 12.";
 		}
 
@@ -240,9 +251,9 @@ public class Estacionamento implements Serializable, Entidade {
 				.sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
 				.limit(5)
 				.map(entry -> "Nome: " + entry.getKey() + ", Total de Usos: " + entry.getValue())
-				.collect(Collectors.joining("\n", "Top 5 Clientes no mês " + mes + ":\n", "")); 
+				.collect(Collectors.joining("\n", "Top 5 Clientes no mês " + mes + ":\n", "")); */
 			return "oi";
-	} */
+	}
 
 	/**
 	 * Calcula o valor total arrecadado pela empresa a partir de todos os clientes.
