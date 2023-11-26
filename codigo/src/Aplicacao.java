@@ -3,60 +3,35 @@ package src;
 import src.entities.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import src.dao.GenericDAO;
-
-import src.exceptions.*;
+import src.dao.SerializationUtils;
+import src.Exceptions.*;
 
 public class Aplicacao {
 
-    public static GenericDAO<Cliente, String> clienteDAO;
-    public static GenericDAO<Estacionamento, String> estacionamentoDAO;
-    public static GenericDAO<Vaga, String> vagaDAO;
-    public static GenericDAO<Veiculo, String> veiculoDAO;
-    public static GenericDAO<UsoDeVaga, String> usoDeVagaDAO;
 
-    public static String estacionamentoAtrabalhar;
+
+    public static int estacionamentoAtrabalhar;
+
+    static Estacionamento estacionamento;
 
     static List<Estacionamento> estacionamentos;
+    static SerializationUtils<Estacionamento> serializableEstacionamento;
 
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
 
         try {
-            clienteDAO = new GenericDAO<>("codigo/files/clientes.dat");
-            estacionamentoDAO = new GenericDAO<>("codigo/files/estacionamentos.dat");
-            vagaDAO = new GenericDAO<>("codigo/files/vagas.dat");
-            veiculoDAO = new GenericDAO<>("codigo/files/veiculos.dat");
-            usoDeVagaDAO = new GenericDAO<>("codigo/files/usodevaga.dat");
+            Aplicacao.serializableEstacionamento = new SerializationUtils<>();
 
-            estacionamentos = estacionamentoDAO.getAll();
-            for (Estacionamento estacionamento : estacionamentos) {
-                estacionamento.setClientes(clienteDAO.getAll().stream()
-                        .filter(cliente -> cliente.getEstacionamento().contains(estacionamento))
-                        .collect(Collectors.toList()));
-
-                estacionamento.setVagas(vagaDAO.getAll().stream()
-                        .filter(vaga -> vaga.getEstacionamento().equals(estacionamento))
-                        .collect(Collectors.toList()));
-
-                for (Cliente cliente : estacionamento.getClientes()) {
-                    cliente.setVeiculos(veiculoDAO.getAll().stream()
-                            .filter(veiculo -> veiculo.getCliente().equals(cliente))
-                            .collect(Collectors.toList()));
-
-                    for (Veiculo veiculo : cliente.getVeiculos()) {
-                        veiculo.setUsos(usoDeVagaDAO.getAll().stream()
-                                .filter(e -> e.getVeiculo().equals(veiculo)).collect(Collectors.toList()));
-                    }
-                }
-
-            }
+            Aplicacao.estacionamentos = serializableEstacionamento.getAll();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -87,8 +62,8 @@ public class Aplicacao {
                     Estacionamento estacionamentoNovo = new Estacionamento(name, fileiras, vagasPorFila);
 
                     try {
-                        estacionamentoDAO.add(estacionamentoNovo);
-                        
+                        Aplicacao.serializableEstacionamento.add(estacionamentoNovo);
+
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
@@ -97,13 +72,24 @@ public class Aplicacao {
 
                 case 1:
                     System.out.println("Digite o nome do estacionamento a se trabalhar: ");
-                    estacionamentoAtrabalhar = scanner.nextLine();
-                    menuEstacionamento(estacionamentoDAO.get(estacionamentoAtrabalhar));
+                    System.out.println("1 - " + estacionamentos.get(0).getNome());
+                    System.out.println("2 - " + estacionamentos.get(1).getNome());
+                    System.out.println("3 - " + estacionamentos.get(2).getNome());
+
+                    estacionamentoAtrabalhar = scanner.nextInt();
+                    estacionamento = estacionamentos.get(estacionamentoAtrabalhar);
+
+                    menuEstacionamento();
                     break;
                 case 2:
-                    System.out.println("Digite o nome estacionamento a se trabalhar: ");
-                    estacionamentoAtrabalhar = scanner.nextLine();
-                    menuCliente(estacionamentoDAO.get(estacionamentoAtrabalhar));
+                    System.out.println("Digite o nome do estacionamento a se trabalhar: ");
+                    System.out.println("1 - " + estacionamentos.get(0).getNome());
+                    System.out.println("2 - " + estacionamentos.get(1).getNome());
+                    System.out.println("3 - " + estacionamentos.get(2).getNome());
+
+                    estacionamentoAtrabalhar = scanner.nextInt();
+                    estacionamento = estacionamentos.get(estacionamentoAtrabalhar);
+                    menuCliente();
                     break;
                 case 3:
                     menuVeiculo();
@@ -119,19 +105,12 @@ public class Aplicacao {
                 default:
                     System.out.println("Opção inválida. Tente novamente...");
             }
-            try {
-                clienteDAO.close();
-                estacionamentoDAO.close();
-                vagaDAO.close();
-                veiculoDAO.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
         }
 
     }
 
-    private static void menuEstacionamento(Estacionamento estacionamento) {
+    private static void menuEstacionamento() {
 
         Scanner scanner = new Scanner(System.in);
         String id;
@@ -161,29 +140,30 @@ public class Aplicacao {
                     cliente.addEstacionamento(estacionamento);
                     try {
                         estacionamento.addCliente(cliente);
-                        clienteDAO.add(cliente);
+                        Aplicacao.serializableEstacionamento.update(estacionamentos);
+
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
-                    
+
                     break;
                 case 2:
                     id = scanner.nextLine();
                     try {
-                        Cliente clientePorId = clienteDAO.get(id);
+                        Cliente clientePorId = estacionamento.encontrarClientePorId(id);
                         System.out.println("Nome: " + clientePorId.getNome() + " Id: " + clientePorId.getId());
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;
                 case 3:
-                    double soma;
-                    List<UsoDeVaga> usosDeVagas = usoDeVagaDAO.getAll();
+                double soma = estacionamento.getClientes().stream()
+                .flatMap(cli -> cli.getVeiculos().stream())
+                .flatMap(veiculo -> veiculo.getUsos().stream())
+                .mapToDouble(usoa -> usoa.valorPago())  // Corrigido para usar o método getValor
+                .sum();
 
-                    soma = usosDeVagas.stream()
-                            .filter(e -> e.getEstacionamento().equals(estacionamento))
-                            .mapToDouble(UsoDeVaga::getValorPago)
-                            .sum();
+                    
 
                     System.out.println("O estacionamento " + estacionamento.getNome() + "Arrecadou no total: "
                             + soma);
@@ -207,17 +187,19 @@ public class Aplicacao {
                 case 7:
                     scanner.close();
                     System.out.println("Saindo do Menu do Estacionamento.");
-                    return; // Retorna ao do-while do main
+                    
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
             }
         }
     }
 
-    private static void menuCliente(Estacionamento estacionamento) {
+    private static void menuCliente() {
+
+        
         Scanner scanner = new Scanner(System.in);
         Cliente clienteSelecionado = null;
-         String placa;
+        String placa;
 
         System.out.print("Digite o ID do cliente que deseja trabalhar: ");
         String idCliente = scanner.nextLine();
@@ -246,43 +228,70 @@ public class Aplicacao {
             switch (escolha) {
 
                 case 1:
-                        System.out.print("Digite a placa do veículo: ");
-                        placa = scanner.nextLine();
-                        Veiculo veiculo = new Veiculo(placa);
-                        try {
-                            veiculoDAO.add(veiculo);
-                            veiculo.setCliente(clienteSelecionado);
-                        } catch (ExcecaoCadastrarVeiculoExistente | ExcecaoClientejaExistente e) {
-                            System.out.println(e.getMessage());
-                        }
+                    System.out.print("Digite a placa do veículo: ");
+                    placa = scanner.nextLine();
+                    Veiculo veiculo = new Veiculo(placa);
+                    try {
+                        estacionamento.addVeiculo(veiculo, idCliente);
+                    } catch (ExcecaoCadastrarVeiculoExistente | ExcecaoClientejaExistente e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 2:
                     System.out.println("Digite a placa do veiculo: ");
-                    
+
                     placa = scanner.nextLine();
 
                     System.out.println("O cliente: " + clienteSelecionado.getNome() + " Possui o veículo de placa = "
-                         + clienteSelecionado.possuiVeiculo(placa));
+                            + clienteSelecionado.possuiVeiculo(placa));
                     break;
                 case 3:
                     List<UsoDeVaga> usos = clienteSelecionado.obterHistoricoDeUsos();
                     int totalusos = usos.lastIndexOf(usos);
                     System.out.println("Total de usos do cliente " + clienteSelecionado.getNome() + " é " + totalusos);
                     break;
-                case 4:
-                    // ... Restante das opções do menu
+                    case 4:
+                    // Arrecadado por Veículo
+                    System.out.print("Digite a placa do veículo: ");
+                    placa = scanner.nextLine();
+                    veiculo = clienteSelecionado.possuiVeiculo(placa);
+                    if (veiculo != null) {
+                        double arrecadacaoVeiculo = veiculo.totalArrecadado();
+                        System.out.println("Arrecadação total do veículo de placa " + placa + " é " + arrecadacaoVeiculo);
+                    } else {
+                        System.out.println("O cliente não possui um veículo com a placa informada.");
+                    }
                     break;
+                
                 case 5:
-                    // ... Restante das opções do menu
+                    // Arrecadado Total
+                    double arrecadacaoTotal = clienteSelecionado.arrecadadoTotal();
+                    System.out.println("Arrecadação total do cliente " + clienteSelecionado.getNome() + " é " + arrecadacaoTotal);
                     break;
+                
                 case 6:
-                    // ... Restante das opções do menu
+                    // Arrecadado no Mês
+                    System.out.print("Digite o número do mês: ");
+                    int mes = scanner.nextInt();
+                    double arrecadacaoMes = clienteSelecionado.arrecadadoNoMes(mes);
+                    System.out.println("Arrecadação do cliente " + clienteSelecionado.getNome() + " no mês " + mes + " é " + arrecadacaoMes);
                     break;
+                
                 case 7:
-                    // ... Restante das opções do menu
+                    // Obter Histórico de Usos
+                    List<UsoDeVaga> historicoUsos = clienteSelecionado.obterHistoricoDeUsos();
+                    for (UsoDeVaga uso : historicoUsos) {
+                        System.out.println("Veículo: " + uso.getVeiculo().getPlaca() + " - Vaga: " + uso.getVaga().getPosicao() +
+                                " - Entrada: " + uso.getEntrada() + " - Saída: " + uso.getSaida() + " - Valor: " + uso.valorPago());
+                    }
                     break;
+                
                 case 8:
-                    // ... Restante das opções do menu
+                    // Remover Veículo
+                    System.out.print("Digite a placa do veículo a ser removido: ");
+                    placa = scanner.nextLine();
+                    clienteSelecionado.removerVeiculo(placa);
+                    System.out.println("Veículo removido com sucesso.");
                     break;
                 case 9:
                     System.out.println("Voltando ao Menu Principal.");
