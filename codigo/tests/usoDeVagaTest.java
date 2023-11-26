@@ -43,6 +43,6 @@ public class UsoDeVagaTest {
         assertNotNull(uso.getEntrada());
     }
 
-    
+
 
 }
