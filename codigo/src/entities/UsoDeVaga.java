@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import src.enums.ServicosAdicionais;
-import src.enums.*;
+import src.interfaces.Entidade;
 
 /**
  * Classe que representa o uso de uma vaga de estacionamento.
@@ -24,7 +24,7 @@ public class UsoDeVaga implements Serializable {
 	private LocalDateTime saida;
 	private double valorPago;
 	private List<ServicosAdicionais> servicosAdicionais;
-	private Veiculo veiculo;
+	
 
 	/**
 	 * Cria uma instância de UsoDeVaga associada a uma vaga específica.
@@ -38,26 +38,26 @@ public class UsoDeVaga implements Serializable {
 	}
 
 	public UsoDeVaga(Vaga vaga, LocalDateTime entrada, LocalDateTime saida, double valorPago,
-            List<ServicosAdicionais> servicosAdicionais, Veiculo veiculo) {
+            List<ServicosAdicionais> servicosAdicionais) {
         this.vaga = vaga;
         this.entrada = entrada;
         this.saida = saida;
         this.valorPago = valorPago;
         this.servicosAdicionais = servicosAdicionais;
-        this.veiculo = veiculo;
+        
     }
 
-
+	
 	/**
 	 * Registra a saída do cliente da vaga e calcula o valor a ser pago.
 	 * 
 	 * @return O valor a ser pago pelo uso da vaga.
 	 */
-	public double sair(Cliente cliente) throws RuntimeException {
-    this.saida = LocalDateTime.now();
-    long minutosEstacionado = Duration.between(entrada, saida).toMinutes();
-
-	for (ServicosAdicionais servico : servicosAdicionais) {
+	public double sair() throws RuntimeException{
+		this.saida = LocalDateTime.now();
+		long minutosEstacionado = Duration.between(entrada, saida).toMinutes();
+	
+		for (ServicosAdicionais servico : servicosAdicionais) {
 			if (servico == ServicosAdicionais.POLIMENTO && minutosEstacionado < 120) {
 				throw new RuntimeException("Tempo mínimo de permanência para polimento não atendido.");
 			} else if (servico == ServicosAdicionais.LAVAGEM && minutosEstacionado < 60) {
@@ -65,46 +65,19 @@ public class UsoDeVaga implements Serializable {
 			}
 		}
 
-
-    double valorAPagar;
-
-    switch (cliente.getModalidade()) {
-        case HORISTA:
-            valorAPagar = calcularValorHorista(minutosEstacionado);
-            break;
-        case DE_TURNO:
-            valorAPagar = calcularValorDeTurno(minutosEstacionado, cliente.getTurnoEscolhido());
-            break;
-        case MENSALISTA:
-            valorAPagar = 0.0; // Mensalistas não pagam pelo estacionamento por tempo.
-            break;
-        default:
-            throw new RuntimeException("Modalidade de cliente desconhecida.");
-    }
-
-    // Adicione o valor dos serviços adicionais
-    double valorServicosAdicionais = servicosAdicionais.stream()
-            .mapToDouble(ServicosAdicionais::getValor)
-            .sum();
-
-    valorAPagar += valorServicosAdicionais;
-
-    this.valorPago = valorAPagar;
-    return valorAPagar;
-}
-
-private double calcularValorHorista(long minutosEstacionado) {
-    return (minutosEstacionado / 15) * VALOR_FRACAO;
-}
-
-private double calcularValorDeTurno(long minutosEstacionado, Turno turnoEscolhido) {
-    if (minutosEstacionado <= Duration.between(turnoEscolhido.getInicio(), turnoEscolhido.getFim()).toMinutes()) {
-        return 0.0; // Está dentro do turno, não paga estacionamento.
-    } else {
-        return calcularValorHorista(minutosEstacionado);
-    }
-}
-
+		double valorAPagar = (minutosEstacionado / 15) * VALOR_FRACAO;
+		valorAPagar = Math.min(valorAPagar, VALOR_MAXIMO);
+	
+		// Adicione o valor dos serviços adicionais
+		double valorServicosAdicionais = servicosAdicionais.stream()
+				.mapToDouble(ServicosAdicionais::getValor)
+				.sum();
+	
+		valorAPagar += valorServicosAdicionais;
+	
+		this.valorPago = valorAPagar;
+		return valorAPagar;
+	}
 	
 	public void adicionarServicos(ServicosAdicionais servico) {
 		servicosAdicionais.add(servico);
@@ -146,9 +119,7 @@ private double calcularValorDeTurno(long minutosEstacionado, Turno turnoEscolhid
 		this.valorPago = valorPago;
 	}
 
-	public Estacionamento getEstacionamento(){
-		return this.getVaga().getEstacionamento();
-	}
+	
 
 	public List<ServicosAdicionais> getServicosAdicionais() {
 		return servicosAdicionais;
@@ -162,8 +133,8 @@ private double calcularValorDeTurno(long minutosEstacionado, Turno turnoEscolhid
 		return VALOR_MAXIMO;
 	}
 
-	public Veiculo getVeiculo() {
-		return veiculo;
-	}
+	
+
+	
 
 }
