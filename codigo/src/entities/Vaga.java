@@ -1,5 +1,7 @@
 package src.entities;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A classe Vaga representa uma vaga de estacionamento em um estacionamento.
@@ -9,7 +11,7 @@ public class Vaga implements Serializable {
     private String fila;
     private int numero;
     private boolean disponivel;
-    private Estacionamento estacionamento;
+
 
     /**
      * Construtor da classe Vaga.
@@ -17,11 +19,11 @@ public class Vaga implements Serializable {
      * @param fila    Uma string representando a fila da vaga.
      * @param numero  Um número inteiro representando o número da vaga.
      */
-    public Vaga(String fila, int numero, Estacionamento estacionamento) {
+    public Vaga(String fila, int numero) {
         this.fila = fila;
         this.numero = numero;
         this.disponivel = true;
-        this.estacionamento = estacionamento;
+        
     }
 
     /**
@@ -70,7 +72,5 @@ public class Vaga implements Serializable {
         return disponivel;
     }
 
-    public Estacionamento getEstacionamento(){
-        return this.estacionamento;
-    }
+    
 }
