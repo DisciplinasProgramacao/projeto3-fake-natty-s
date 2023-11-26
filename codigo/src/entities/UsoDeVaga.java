@@ -37,6 +37,17 @@ public class UsoDeVaga implements Serializable {
 		this.servicosAdicionais = new ArrayList<>();
 	}
 
+	public UsoDeVaga(Vaga vaga, LocalDateTime entrada, LocalDateTime saida, double valorPago,
+            List<ServicosAdicionais> servicosAdicionais, Veiculo veiculo) {
+        this.vaga = vaga;
+        this.entrada = entrada;
+        this.saida = saida;
+        this.valorPago = valorPago;
+        this.servicosAdicionais = servicosAdicionais;
+        this.veiculo = veiculo;
+    }
+
+
 	/**
 	 * Registra a saída do cliente da vaga e calcula o valor a ser pago.
 	 * 
