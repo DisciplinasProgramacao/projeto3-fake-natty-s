@@ -37,6 +37,16 @@ public class Estacionamento implements Serializable, Entidade {
 		this.valorTotal = 0;
 		this.valorMes = 0;
 		this.valorUso = 0;
+		char fila = 'A';
+
+
+		for (int i = 1; i <= fileiras; i++) {
+			for (int j = 1; j <= vagasPorFila; j++) {
+				String nomeFila = String.valueOf(fila);
+				this.vagas.add(new Vaga(nomeFila, j));
+			}
+			fila++;
+		}
 		//gerarVagas();
 	}
 
