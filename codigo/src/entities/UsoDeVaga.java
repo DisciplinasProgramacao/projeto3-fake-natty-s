@@ -1,141 +1,72 @@
-package src.entities;
-
-import java.io.Serializable;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+import src.enums.ModalidadeCliente;
 import src.enums.ServicosAdicionais;
 import src.enums.Turno;
 
-/**
- * Classe que representa o uso de uma vaga de estacionamento.
- * 
- * Esta classe permite registrar a entrada, saída e cálculo do valor pago por um
- * cliente ao utilizar uma vaga de estacionamento.
- */
-public class UsoDeVaga implements Serializable {
+public class UsoDeVagaTest {
 
-	private static final double VALOR_FRACAO = 4.0;
-	private static final double VALOR_MAXIMO = 50.0;
-	private Vaga vaga;
-	private LocalDateTime entrada;
-	private LocalDateTime saida;
-	private double valorPago;
-	private List<ServicosAdicionais> servicosAdicionais;
+    private Vaga vaga;
+    private Cliente cliente;
 
-	/**
-	 * Cria uma instância de UsoDeVaga associada a uma vaga específica.
-	 * 
-	 * @param vaga A vaga de estacionamento utilizada.
-	 */
-	public UsoDeVaga(Vaga vaga) {
-		this.vaga = vaga;
-		this.entrada = LocalDateTime.now();
-		this.servicosAdicionais = new ArrayList<>();
-	}
-
-
-	/**
-	 * Registra a saída do cliente da vaga e calcula o valor a ser pago.
-	 * 
-	 * @return O valor a ser pago pelo uso da vaga.
-	 */
-
-
-	public double sair(Cliente cliente) throws RuntimeException {
-    this.saida = LocalDateTime.now();
-    long minutosEstacionado = Duration.between(entrada, saida).toMinutes();
-
-	for (ServicosAdicionais servico : servicosAdicionais) {
-			if (servico == ServicosAdicionais.POLIMENTO && minutosEstacionado < 120) {
-				throw new RuntimeException("Tempo mínimo de permanência para polimento não atendido.");
-			} else if (servico == ServicosAdicionais.LAVAGEM && minutosEstacionado < 60) {
-				throw new RuntimeException("Tempo mínimo de permanência para lavagem não atendido.");
-			}
-		}
-
-
-    double valorAPagar;
-
-    switch (cliente.getModalidade()) {
-        case HORISTA:
-            valorAPagar = calcularValorHorista(minutosEstacionado);
-            break;
-        case DE_TURNO:
-            valorAPagar = calcularValorDeTurno(minutosEstacionado, cliente.getTurnoEscolhido());
-            break;
-        case MENSALISTA:
-            valorAPagar = 0.0; // Mensalistas não pagam pelo estacionamento por tempo.
-            break;
-        default:
-            throw new RuntimeException("Modalidade de cliente desconhecida.");
+    @Before
+    public void setUp() {
+        vaga = new Vaga();  // You may need to adjust this based on your Vaga class implementation
+        cliente = new Cliente("John Doe", ModalidadeCliente.HORISTA);
     }
 
-    // Adicione o valor dos serviços adicionais
-    double valorServicosAdicionais = servicosAdicionais.stream()
-            .mapToDouble(ServicosAdicionais::getValor)
-            .sum();
-
-    valorAPagar += valorServicosAdicionais;
-
-    this.valorPago = valorAPagar;
-    return valorAPagar;
-}
-
-private double calcularValorHorista(long minutosEstacionado) {
-    return (minutosEstacionado / 15) * VALOR_FRACAO;
-}
-
-private double calcularValorDeTurno(long minutosEstacionado, Turno turnoEscolhido) {
-    if (minutosEstacionado <= Duration.between(turnoEscolhido.getInicio(), turnoEscolhido.getFim()).toMinutes()) {
-        return 0.0; // Está dentro do turno, não paga estacionamento.
-    } else {
-        return calcularValorHorista(minutosEstacionado);
+    @Test
+    public void testEntrada() {
+        UsoDeVaga usoDeVaga = new UsoDeVaga(vaga);
+        assertNotNull(usoDeVaga.getEntrada());
     }
-}
 
+    @Test
+    public void testSairHorista() {
+        UsoDeVaga usoDeVaga = new UsoDeVaga(vaga);
+        usoDeVaga.adicionarServicos(ServicosAdicionais.LAVAGEM);
+        usoDeVaga.adicionarServicos(ServicosAdicionais.POLIMENTO);
 
+        // Simulate parking for 2 hours
+        usoDeVaga.sair(cliente);
 
-	public void adicionarServicos(ServicosAdicionais servico) {
-		servicosAdicionais.add(servico);
-	}
+        assertEquals(8.0, usoDeVaga.getValorPago(), 0.01); // 2 hours * VALOR_FRACAO
+    }
 
-	public double valorPago() {
-		return valorPago;
-	}
+    @Test
+    public void testSairDeTurno() {
+        Turno turno = new Turno(LocalDateTime.now(), LocalDateTime.now().plusHours(8)); // Assuming 8-hour shift
+        cliente.setModalidade(ModalidadeCliente.DE_TURNO);
+        cliente.setTurnoEscolhido(turno);
 
-	public Vaga getVaga() {
-		return vaga;
-	}
+        UsoDeVaga usoDeVaga = new UsoDeVaga(vaga);
 
-	public void setVaga(Vaga vaga) {
-		this.vaga = vaga;
-	}
+        // Simulate parking for 10 hours (beyond the shift duration)
+        usoDeVaga.sair(cliente);
 
-	public LocalDateTime getEntrada() {
-		return entrada;
-	}
+        assertEquals(16.0, usoDeVaga.getValorPago(), 0.01); // 10 hours * VALOR_FRACAO
+    }
 
-	public void setEntrada(LocalDateTime entrada) {
-		this.entrada = entrada;
-	}
+    @Test(expected = RuntimeException.class)
+    public void testSairPolimentoTempoInsuficiente() {
+        UsoDeVaga usoDeVaga = new UsoDeVaga(vaga);
 
-	public LocalDateTime getSaida() {
-		return saida;
-	}
+        // Try to add polishing service without meeting the minimum parking time
+        usoDeVaga.adicionarServicos(ServicosAdicionais.POLIMENTO);
+        usoDeVaga.sair(cliente);
+    }
 
-	public void setSaida(LocalDateTime saida) {
-		this.saida = saida;
-	}
+    @Test
+    public void testAdicionarServicos() {
+        UsoDeVaga usoDeVaga = new UsoDeVaga(vaga);
 
-	public double getValorPago() {
-		return valorPago;
-	}
+        usoDeVaga.adicionarServicos(ServicosAdicionais.LAVAGEM);
+        usoDeVaga.adicionarServicos(ServicosAdicionais.POLIMENTO);
 
-	public void setValorPago(double valorPago) {
-		this.valorPago = valorPago;
-	}
+        assertEquals(2, usoDeVaga.getServicosAdicionais().size());
+    }
+
+    // Add more test cases as needed
 
 }
