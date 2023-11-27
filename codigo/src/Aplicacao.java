@@ -64,9 +64,11 @@ public class Aplicacao {
                     
 
                     Estacionamento estacionamentoNovo = new Estacionamento(name, fileiras, vagasPorFila);
+                    
                     System.out.println("");
                     try {
                         Aplicacao.serializableEstacionamento.add(estacionamentoNovo);
+                        estacionamentos.add(estacionamentoNovo);
 
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
