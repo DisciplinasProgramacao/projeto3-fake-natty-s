@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 import src.dao.GenericDAO;
 import src.dao.SerializationUtils;
-import src.Exceptions.*;
+import src.exceptions.*;
 
 public class Aplicacao {
 
@@ -77,10 +77,10 @@ public class Aplicacao {
                     break;
 
                 case 1:
-                    System.out.println("Digite o nome do estacionamento a se trabalhar: ");
-                    System.out.println("1 - " + estacionamentos.get(0).getNome());
-                    System.out.println("2 - " + estacionamentos.get(1).getNome());
-                    System.out.println("3 - " + estacionamentos.get(2).getNome());
+                    System.out.println("Digite o número do estacionamento a se trabalhar: ");
+                    System.out.println("0 - " + estacionamentos.get(0).getNome());
+                    System.out.println("1 - " + estacionamentos.get(1).getNome());
+                    System.out.println("2 - " + estacionamentos.get(2).getNome());
 
                     estacionamentoAtrabalhar = scanner.nextInt();
                     estacionamento = estacionamentos.get(estacionamentoAtrabalhar);
@@ -89,9 +89,9 @@ public class Aplicacao {
                     break;
                 case 2:
                     System.out.println("Digite o nome do estacionamento a se trabalhar: ");
-                    System.out.println("1 - " + estacionamentos.get(0).getNome());
-                    System.out.println("2 - " + estacionamentos.get(1).getNome());
-                    System.out.println("3 - " + estacionamentos.get(2).getNome());
+                    System.out.println("0 - " + estacionamentos.get(0).getNome());
+                    System.out.println("1 - " + estacionamentos.get(1).getNome());
+                    System.out.println("2 - " + estacionamentos.get(2).getNome());
 
                     estacionamentoAtrabalhar = scanner.nextInt();
                     estacionamento = estacionamentos.get(estacionamentoAtrabalhar);

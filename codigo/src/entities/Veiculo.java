@@ -1,8 +1,7 @@
 package src.entities;
 
 import java.util.List;
-import src.Exceptions.ExcecaoEstacionarSemSair;
-import src.Exceptions.ExcecaoSairFinalizada;
+import src.exceptions.*;
 import src.interfaces.Entidade;
 
 import java.io.Serializable;

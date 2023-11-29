@@ -12,10 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import src.Exceptions.ExcecaoCadastrarVeiculoExistente;
-import src.Exceptions.ExcecaoClientejaExistente;
-import src.Exceptions.ExcecaoEstacionarSemSair;
-import src.Exceptions.ExcecaoSairFinalizada;
+import src.exceptions.*;
 import src.entities.UsoDeVaga;
 import src.interfaces.Entidade;
 
