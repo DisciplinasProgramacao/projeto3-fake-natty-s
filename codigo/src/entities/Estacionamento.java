@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import src.Exceptions.*;
+import src.exceptions.*;
 import src.entities.UsoDeVaga;
 import src.interfaces.Entidade;
 
