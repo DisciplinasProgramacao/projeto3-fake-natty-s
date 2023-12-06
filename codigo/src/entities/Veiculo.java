@@ -1,7 +1,7 @@
 package src.entities;
 
 import java.util.List;
-import src.exceptions.*;
+import src.Exceptions.*;
 import src.interfaces.Entidade;
 
 import java.io.Serializable;

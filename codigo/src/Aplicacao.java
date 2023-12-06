@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 import src.dao.GenericDAO;
 import src.dao.SerializationUtils;
-import src.exceptions.*;
+import src.Exceptions.*;
 
 public class Aplicacao {
 
