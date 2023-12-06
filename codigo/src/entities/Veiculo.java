@@ -70,11 +70,7 @@ public class Veiculo implements Serializable, Entidade{
      * @return O valor total arrecadado.
      */
     public double totalArrecadado() {
-        double totalValor = 0.0;
-        for (UsoDeVaga usoDeVaga : usos) {
-            totalValor += usoDeVaga.valorPago();
-        }
-        return totalValor;
+        return usos.stream().mapToDouble(UsoDeVaga::valorPago).sum();
     }
 
     /**
@@ -85,13 +81,10 @@ public class Veiculo implements Serializable, Entidade{
      * @return O valor arrecadado no mês especificado.
      */
     public double arrecadadoNoMes(int mes) {
-        double totalArrecadadoNoMes = 0.0;
-        for (UsoDeVaga usoDeVaga : usos) {
-            if (usoDeVaga.getEntrada().getMonthValue() == mes) {
-                totalArrecadadoNoMes += usoDeVaga.valorPago();
-            }
-        }
-        return totalArrecadadoNoMes;
+        return usos.stream()
+                   .filter(uso -> uso.getEntrada().getMonthValue() == mes)
+                   .mapToDouble(UsoDeVaga::valorPago)
+                   .sum();
     }
 
     /**
