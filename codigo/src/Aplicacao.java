@@ -45,7 +45,6 @@ public class Aplicacao {
             System.out.println("4. Menu Vaga");
             System.out.println("5. Sair");
             System.out.println("");
-            
 
             int escolha = scanner.nextInt();
             scanner.nextLine();
@@ -61,10 +60,9 @@ public class Aplicacao {
                     System.out.print("Digite o número de vagas por fileira: ");
                     System.out.println("");
                     int vagasPorFila = scanner.nextInt();
-                    
 
                     Estacionamento estacionamentoNovo = new Estacionamento(name, fileiras, vagasPorFila);
-                    
+
                     System.out.println("");
                     try {
                         Aplicacao.serializableEstacionamento.add(estacionamentoNovo);
@@ -73,35 +71,80 @@ public class Aplicacao {
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
-                    
+
                     break;
 
                 case 1:
+
                     System.out.println("Digite o número do estacionamento a se trabalhar: ");
-                    System.out.println("0 - " + estacionamentos.get(0).getNome());
-                    System.out.println("1 - " + estacionamentos.get(1).getNome());
-                    System.out.println("2 - " + estacionamentos.get(2).getNome());
+                    for (Estacionamento estacio : estacionamentos) {
+
+                        System.out.println("1 - " + estacio.getNome());
+
+                    }
 
                     estacionamentoAtrabalhar = scanner.nextInt();
-                    estacionamento = estacionamentos.get(estacionamentoAtrabalhar);
+                    try {
+                        estacionamento = estacionamentos.get(estacionamentoAtrabalhar);
+                        menuEstacionamento();
+                    } catch (RuntimeException e) {
+                        System.out.println("Não existe este estacionamento em nosso sistema, Escolhe outro");
+                    }
 
-                    menuEstacionamento();
                     break;
                 case 2:
-                    System.out.println("Digite o nome do estacionamento a se trabalhar: ");
-                    System.out.println("0 - " + estacionamentos.get(0).getNome());
-                    System.out.println("1 - " + estacionamentos.get(1).getNome());
-                    System.out.println("2 - " + estacionamentos.get(2).getNome());
+                    System.out.println("Digite o número do estacionamento a se trabalhar: ");
+                    for (Estacionamento estacio : estacionamentos) {
+
+                        System.out.println("1 - " + estacio.getNome());
+
+                    }
 
                     estacionamentoAtrabalhar = scanner.nextInt();
-                    estacionamento = estacionamentos.get(estacionamentoAtrabalhar);
-                    menuCliente();
+
+                    try {
+                        estacionamento = estacionamentos.get(estacionamentoAtrabalhar);
+                        menuCliente();
+                    } catch (Exception e) {
+                        System.out.println("Não existe este estacionamento em nosso sistema, Escolhe outro");
+                    }
+
                     break;
                 case 3:
-                    menuVeiculo();
+                    System.out.println("Digite o número do estacionamento a se trabalhar: ");
+                    for (Estacionamento estacio : estacionamentos) {
+
+                        System.out.println("1 - " + estacio.getNome());
+
+                    }
+
+                    estacionamentoAtrabalhar = scanner.nextInt();
+
+                    try {
+                        estacionamento = estacionamentos.get(estacionamentoAtrabalhar);
+                        menuVeiculo();
+                    } catch (Exception e) {
+                        System.out.println("Não existe este estacionamento em nosso sistema, Escolhe outro");
+                    }
+
                     break;
                 case 4:
-                    menuVaga();
+                    System.out.println("Digite o número do estacionamento a se trabalhar: ");
+                    for (Estacionamento estacio : estacionamentos) {
+
+                        System.out.println("1 - " + estacio.getNome());
+
+                    }
+
+                    estacionamentoAtrabalhar = scanner.nextInt();
+
+                    try {
+                        estacionamento = estacionamentos.get(estacionamentoAtrabalhar);
+                        menuVaga();
+                    } catch (Exception e) {
+                        System.out.println("Não existe este estacionamento em nosso sistema, Escolhe outro");
+                    }
+
                     break;
                 case 5:
                     System.out.println("Saindo do programa.");
@@ -133,7 +176,6 @@ public class Aplicacao {
             System.out.println("6. Top 5 Clientes");
             System.out.println("7. Sair");
             System.out.println("\n");
-            
 
             int escolha = scanner.nextInt();
             scanner.nextLine(); // Limpa o buffer do scanner
@@ -194,6 +236,7 @@ public class Aplicacao {
                 case 7:
                     scanner.close();
                     System.out.println("Saindo do Menu do Estacionamento.");
+                    return;
 
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
@@ -252,15 +295,16 @@ public class Aplicacao {
 
                     placa = scanner.nextLine();
 
-                    if(clienteSelecionado.possuiVeiculo(placa) != null){
-                         System.out.println("O cliente: " + clienteSelecionado.getNome() + " Possui o veículo de placa = "
-                            + clienteSelecionado.possuiVeiculo(placa).getPlaca());
-                    }else{
-                        System.out.println("O cliente: " + clienteSelecionado.getNome() + " Não possui o veículo de placa = "
-                            + placa);
+                    if (clienteSelecionado.possuiVeiculo(placa) != null) {
+                        System.out
+                                .println("O cliente: " + clienteSelecionado.getNome() + " Possui o veículo de placa = "
+                                        + clienteSelecionado.possuiVeiculo(placa).getPlaca());
+                    } else {
+                        System.out.println(
+                                "O cliente: " + clienteSelecionado.getNome() + " Não possui o veículo de placa = "
+                                        + placa);
                     }
 
-                    
                     break;
                 case 3:
                     List<UsoDeVaga> usos = clienteSelecionado.obterHistoricoDeUsos();
@@ -317,7 +361,7 @@ public class Aplicacao {
                 case 9:
                     System.out.println("Voltando ao Menu Principal.");
                     scanner.close();
-                    return; // Retorna ao do-while do main
+                    // Retorna ao do-while do main
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
             }
@@ -351,7 +395,7 @@ public class Aplicacao {
 
                         estacionamento.estacionar(placa);
                         Aplicacao.serializableEstacionamento.update(estacionamentos);
-                    } catch ( ExcecaoEstacionarSemSair e) {
+                    } catch (ExcecaoEstacionarSemSair e) {
                         System.out.println(e.getMessage());
                     }
                     break;
