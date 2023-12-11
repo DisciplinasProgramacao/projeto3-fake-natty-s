@@ -1,11 +1,7 @@
 package src.entities;
 
-public abstract class Observer {
+public interface Observer {
 
-    Relatorio relatorio;
-    
-    public void notificar() {
-        
-    }
-    
+ 
+    public void notificar();
 }
