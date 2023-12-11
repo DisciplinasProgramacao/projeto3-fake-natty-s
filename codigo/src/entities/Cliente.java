@@ -253,6 +253,17 @@ public class Cliente implements Serializable, Entidade {
 
 
     }
+
+    public void attach(Veiculo veiculo){
+        veiculos.add(veiculo);
+
+
+    }
+
+    public void notificar(Veiculo veiculo){
+        //
+        }
+
     /**
      * Obtém o nome do cliente.
      *
