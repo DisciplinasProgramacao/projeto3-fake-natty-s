@@ -92,6 +92,10 @@ public class Cliente implements Serializable, Entidade {
 
    
    
+    
+    /** 
+     * @return double
+     */
     /*  public double arrecadadoPorVeiculo(String placa) {
         double totalArrecadadoveiculo = 0.0;
         for (Veiculo veiculo : veiculos) {

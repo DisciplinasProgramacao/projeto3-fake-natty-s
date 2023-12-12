@@ -87,6 +87,10 @@ public class UsoDeVaga implements Serializable {
 		servicosAdicionais.add(servico);
 	}
 
+	
+	/** 
+	 * @return double
+	 */
 	public double valorPago() {
 		return valorPago;
 	}

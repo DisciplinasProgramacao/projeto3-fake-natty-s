@@ -81,6 +81,11 @@ public class Estacionamento implements Serializable, Entidade {
 
 	}
 
+	
+	/** 
+	 * @param cliente
+	 * @throws ExcecaoClientejaExistente
+	 */
 	/*
 	 * Adiciona cliente na lista de clientes do estacionamento,
 	 * 

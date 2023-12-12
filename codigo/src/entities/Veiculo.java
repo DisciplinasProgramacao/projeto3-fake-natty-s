@@ -104,6 +104,10 @@ public class Veiculo implements Serializable, Entidade{
         return placa;
     }
 
+    
+    /** 
+     * @return List<UsoDeVaga>
+     */
     public List<UsoDeVaga> getUsos() {
         return usos;
     }
