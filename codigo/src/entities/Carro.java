@@ -1,16 +1,15 @@
 package src.entities;
 
 import java.util.List;
-
 import javax.swing.text.html.HTMLDocument.BlockElement;
 
 import src.enums.ServicosAdicionais;
+import src.interfaces.Observador;
 import src.interfaces.Veiculo;
 import src.Exceptions.*;
 
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -18,8 +17,7 @@ public class Carro implements Serializable, Veiculo {
 
     private String placa;
     private List<UsoDeVaga> usos;
-
-    
+    private List<Observador> observadores;
 
     public Carro(String placa) {
         this.placa = placa;
@@ -72,6 +70,9 @@ public class Carro implements Serializable, Veiculo {
         if(!encontrado){
             throw new ExcecaoSairFinalizada(vaga);
         }
+
+        this.notificarObservadores();
+        
         return totalPago;
     }
     
@@ -146,7 +147,7 @@ public class Carro implements Serializable, Veiculo {
 
     @Override
     public void notificarObservadores() {
-
+        observadores.stream().forEach(observador -> observador.atualizar(LocalDateTime.now().getMonthValue()));
     }
     
 }

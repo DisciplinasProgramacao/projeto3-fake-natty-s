@@ -2,6 +2,7 @@ package src.entities;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import src.Exceptions.ExcecaoMesInvalido;
 import src.interfaces.*;
@@ -9,7 +10,7 @@ import src.*;
 
 public class Relatorio implements Observador {
     List<Observavel> observaveis;
-    Map<Integer, List<Cliente>> top5clientes;
+    Map<Integer, Set<Cliente>> top5clientes;
     
     /** 
      * @param mes
@@ -26,7 +27,7 @@ public class Relatorio implements Observador {
     }
 
     @Override
-    public void atualizar() {
+    public void atualizar(int mes) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'atualizar'");
     }

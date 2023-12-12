@@ -1,5 +1,5 @@
 package src.interfaces;
 
 public interface Observador {
-    public void atualizar();
+    public void atualizar(int mes);
 }
