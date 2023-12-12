@@ -5,8 +5,6 @@ import java.util.Optional;
 import java.io.Serializable;
 import java.util.stream.Collectors;
 
-import src.interfaces.Entidade;
-
 import src.enums.ModalidadeCliente;
 import src.enums.Turno;
 import java.util.ArrayList;
@@ -15,7 +13,7 @@ import java.util.Comparator;
 /**
  * Classe que representa um cliente e seus veículos.
  */
-public class Cliente implements Serializable, Entidade {
+public class Cliente implements Serializable {
 
     private String nome;
     private String id;

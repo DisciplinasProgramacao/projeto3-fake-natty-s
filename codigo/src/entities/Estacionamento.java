@@ -15,9 +15,8 @@ import java.util.stream.Collectors;
 import src.entities.UsoDeVaga;
 import src.enums.ServicosAdicionais;
 import src.Exceptions.*;
-import src.interfaces.Entidade;
 
-public class Estacionamento implements Serializable, Entidade {
+public class Estacionamento implements Serializable {
 
 	private String nome;
 	private List<Cliente> clientes;
@@ -310,10 +309,4 @@ public class Estacionamento implements Serializable, Entidade {
 	public String getNome() {
 		return nome;
 	}
-
-	@Override
-	public String getId() {
-		return this.nome;
-	}
-
 }

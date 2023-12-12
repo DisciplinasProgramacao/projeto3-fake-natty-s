@@ -6,14 +6,13 @@ import javax.swing.text.html.HTMLDocument.BlockElement;
 
 import src.enums.ServicosAdicionais;
 import src.Exceptions.*;
-import src.interfaces.Entidade;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class Veiculo implements Serializable, Entidade{
+public class Veiculo implements Serializable {
 
     private String placa;
     private List<UsoDeVaga> usos;
@@ -130,11 +129,6 @@ public class Veiculo implements Serializable, Entidade{
 
     public void setUsos(List<UsoDeVaga> usos) {
         this.usos = usos;
-    }
-
-    @Override
-    public String getId() {
-        return this.placa;
     }
 
     public void addUsos(UsoDeVaga uso){

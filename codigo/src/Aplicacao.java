@@ -15,7 +15,6 @@ import javax.print.DocFlavor.SERVICE_FORMATTED;
 
 import src.Exceptions.ExcecaoCadastrarVeiculoExistente;
 import src.Exceptions.ExcecaoClientejaExistente;
-import src.dao.GenericDAO;
 import src.dao.SerializationUtils;
 
 public class Aplicacao {
