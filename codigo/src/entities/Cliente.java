@@ -17,7 +17,7 @@ public class Cliente implements Serializable {
 
     private String nome;
     private String id;
-    private List<Veiculo> veiculos;
+    private List<Carro> veiculos;
     private ModalidadeCliente modalidade;
     private Turno turnoEscolhido;
    
@@ -31,7 +31,7 @@ public class Cliente implements Serializable {
      */
 
 
-    public Cliente(String nome, String id, List<Veiculo> veiculos, ModalidadeCliente modalidade, Turno turnoEscolhido) {
+    public Cliente(String nome, String id, List<Carro> veiculos, ModalidadeCliente modalidade, Turno turnoEscolhido) {
         this.nome = nome;
         this.id = id;
         this.veiculos = veiculos;
@@ -43,7 +43,7 @@ public class Cliente implements Serializable {
     public Cliente(String nome, String id) { //passar a modalidae do cliente
         this.nome = nome;
         this.id = id;
-        this.veiculos = new ArrayList<Veiculo>();
+        this.veiculos = new ArrayList<Carro>();
          this.modalidade = modalidade;
     }
 
@@ -53,7 +53,7 @@ public class Cliente implements Serializable {
      *
      * @param veiculo Veículo a ser adicionado.
      */
-    public void addVeiculo(Veiculo veiculo) {
+    public void addVeiculo(Carro veiculo) {
        this.veiculos.add(veiculo);
     }
 
@@ -96,7 +96,7 @@ public class Cliente implements Serializable {
      * @param placa Placa do veículo.
      * @return      O veículo com a placa especificada ou nulo se não encontrado.
      */
-    public Veiculo possuiVeiculo(String placa) {
+    public Carro possuiVeiculo(String placa) {
         return veiculos.stream().filter(veiculo -> veiculo.getPlaca().equals(placa)).findFirst().orElse(null);
     }
 
@@ -115,7 +115,7 @@ public class Cliente implements Serializable {
      * @return O número total de usos.
      */
     public int totalDeUsos() {
-        return veiculos.stream().mapToInt(Veiculo::totalDeUsos).sum();
+        return veiculos.stream().mapToInt(Carro::totalDeUsos).sum();
     }
 
 
@@ -131,7 +131,7 @@ public class Cliente implements Serializable {
         return veiculos.stream()
                 .filter(veiculo -> veiculo.getPlaca().equals(placa))
                 .findFirst()
-                .map(Veiculo::totalArrecadado)
+                .map(Carro::totalArrecadado)
                 .orElse(0.0);
     }
 
@@ -164,7 +164,7 @@ public class Cliente implements Serializable {
  
      public double arrecadadoTotal() {
         return veiculos.stream()
-                .mapToDouble(Veiculo::totalArrecadado)
+                .mapToDouble(Carro::totalArrecadado)
                 .sum();
     }
  
@@ -237,7 +237,7 @@ public class Cliente implements Serializable {
      *
      * @param novosVeiculos Lista de veículos a serem adicionados.
      */
-    public void adicionarVeiculos(List<Veiculo> novosVeiculos) {
+    public void adicionarVeiculos(List<Carro> novosVeiculos) {
         veiculos.addAll(novosVeiculos);
     }
 
@@ -258,8 +258,8 @@ public class Cliente implements Serializable {
      * @param placa Placa do veículo a ser buscado.
      * @return      Lista de veículos com a placa especificada.
      */
-    public Veiculo buscarVeiculoPorPlaca(String placa) {
-        Optional<Veiculo> optionalVeiculo = veiculos.stream()
+    public Carro buscarVeiculoPorPlaca(String placa) {
+        Optional<Carro> optionalVeiculo = veiculos.stream()
                 .filter(veiculo -> veiculo.getPlaca().equalsIgnoreCase(placa))
                 .findFirst();
         return optionalVeiculo.orElse(null);
@@ -273,9 +273,9 @@ public class Cliente implements Serializable {
      *
      * @return Lista de veículos ordenados por total de usos.
      */
-    public List<Veiculo> ordenarVeiculosPorTotalDeUso() {
+    public List<Carro> ordenarVeiculosPorTotalDeUso() {
         return veiculos.stream()
-                .sorted(Comparator.comparing(Veiculo::totalDeUsos).reversed())
+                .sorted(Comparator.comparing(Carro::totalDeUsos).reversed())
                 .collect(Collectors.toList());
     }
 
@@ -286,7 +286,7 @@ public class Cliente implements Serializable {
      * @param mes Mês para o qual a arrecadação será verificada.
      * @return    Lista de veículos com arrecadação no mês especificado.
      */
-    public List<Veiculo> buscarVeiculosPorArrecadadoMes(int mes) {
+    public List<Carro> buscarVeiculosPorArrecadadoMes(int mes) {
         return veiculos.stream()
                 .filter(veiculo -> veiculo.arrecadadoNoMes(mes) > 0)
                 .collect(Collectors.toList());
@@ -300,7 +300,7 @@ public class Cliente implements Serializable {
      * @param novaPlaca   Nova placa a ser atribuída ao veículo.
      */
     public void alterarPlacaDoVeiculo(String placaAntiga, String novaPlaca) {
-        Veiculo veiculo = buscarVeiculoPorPlaca(placaAntiga);
+        Carro veiculo = buscarVeiculoPorPlaca(placaAntiga);
         if(veiculo != null){
             veiculo.setPlaca(novaPlaca);
         }
@@ -308,13 +308,13 @@ public class Cliente implements Serializable {
 
     }
 
-    public void attach(Veiculo veiculo){
+    public void attach(Carro veiculo){
         veiculos.add(veiculo);
 
 
     }
 
-    public void notificar(Veiculo veiculo){
+    public void notificar(Carro veiculo){
         //
         }
 
@@ -363,7 +363,7 @@ public class Cliente implements Serializable {
      *
      * @return A lista de veículos do cliente.
      */
-    public List<Veiculo> getVeiculos() {
+    public List<Carro> getVeiculos() {
         return veiculos;
     }
    
@@ -372,7 +372,7 @@ public class Cliente implements Serializable {
      *
      * @param veiculos Nova lista de veículos do cliente.
      */
-    public void setVeiculos(List<Veiculo> veiculos) {
+    public void setVeiculos(List<Carro> veiculos) {
         this.veiculos = veiculos;
     }
 

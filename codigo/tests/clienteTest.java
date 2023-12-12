@@ -1,7 +1,7 @@
 package tests;
 import src.*;
 import src.entities.Cliente;
-import src.entities.Veiculo;
+import src.entities.Carro;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,28 +11,28 @@ import static org.junit.jupiter.api.Assertions.*;
 public class clienteTest {
 
     private Cliente cliente;
-    private Veiculo veiculo1;
-    private Veiculo veiculo2;
+    private Carro veiculo1;
+    private Carro veiculo2;
 
     @BeforeEach
     public void setUp() {
         cliente = new Cliente("Cliente Teste", "123");
-        veiculo1 = new Veiculo("ABC123");
-        veiculo2 = new Veiculo("DEF456");
+        veiculo1 = new Carro("ABC123");
+        veiculo2 = new Carro("DEF456");
         cliente.addVeiculo(veiculo1);
         cliente.addVeiculo(veiculo2);
     }
 
     @Test
     public void testAddVeiculo() {
-        Veiculo novoVeiculo = new Veiculo("GHI789");
+        Carro novoVeiculo = new Carro("GHI789");
         cliente.addVeiculo(novoVeiculo);
         assertEquals(3, cliente.getVeiculos().size());
     }
 
     @Test
     public void testPossuiVeiculoInexistente() {
-        Veiculo veiculo = cliente.possuiVeiculo("XYZ999");
+        Carro veiculo = cliente.possuiVeiculo("XYZ999");
         assertNull(veiculo);
     }
 

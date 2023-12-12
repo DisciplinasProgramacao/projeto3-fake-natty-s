@@ -4,8 +4,8 @@ import org.junit.Test;
 
 import src.entities.Cliente;
 import src.entities.Estacionamento;
-import src.entities.Veiculo;
-import src.exceptions.*;
+import src.entities.Carro;
+import src.Exceptions.*;
 
 import static org.junit.Assert.*;
 
@@ -16,8 +16,8 @@ public class EstacionamentoTest {
     private Cliente cliente3;
     private Cliente cliente4;
     private Cliente cliente5;
-    private Veiculo veiculo1;
-    private Veiculo veiculo2;
+    private Carro veiculo1;
+    private Carro veiculo2;
 
 @Before
     public void setUp() {
@@ -27,8 +27,8 @@ public class EstacionamentoTest {
         cliente3 = new Cliente("Cliente3", "3");
         cliente4 = new Cliente("Cliente4", "4");
         cliente5 = new Cliente("Cliente5", "5");
-        veiculo1 = new Veiculo("ABC123");
-        veiculo2 = new Veiculo("XYZ789");
+        veiculo1 = new Carro("ABC123");
+        veiculo2 = new Carro("XYZ789");
     }
 
     

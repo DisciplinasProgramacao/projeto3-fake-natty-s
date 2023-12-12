@@ -316,7 +316,7 @@ public class Aplicacao {
                 case 1:
                     System.out.print("Digite a placa do veículo: ");
                     placa = scanner.nextLine();
-                    Veiculo veiculo = new Veiculo(placa);
+                    Carro veiculo = new Carro(placa);
                     try {
                         estacionamento.addVeiculo(veiculo, idCliente);
                         Aplicacao.serializableEstacionamento.update(estacionamentos);
@@ -493,7 +493,7 @@ public class Aplicacao {
 
                     System.out.print("Digite a placa do veículo: ");
                     placa = scanner.nextLine();
-                    Veiculo veiculo = new Veiculo(placa);
+                    Carro veiculo = new Carro(placa);
                     try {
                         estacionamento.addVeiculo(veiculo, idCliente);
                         Aplicacao.serializableEstacionamento.update(estacionamentos);
