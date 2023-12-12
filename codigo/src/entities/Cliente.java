@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import src.interfaces.Entidade;
 
+import src.enums.ModalidadeCliente;
+import src.enums.Turno;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -18,7 +20,9 @@ public class Cliente implements Serializable, Entidade {
     private String nome;
     private String id;
     private List<Veiculo> veiculos;
-    
+    private ModalidadeCliente modalidade;
+    private Turno turnoEscolhido;
+   
 
 
     /**
@@ -27,10 +31,11 @@ public class Cliente implements Serializable, Entidade {
      * @param nome Nome do cliente.
      * @param id   ID do cliente.
      */
-    public Cliente(String nome, String id) {
+    public Cliente(String nome, String id) { //passar a modalidae do cliente
         this.nome = nome;
         this.id = id;
         this.veiculos = new ArrayList<Veiculo>();
+         this.modalidade = modalidade;
     }
 
 
@@ -330,9 +335,23 @@ public class Cliente implements Serializable, Entidade {
         this.veiculos = veiculos;
     }
 
-    
-    
-}
+    public ModalidadeCliente getModalidade() {
+        return modalidade;
+    }
 
+    public void setModalidade(ModalidadeCliente modalidade) {
+        this.modalidade = modalidade;
+    }
+
+     public Turno getTurnoEscolhido() {
+        return turnoEscolhido;
+    }
+
+    public void setTurnoEscolhido(Turno turnoEscolhido) {
+        this.turnoEscolhido = turnoEscolhido;
+    }
+}
+    
+    
 
 
