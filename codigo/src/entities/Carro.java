@@ -18,6 +18,7 @@ public class Carro implements Serializable, Veiculo {
 
     private String placa;
     private List<UsoDeVaga> usos;
+
     
 
     public Carro(String placa) {
@@ -64,9 +65,6 @@ public class Carro implements Serializable, Veiculo {
                 if (usoDeVaga.getSaida() == null) {
                     encontrado = true;
                     totalPago = usoDeVaga.sair(cliente);
-                } else {
-                    
-                    
                 }
             }
         }
@@ -146,5 +144,9 @@ public class Carro implements Serializable, Veiculo {
         this.usos.add(uso);
     }
 
+    @Override
+    public void notificarObservadores() {
+
+    }
     
 }

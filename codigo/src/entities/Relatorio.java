@@ -1,25 +1,15 @@
 package src.entities;
 
 import java.util.List;
+import java.util.Map;
 
 import src.Exceptions.ExcecaoMesInvalido;
+import src.interfaces.*;
+import src.*;
 
-public class Relatorio implements Observer {
-    List<Cliente> observers;
-
-    
-    /** 
-     * @param mes
-     * @return String
-     * @throws ExcecaoMesInvalido
-     */
-
-    @Override
-    public void notificar(){
-        top5clientesMes(mes);
-    }
-    
-    
+public class Relatorio implements Observador {
+    List<Observavel> observaveis;
+    Map<Integer, List<Cliente>> top5clientes;
     
     /** 
      * @param mes
@@ -33,6 +23,12 @@ public class Relatorio implements Observer {
         }
 
         return "clientes";
+    }
+
+    @Override
+    public void atualizar() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'atualizar'");
     }
     
 }

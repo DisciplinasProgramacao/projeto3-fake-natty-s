@@ -67,5 +67,7 @@ public interface Veiculo {
     public void setUsos(List<UsoDeVaga> usos);
 
     public void addUsos(UsoDeVaga uso);
+
+    public void notificarObservadores();
     
 }
