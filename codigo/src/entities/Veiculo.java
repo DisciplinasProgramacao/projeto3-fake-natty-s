@@ -24,13 +24,14 @@ public class Veiculo implements Serializable, Entidade{
      * 
      * @param vaga A vaga onde o veículo deve estacionar.
      */
-    public void estacionar(Vaga vaga) throws ExcecaoEstacionarSemSair {
+    public void estacionar(Vaga vaga, List<ServicosAdicionais> servicosAdicionais) throws ExcecaoEstacionarSemSair {
         for (UsoDeVaga usoDeVaga : usos) {
 
             if (!usoDeVaga.getSaida().isBefore(LocalDateTime.now()) || usoDeVaga.getSaida() == null) {
                 throw new ExcecaoEstacionarSemSair(usoDeVaga.getVaga());
             } else {
                 if (vaga.disponivel()) {
+                    usos.add(new UsoDeVaga(vaga, LocalDateTime.now(), servicosAdicionais));
                     vaga.estacionar();
                 } else {
                     throw new ExcecaoEstacionarSemSair(usoDeVaga.getVaga());
