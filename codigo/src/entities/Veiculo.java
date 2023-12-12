@@ -1,10 +1,15 @@
 package src.entities;
 
 import java.util.List;
-import src.Exceptions.*;
+
+import javax.swing.text.html.HTMLDocument.BlockElement;
+
+import src.enums.ServicosAdicionais;
+import src.exceptions.*;
 import src.interfaces.Entidade;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -48,17 +53,23 @@ public class Veiculo implements Serializable, Entidade{
      * @param vaga A vaga da qual o veículo está saindo.
      * @return O valor a ser pago pelo uso da vaga.
      */
-    public Double sair(Vaga vaga) throws ExcecaoSairFinalizada {
+    public Double sair(Vaga vaga, Cliente cliente) throws ExcecaoSairFinalizada {
         Double totalPago = 0.0;
+        Boolean encontrado = false;
         for (UsoDeVaga usoDeVaga : usos) {
             if (usoDeVaga.getVaga() == vaga) {
-                if (usoDeVaga.getSaida().isBefore(LocalDateTime.now())) {
-                    throw new ExcecaoSairFinalizada(vaga);
+                if (usoDeVaga.getSaida() == null) {
+                    encontrado = true;
+                    totalPago = usoDeVaga.sair(cliente);
                 } else {
-                    totalPago = usoDeVaga.sair();
+                    
                     
                 }
             }
+        }
+
+        if(!encontrado){
+            throw new ExcecaoSairFinalizada(vaga);
         }
         return totalPago;
     }
