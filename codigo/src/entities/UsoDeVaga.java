@@ -25,7 +25,6 @@ public class UsoDeVaga implements Serializable {
 	private LocalDateTime saida;
 	private double valorPago;
 	private List<ServicosAdicionais> servicosAdicionais;
-	
 
 	/**
 	 * Cria uma instância de UsoDeVaga associada a uma vaga específica.
@@ -39,85 +38,89 @@ public class UsoDeVaga implements Serializable {
 	}
 
 	public UsoDeVaga(Vaga vaga, LocalDateTime entrada, LocalDateTime saida, double valorPago,
-            List<ServicosAdicionais> servicosAdicionais) {
-        this.vaga = vaga;
-        this.entrada = entrada;
-        this.saida = saida;
-        this.valorPago = valorPago;
-        this.servicosAdicionais = servicosAdicionais;
-        
-    }
+			List<ServicosAdicionais> servicosAdicionais) {
+		this.vaga = vaga;
+		this.entrada = entrada;
+		this.saida = saida;
+		this.valorPago = valorPago;
+		this.servicosAdicionais = servicosAdicionais;
 
-	
+	}
+
+	public UsoDeVaga(Vaga vaga, LocalDateTime entrada, List<ServicosAdicionais> servicosAdicionais) {
+		this.vaga = vaga;
+		this.saida = null;
+		this.entrada = entrada;
+		this.servicosAdicionais = servicosAdicionais;
+
+	}
+
 	/**
 	 * Registra a saída do cliente da vaga e calcula o valor a ser pago.
 	 * 
 	 * @return O valor a ser pago pelo uso da vaga.
 	 */
-	
-public double sair(Cliente cliente) throws RuntimeException {
+
+	public double sair(Cliente cliente) throws RuntimeException {
 		this.saida = LocalDateTime.now();
 		long minutosEstacionado = Duration.between(entrada, saida).toMinutes();
-	
+
 		for (ServicosAdicionais servico : servicosAdicionais) {
-				if (servico == ServicosAdicionais.POLIMENTO && minutosEstacionado < 120) {
-					throw new RuntimeException("Tempo mínimo de permanência para polimento não atendido.");
-				} else if (servico == ServicosAdicionais.LAVAGEM && minutosEstacionado < 60) {
-					throw new RuntimeException("Tempo mínimo de permanência para lavagem não atendido.");
-				}
+			if (servico == ServicosAdicionais.POLIMENTO && minutosEstacionado < 120) {
+				throw new RuntimeException("Tempo mínimo de permanência para polimento não atendido.");
+			} else if (servico == ServicosAdicionais.LAVAGEM && minutosEstacionado < 60) {
+				throw new RuntimeException("Tempo mínimo de permanência para lavagem não atendido.");
 			}
+		}
 
-			double valorAPagar;
+		double valorAPagar;
 
-			switch (cliente.getModalidade()) {
-				case HORISTA:
-					valorAPagar = calcularValorHorista(minutosEstacionado);
-					break;
-				case DE_TURNO:
-					valorAPagar = calcularValorDeTurno(minutosEstacionado, cliente.getTurnoEscolhido());
-					break;
-				case MENSALISTA:
-					valorAPagar = 0.0; // Mensalistas não pagam pelo estacionamento por tempo.
-					break;
-				default:
-					throw new RuntimeException("Modalidade de cliente desconhecida.");
-			}
-		
-			// Adicione o valor dos serviços adicionais
-			double valorServicosAdicionais = servicosAdicionais.stream()
-					.mapToDouble(ServicosAdicionais::getValor)
-					.sum();
-		
-			valorAPagar += valorServicosAdicionais;
-		
-			this.valorPago = valorAPagar;
-			this.vaga.sair();
-			return valorAPagar;
+		switch (cliente.getModalidade()) {
+			case HORISTA:
+				valorAPagar = calcularValorHorista(minutosEstacionado);
+				break;
+			case DE_TURNO:
+				valorAPagar = calcularValorDeTurno(minutosEstacionado, cliente.getTurnoEscolhido());
+				break;
+			case MENSALISTA:
+				valorAPagar = 0.0; // Mensalistas não pagam pelo estacionamento por tempo.
+				break;
+			default:
+				throw new RuntimeException("Modalidade de cliente desconhecida.");
 		}
-		
-		private double calcularValorHorista(long minutosEstacionado) {
-			return (minutosEstacionado / 15) * VALOR_FRACAO;
+
+		// Adicione o valor dos serviços adicionais
+		double valorServicosAdicionais = servicosAdicionais.stream()
+				.mapToDouble(ServicosAdicionais::getValor)
+				.sum();
+
+		valorAPagar += valorServicosAdicionais;
+
+		this.vaga.sair();
+		this.valorPago = valorAPagar;
+		return valorAPagar;
+	}
+
+	private double calcularValorHorista(long minutosEstacionado) {
+		return (minutosEstacionado / 15) * VALOR_FRACAO;
+	}
+
+	private double calcularValorDeTurno(long minutosEstacionado, Turno turnoEscolhido) {
+		if (minutosEstacionado <= Duration.between(turnoEscolhido.getInicio(), turnoEscolhido.getFim()).toMinutes()) {
+			return 0.0; // Está dentro do turno, não paga estacionamento.
+		} else {
+			return calcularValorHorista(minutosEstacionado);
 		}
-		
-		private double calcularValorDeTurno(long minutosEstacionado, Turno turnoEscolhido) {
-			if (minutosEstacionado <= Duration.between(turnoEscolhido.getInicio(), turnoEscolhido.getFim()).toMinutes()) {
-				return 0.0; // Está dentro do turno, não paga estacionamento.
-			} else {
-				return calcularValorHorista(minutosEstacionado);
-			}
-		}
-		
-	
-	
-	/** 
+	}
+
+	/**
 	 * @param servico
 	 */
 	public void adicionarServicos(ServicosAdicionais servico) {
 		servicosAdicionais.add(servico);
 	}
 
-	
-	/** 
+	/**
 	 * @return double
 	 */
 	public double valorPago() {
@@ -156,8 +159,6 @@ public double sair(Cliente cliente) throws RuntimeException {
 		this.valorPago = valorPago;
 	}
 
-	
-
 	public List<ServicosAdicionais> getServicosAdicionais() {
 		return servicosAdicionais;
 	}
@@ -169,9 +170,5 @@ public double sair(Cliente cliente) throws RuntimeException {
 	public static double getValorMaximo() {
 		return VALOR_MAXIMO;
 	}
-
-	
-
-	
 
 }
