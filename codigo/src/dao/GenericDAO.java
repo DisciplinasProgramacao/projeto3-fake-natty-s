@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import src.exceptions.*;
+import src.Exceptions.*;
 import src.interfaces.DAO;
 import src.interfaces.Entidade;
 

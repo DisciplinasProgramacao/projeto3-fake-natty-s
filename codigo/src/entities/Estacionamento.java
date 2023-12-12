@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 import src.entities.UsoDeVaga;
 import src.enums.ServicosAdicionais;
-import src.exceptions.*;
+import src.Exceptions.*;
 import src.interfaces.Entidade;
 
 public class Estacionamento implements Serializable, Entidade {

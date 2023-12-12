@@ -2,7 +2,7 @@ package src;
 
 import src.entities.*;
 import src.enums.ServicosAdicionais;
-import src.exceptions.*;
+import src.Exceptions.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,21 +13,28 @@ import java.util.stream.Collectors;
 
 import javax.print.DocFlavor.SERVICE_FORMATTED;
 
+import src.Exceptions.ExcecaoCadastrarVeiculoExistente;
+import src.Exceptions.ExcecaoClientejaExistente;
 import src.dao.GenericDAO;
 import src.dao.SerializationUtils;
 
 public class Aplicacao {
 
     public static int estacionamentoAtrabalhar;
+    /**
+ * Método principal que seleciona o estacionamento que vai ser trabalhado.
+ *
+ * @param estacionamentoAtrabalhar Um objeto Scanner para capturar a escolha do estacionamento a partir da entrada do usuário.
+ */
 
     static Estacionamento estacionamento;
 
     static List<Estacionamento> estacionamentos;
     static SerializationUtils<Estacionamento> serializableEstacionamento;
-
-    /**
-     * @param args
-     */
+/**
+ * 
+ * @param args Método principal que inicia a execução do programa.
+ *  */
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);

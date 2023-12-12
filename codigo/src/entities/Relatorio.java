@@ -2,7 +2,7 @@ package src.entities;
 
 import java.util.List;
 
-import src.exceptions.ExcecaoMesInvalido;
+import src.Exceptions.ExcecaoMesInvalido;
 
 public class Relatorio implements Observer {
     List<Cliente> observers;

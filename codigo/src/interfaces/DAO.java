@@ -2,8 +2,8 @@ package src.interfaces;
 
 import java.util.List;
 
-import src.exceptions.ExcecaoCadastrarVeiculoExistente;
-import src.exceptions.ExcecaoClientejaExistente;
+import src.Exceptions.ExcecaoCadastrarVeiculoExistente;
+import src.Exceptions.ExcecaoClientejaExistente;
 
 public interface DAO<T, K> {
 	public T get(K chave);

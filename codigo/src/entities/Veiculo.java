@@ -5,7 +5,7 @@ import java.util.List;
 import javax.swing.text.html.HTMLDocument.BlockElement;
 
 import src.enums.ServicosAdicionais;
-import src.exceptions.*;
+import src.Exceptions.*;
 import src.interfaces.Entidade;
 
 import java.io.Serializable;

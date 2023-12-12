@@ -1,4 +1,4 @@
-package src.exceptions;
+package src.Exceptions;
 
 public class ExcecaoMesInvalido extends Exception {
     public ExcecaoMesInvalido() {

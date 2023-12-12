@@ -1,4 +1,4 @@
-package src.exceptions;
+package src.Exceptions;
 import src.entities.Vaga;
 
 public class ExcecaoSairFinalizada extends Exception{
