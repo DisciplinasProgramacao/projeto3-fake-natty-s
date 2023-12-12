@@ -72,10 +72,13 @@ public class UsoDeVaga implements Serializable {
 		double valorServicosAdicionais = servicosAdicionais.stream()
 				.mapToDouble(ServicosAdicionais::getValor)
 				.sum();
+
+		
 	
 		valorAPagar += valorServicosAdicionais;
 	
 		this.valorPago = valorAPagar;
+		this.vaga.sair();
 		return valorAPagar;
 	}
 	
