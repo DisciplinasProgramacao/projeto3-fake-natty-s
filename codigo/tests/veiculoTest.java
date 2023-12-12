@@ -29,6 +29,10 @@ public class veiculoTest {
         vaga = new Vaga("A", 1, estacionamento);
     }
 
+    
+    /** 
+     * @throws ExcecaoEstacionarSemSair
+     */
     @Test
     void testEstacionar() throws ExcecaoEstacionarSemSair {
         veiculo.estacionar(vaga);

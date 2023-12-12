@@ -14,6 +14,10 @@ public class SerializationUtils<T> {
         carregarDados();  // Carregar dados do arquivo ao inicializar a classe
     }
 
+    
+    /** 
+     * @param objeto
+     */
     public void add(T objeto) {
         objetos.add(objeto);
         salvarDados();  // Salvar dados após adicionar um objeto

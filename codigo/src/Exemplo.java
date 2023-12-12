@@ -11,6 +11,10 @@ class Exemplo implements Serializable, Entidade {
         this.placa = placa;
     }
 
+    
+    /** 
+     * @return String
+     */
     public String getPlaca() {
         return placa;
     }

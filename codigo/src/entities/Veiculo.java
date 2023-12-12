@@ -96,6 +96,10 @@ public class Veiculo implements Serializable, Entidade{
         return usos.size();
     }
 
+    
+    /** 
+     * @return String
+     */
     public String getPlaca() {
         return placa;
     }

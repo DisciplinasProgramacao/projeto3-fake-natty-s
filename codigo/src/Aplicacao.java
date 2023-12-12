@@ -22,6 +22,10 @@ public class Aplicacao {
     static List<Estacionamento> estacionamentos;
     static SerializationUtils<Estacionamento> serializableEstacionamento;
 
+    
+    /** 
+     * @param args
+     */
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);

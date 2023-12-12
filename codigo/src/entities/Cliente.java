@@ -54,6 +54,10 @@ public class Cliente implements Serializable, Entidade {
         return veiculos.stream().filter(veiculo -> veiculo.getPlaca().equals(placa)).findFirst().orElse(null);
     }
 
+
+/** 
+ * @return int
+ */
 /* 
     public int totalDeUsosNoMes(int mes){
         

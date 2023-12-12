@@ -7,6 +7,10 @@ import src.interfaces.Entidade;
 
 // Classe principal para testar o GenericDAO com Veiculo
 public class ExemploArquivos {
+    
+    /** 
+     * @param args
+     */
     public static void main(String[] args) {
         // Criando um DAO para Veiculo
         GenericDAO<Exemplo, String> veiculoDAO;

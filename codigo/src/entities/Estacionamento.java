@@ -56,6 +56,13 @@ public class Estacionamento implements Serializable, Entidade {
 		//gerarVagas();
 	}
 
+	
+	/** 
+	 * @param veiculo
+	 * @param idCli
+	 * @throws ExcecaoCadastrarVeiculoExistente
+	 * @throws ExcecaoClientejaExistente
+	 */
 	/*
 	 * Adiciona veiculo a um cliente (faz a verificação se aql cliente existe
 	 * cadastrado e

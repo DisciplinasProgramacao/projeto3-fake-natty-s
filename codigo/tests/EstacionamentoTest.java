@@ -32,6 +32,10 @@ public class EstacionamentoTest {
     }
 
     
+    
+    /** 
+     * @throws ExcecaoClientejaExistente
+     */
     @Test
     public void testAddCliente() throws ExcecaoClientejaExistente {
         estacionamento.addCliente(cliente1);

@@ -79,6 +79,10 @@ public class UsoDeVaga implements Serializable {
 		return valorAPagar;
 	}
 	
+	
+	/** 
+	 * @param servico
+	 */
 	public void adicionarServicos(ServicosAdicionais servico) {
 		servicosAdicionais.add(servico);
 	}
