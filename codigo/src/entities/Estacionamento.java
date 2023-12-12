@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import src.entities.UsoDeVaga;
@@ -258,20 +259,15 @@ public class Estacionamento implements Serializable {
 	 * @return Uma string que contém os nomes e o total de usos dos 5 principais
 	 *         clientes no mês especificado.
 	 */
-	public String top5Clientes(int mes) {
-		/*if (mes < 1 || mes > 12) {
-			return "Mês inválido. O mês deve estar entre 1 e 12.";
-		}
+	public Set<Cliente> top5Clientes(int mes) throws ExcecaoMesInvalido {
+        if (mes < 1 || mes > 12) {
+            throw new ExcecaoMesInvalido();
+        }
 
-		Map<String, Integer> topClients = clientes.stream()
-				.collect(Collectors.toMap(Cliente::getNome, cliente -> cliente.totalDeUsosNoMes(mes)));
-
-		return topClients.entrySet().stream()
-				.sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-				.limit(5)
-				.map(entry -> "Nome: " + entry.getKey() + ", Total de Usos: " + entry.getValue())
-				.collect(Collectors.joining("\n", "Top 5 Clientes no mês " + mes + ":\n", "")); */
-			return "oi";
+        return clientes.stream()
+            .sorted(Comparator.comparingDouble(c -> ((Cliente) c).arrecadadoNoMes(mes)).reversed())
+            .limit(5)
+            .collect(Collectors.toSet());
 	}
 
 	/**
