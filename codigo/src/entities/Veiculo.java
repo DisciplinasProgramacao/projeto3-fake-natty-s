@@ -47,19 +47,19 @@ public class Veiculo implements Serializable, Entidade{
      * @param vaga A vaga da qual o veículo está saindo.
      * @return O valor a ser pago pelo uso da vaga.
      */
-    public double sair(Vaga vaga) throws ExcecaoSairFinalizada {
-        double valorPago = 0.0;
+    public void sair(Vaga vaga) throws ExcecaoSairFinalizada {
+        
         for (UsoDeVaga usoDeVaga : usos) {
             if (usoDeVaga.getVaga() == vaga) {
                 if (usoDeVaga.getSaida().isBefore(LocalDateTime.now())) {
                     throw new ExcecaoSairFinalizada(vaga);
                 } else {
-                    valorPago = usoDeVaga.sair();
-                    return valorPago;
+                    usoDeVaga.sair();
+                    
                 }
             }
         }
-        return valorPago; 
+         
     }
     
 
