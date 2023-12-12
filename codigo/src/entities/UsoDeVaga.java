@@ -91,6 +91,7 @@ public double sair(Cliente cliente) throws RuntimeException {
 			valorAPagar += valorServicosAdicionais;
 		
 			this.valorPago = valorAPagar;
+			this.vaga.sair();
 			return valorAPagar;
 		}
 		
