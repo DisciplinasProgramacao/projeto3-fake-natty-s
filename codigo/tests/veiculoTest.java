@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import src.entities.Estacionamento;
 import src.entities.UsoDeVaga;
 import src.entities.Vaga;
-import src.entities.Veiculo;
+import src.entities.Carro;
 import src.exceptions.ExcecaoEstacionarSemSair;
 import src.exceptions.ExcecaoSairFinalizada;
 
@@ -19,13 +19,13 @@ import java.time.LocalDateTime;
 
 public class veiculoTest {
 
-    private Veiculo veiculo;
+    private Carro veiculo;
     private Vaga vaga;
 
     @BeforeEach
     void setUp() {
         Estacionamento estacionamento = new Estacionamento("Estacionamento1", 10, 10);
-        veiculo = new Veiculo("ABC123");
+        veiculo = new Carro("ABC123");
         vaga = new Vaga("A", 1, estacionamento);
     }
 

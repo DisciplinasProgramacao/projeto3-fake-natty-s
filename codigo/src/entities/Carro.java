@@ -5,20 +5,22 @@ import java.util.List;
 import javax.swing.text.html.HTMLDocument.BlockElement;
 
 import src.enums.ServicosAdicionais;
+import src.interfaces.Veiculo;
 import src.Exceptions.*;
+
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class Veiculo implements Serializable {
+public class Carro implements Serializable, Veiculo {
 
     private String placa;
     private List<UsoDeVaga> usos;
     
 
-    public Veiculo(String placa) {
+    public Carro(String placa) {
         this.placa = placa;
         this.usos = new ArrayList<UsoDeVaga>();
     }
@@ -28,6 +30,7 @@ public class Veiculo implements Serializable {
      * 
      * @param vaga A vaga onde o veículo deve estacionar.
      */
+    @Override
     public void estacionar(Vaga vaga, List<ServicosAdicionais> servicosAdicionais) throws ExcecaoEstacionarSemSair {
         for (UsoDeVaga usoDeVaga : usos) {
 
@@ -52,8 +55,9 @@ public class Veiculo implements Serializable {
      * @param vaga A vaga da qual o veículo está saindo.
      * @return O valor a ser pago pelo uso da vaga.
      */
-    public Double sair(Vaga vaga, Cliente cliente) throws ExcecaoSairFinalizada {
-        Double totalPago = 0.0;
+    @Override
+    public double sair(Vaga vaga, Cliente cliente) throws ExcecaoSairFinalizada {
+        double totalPago = 0.0;
         Boolean encontrado = false;
         for (UsoDeVaga usoDeVaga : usos) {
             if (usoDeVaga.getVaga() == vaga) {
@@ -80,6 +84,7 @@ public class Veiculo implements Serializable {
      * 
      * @return O valor total arrecadado.
      */
+    @Override
     public double totalArrecadado() {
         return usos.stream().mapToDouble(UsoDeVaga::valorPago).sum();
     }
@@ -91,6 +96,7 @@ public class Veiculo implements Serializable {
      * @param mes O mês para o qual o valor arrecadado deve ser calculado.
      * @return O valor arrecadado no mês especificado.
      */
+    @Override
     public double arrecadadoNoMes(int mes) {
         return usos.stream()
                    .filter(uso -> uso.getEntrada().getMonthValue() == mes)
@@ -103,6 +109,7 @@ public class Veiculo implements Serializable {
      * 
      * @return O número total de usos de vaga.
      */
+    @Override
     public int totalDeUsos() {
         return usos.size();
     }
@@ -111,26 +118,30 @@ public class Veiculo implements Serializable {
     /** 
      * @return String
      */
+    @Override
     public String getPlaca() {
         return placa;
     }
-
     
     /** 
      * @return List<UsoDeVaga>
      */
+    @Override
     public List<UsoDeVaga> getUsos() {
         return usos;
     }
 
+    @Override
     public void setPlaca(String placa) {
         this.placa = placa;
     }
 
+    @Override
     public void setUsos(List<UsoDeVaga> usos) {
         this.usos = usos;
     }
 
+    @Override
     public void addUsos(UsoDeVaga uso){
         this.usos.add(uso);
     }

@@ -1,10 +1,10 @@
 package src.Exceptions;
 
-import src.entities.Veiculo;
+import src.entities.Carro;
 
 public class ExcecaoCadastrarVeiculoExistente extends Exception{
 
-    public ExcecaoCadastrarVeiculoExistente(Veiculo veiculo){
+    public ExcecaoCadastrarVeiculoExistente(Carro veiculo){
         super("O veiculo de placa " + veiculo.getPlaca() + " ja está cadastrado no sistema");
     }
 
