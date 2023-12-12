@@ -183,19 +183,23 @@ public class Estacionamento implements Serializable, Entidade {
 	 * 
 	 * @param placa A placa do veículo que deseja sair.
 	 */
-	public void sair(String placa) throws ExcecaoSairFinalizada {
+	public Double sair(String placa) throws ExcecaoSairFinalizada, ExcecaoCadastrarVeiculoExistente {
+		Double totalPago = 0.0;
 		for (Cliente cliente : clientes) {
 			if (cliente.possuiVeiculo(placa) != null) {
 				Veiculo veiculo = cliente.possuiVeiculo(placa);
 
 				for (UsoDeVaga uso : veiculo.getUsos()) {
 					if (uso.getSaida() == null) {
-						veiculo.sair(uso.getVaga());
+						totalPago = veiculo.sair(uso.getVaga());
 					}
 				}
+			}else{
+				throw new ExcecaoCadastrarVeiculoExistente("\n veiculo nao encontrado");
 			}
 
 		}
+		return totalPago;
 	}
 
 	public Vaga getVagaDisponivel() {

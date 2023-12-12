@@ -55,7 +55,7 @@ public class UsoDeVaga implements Serializable {
 	 * @return O valor a ser pago pelo uso da vaga.
 	 */
 	
-	 public double sair(Cliente cliente) throws RuntimeException {
+public double sair(Cliente cliente) throws RuntimeException {
 		this.saida = LocalDateTime.now();
 		long minutosEstacionado = Duration.between(entrada, saida).toMinutes();
 	
