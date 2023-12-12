@@ -135,7 +135,7 @@ public class Estacionamento implements Serializable, Entidade {
 	 * @param String placa
 	 */
 
-	public void estacionar(String placa) throws ExcecaoEstacionarSemSair {
+	public void estacionar(String placa, List<ServicosAdicionais> servicosAdicionais) throws ExcecaoEstacionarSemSair {
 
 		for (Cliente cliente : clientes) {
 			if (cliente.possuiVeiculo(placa) != null) {
@@ -143,7 +143,7 @@ public class Estacionamento implements Serializable, Entidade {
 
 				for (Vaga vaga : vagas) { // procura vaga
 					if (vaga.disponivel()) {
-						veiculo.estacionar(vaga);
+						veiculo.estacionar(vaga, servicosAdicionais);
 
 						break;
 					}
