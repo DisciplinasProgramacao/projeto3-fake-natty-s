@@ -183,7 +183,7 @@ public class Estacionamento implements Serializable, Entidade {
 	 * 
 	 * @param placa A placa do veículo que deseja sair.
 	 */
-	public void sair(String placa) throws ExcecaoSairFinalizada {
+	public void sair(String placa) throws ExcecaoSairFinalizada, ExcecaoCadastrarVeiculoExistente {
 		for (Cliente cliente : clientes) {
 			if (cliente.possuiVeiculo(placa) != null) {
 				Veiculo veiculo = cliente.possuiVeiculo(placa);
@@ -193,6 +193,8 @@ public class Estacionamento implements Serializable, Entidade {
 						veiculo.sair(uso.getVaga());
 					}
 				}
+			}else{
+				throw new ExcecaoCadastrarVeiculoExistente("\n veiculo nao encontrado");
 			}
 
 		}
