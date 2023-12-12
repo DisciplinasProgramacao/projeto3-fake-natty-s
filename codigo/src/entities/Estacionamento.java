@@ -12,8 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import src.Exceptions.*;
 import src.entities.UsoDeVaga;
+import src.enums.ServicosAdicionais;
+import src.exceptions.*;
 import src.interfaces.Entidade;
 
 public class Estacionamento implements Serializable, Entidade {
@@ -135,12 +136,12 @@ public class Estacionamento implements Serializable, Entidade {
 	 * @param String placa
 	 */
 
-	public void estacionar(String placa, List<ServicosAdicionais> servicosAdicionais) throws ExcecaoEstacionarSemSair {
-
+	public void estacionar(String placa, List<ServicosAdicionais> servicosAdicionais) throws ExcecaoEstacionarSemSair, ExcecaoCadastrarVeiculoExistente{
+		Boolean encontrado = false;
 		for (Cliente cliente : clientes) {
 			if (cliente.possuiVeiculo(placa) != null) {
 				Veiculo veiculo = cliente.possuiVeiculo(placa);
-
+				encontrado = true;
 				for (Vaga vaga : vagas) { // procura vaga
 					if (vaga.disponivel()) {
 						veiculo.estacionar(vaga, servicosAdicionais);
@@ -149,6 +150,10 @@ public class Estacionamento implements Serializable, Entidade {
 					}
 				}
 			}
+		}
+
+		if(!encontrado){
+			throw new ExcecaoCadastrarVeiculoExistente("veiculo nao encontrado");
 		}
 
 	}
@@ -185,19 +190,21 @@ public class Estacionamento implements Serializable, Entidade {
 	 */
 	public Double sair(String placa) throws ExcecaoSairFinalizada, ExcecaoCadastrarVeiculoExistente {
 		Double totalPago = 0.0;
+		Boolean encontrado = false;
 		for (Cliente cliente : clientes) {
 			if (cliente.possuiVeiculo(placa) != null) {
 				Veiculo veiculo = cliente.possuiVeiculo(placa);
-
+				encontrado = true;
 				for (UsoDeVaga uso : veiculo.getUsos()) {
 					if (uso.getSaida() == null) {
-						totalPago = veiculo.sair(uso.getVaga());
+						totalPago = veiculo.sair(uso.getVaga(), cliente);
 					}
 				}
-			}else{
-				throw new ExcecaoCadastrarVeiculoExistente("\n veiculo nao encontrado");
 			}
 
+		}
+		if(!encontrado){
+			throw new ExcecaoCadastrarVeiculoExistente("veiculo nao encontrado");
 		}
 		return totalPago;
 	}
