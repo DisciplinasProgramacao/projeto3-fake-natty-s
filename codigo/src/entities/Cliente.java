@@ -31,6 +31,17 @@ public class Cliente implements Serializable, Entidade {
      * @param nome Nome do cliente.
      * @param id   ID do cliente.
      */
+
+
+    public Cliente(String nome, String id, List<Veiculo> veiculos, ModalidadeCliente modalidade, Turno turnoEscolhido) {
+        this.nome = nome;
+        this.id = id;
+        this.veiculos = veiculos;
+        this.modalidade = modalidade;
+        this.turnoEscolhido = turnoEscolhido;
+    }
+    
+
     public Cliente(String nome, String id) { //passar a modalidae do cliente
         this.nome = nome;
         this.id = id;
@@ -46,6 +57,38 @@ public class Cliente implements Serializable, Entidade {
      */
     public void addVeiculo(Veiculo veiculo) {
        this.veiculos.add(veiculo);
+    }
+
+    public void setModalidadeByNumber(int i){
+        switch (i) {
+            case 1:
+                this.modalidade = ModalidadeCliente.HORISTA;
+                break;
+            case 2:
+                this.modalidade = ModalidadeCliente.DE_TURNO;
+                break;
+            case 3:
+                this.modalidade = ModalidadeCliente.MENSALISTA;
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void setTurnoByNumber(int i){
+        switch (i) {
+            case 1:
+                this.turnoEscolhido =  Turno.MANHA;
+                break;
+            case 2:
+                this.turnoEscolhido = Turno.TARDE;
+                break;
+            case 3:
+                this.turnoEscolhido = Turno.NOITE;
+                break;
+            default:
+                break;
+        }
     }
 
 
@@ -345,6 +388,13 @@ public class Cliente implements Serializable, Entidade {
 
      public Turno getTurnoEscolhido() {
         return turnoEscolhido;
+    }
+    
+    public String getTurnoToString(){
+        return this.turnoEscolhido.toString();
+    }
+    public String getModalidadeToString(){
+        return this.modalidade.toString();
     }
 
     public void setTurnoEscolhido(Turno turnoEscolhido) {
