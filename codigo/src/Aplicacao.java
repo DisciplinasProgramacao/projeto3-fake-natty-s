@@ -1,6 +1,8 @@
 package src;
 
 import src.entities.*;
+import src.enums.ServicosAdicionais;
+import src.exceptions.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,9 +11,10 @@ import java.util.Scanner;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import javax.print.DocFlavor.SERVICE_FORMATTED;
+
 import src.dao.GenericDAO;
 import src.dao.SerializationUtils;
-import src.Exceptions.*;
 
 public class Aplicacao {
 
@@ -22,8 +25,7 @@ public class Aplicacao {
     static List<Estacionamento> estacionamentos;
     static SerializationUtils<Estacionamento> serializableEstacionamento;
 
-    
-    /** 
+    /**
      * @param args
      */
     public static void main(String[] args) {
@@ -168,6 +170,8 @@ public class Aplicacao {
         Scanner scanner = new Scanner(System.in);
         String id;
         int mes;
+        int escolhaModalidade;
+        int escolhaTurno;
 
         while (true) {
             System.out.println("\n");
@@ -191,22 +195,42 @@ public class Aplicacao {
                     String nome = scanner.nextLine();
                     System.out.print("id: ");
                     id = scanner.nextLine();
-                    Cliente cliente = new Cliente(nome, id);
+                    System.out.println("Digite a Modalidade: ");
+                    System.out.println("1- HORISTA");
+                    System.out.println("2- DE TURNO");
+                    System.out.println("3- MENSALISTA");
+                    escolhaModalidade = scanner.nextInt();
+                    System.out.println("Digite o Turno: ");
+                    System.out.println("1- MANHA");
+                    System.out.println("2- TARDE");
+                    System.out.println("3- NOITE");
+                    escolhaTurno = scanner.nextInt();
+                    if (escolha != 1 && escolha != 2 && escolha != 3 || escolhaTurno != 1 && escolhaTurno != 2 && escolhaTurno != 3) {
+                        System.out.println("Número de escolha ou turno digitado inválido");
+                        break;
+                    } else {
+                        
 
-                    try {
-                        estacionamento.addCliente(cliente);
-                        Aplicacao.serializableEstacionamento.update(estacionamentos);
+                        Cliente cliente = new Cliente(nome, id);
+                        cliente.setModalidadeByNumber(escolhaModalidade);
+                        cliente.setTurnoByNumber(escolhaTurno);
+                        try {
+                            estacionamento.addCliente(cliente);
+                            Aplicacao.serializableEstacionamento.update(estacionamentos);
 
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+
+                        break;
                     }
 
-                    break;
                 case 2:
                     id = scanner.nextLine();
                     try {
                         Cliente clientePorId = estacionamento.encontrarClientePorId(id);
-                        System.out.println("Nome: " + clientePorId.getNome() + " Id: " + clientePorId.getId());
+                        System.out.println("\n Nome: " + clientePorId.getNome() + "\n Id: " + clientePorId.getId() + "\n Modalidade: " + 
+                        clientePorId.getModalidadeToString() + "\n Turno: " + clientePorId.getTurnoToString());
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
@@ -374,6 +398,7 @@ public class Aplicacao {
 
     private static void menuVeiculo() {
         Scanner scanner = new Scanner(System.in);
+        List<ServicosAdicionais> servicos = new ArrayList<>();
 
         while (true) {
             System.out.println("Menu de Veículo:");
@@ -392,14 +417,45 @@ public class Aplicacao {
             switch (escolha) {
                 case 1:
                     // Estacionar com Veículo
+
                     System.out.print("Digite a placa do veiculo: ");
                     String placa = scanner.nextLine();
+                    int opcaoServicos;
+                    System.out.println("Diga os serviços adicionais que deseja pagar: ");
+                    System.out.println("\t 1- Apenas Manobrista - R$ 5.00");
+                    System.out.println("\t 2- Apenas Lavagem - R$ 20.00");
+                    System.out.println("\t 3- Apenas Polimento (inclui Lavagem) - R$ 45.00");
+                    System.out.println("\t 4- Lavagem e Manobrista - 25.00");
+                    System.out.println("\t 5- Polimento e Manobrista (inclui Lavagem) - R$ 50.00");
+                    opcaoServicos = scanner.nextInt();
+                    switch (opcaoServicos) {
+                        case 1:
+                            servicos.add(ServicosAdicionais.MANOBRISTA);
+                            break;
 
+                        case 2:
+                            servicos.add(ServicosAdicionais.LAVAGEM);
+                            break;
+
+                        case 3:
+                            servicos.add(ServicosAdicionais.POLIMENTO);
+                            break;
+                        case 4:
+                            servicos.add(ServicosAdicionais.LAVAGEM);
+                            servicos.add(ServicosAdicionais.MANOBRISTA);
+                            break;
+                        case 5:
+                            servicos.add(ServicosAdicionais.POLIMENTO);
+                            servicos.add(ServicosAdicionais.MANOBRISTA);
+                            break;
+                        default:
+                            break;
+                    }
                     try {
 
-                        estacionamento.estacionar(placa);
+                        estacionamento.estacionar(placa, servicos);
                         Aplicacao.serializableEstacionamento.update(estacionamentos);
-                    } catch (ExcecaoEstacionarSemSair e) {
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -410,9 +466,9 @@ public class Aplicacao {
                     String placa1 = scanner.nextLine();
 
                     try {
-                        estacionamento.sair(placa1);
+                        System.out.println(estacionamento.sair(placa1));
                         Aplicacao.serializableEstacionamento.update(estacionamentos);
-                    } catch (ExcecaoSairFinalizada e) {
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;
