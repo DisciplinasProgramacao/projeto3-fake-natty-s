@@ -1,12 +1,14 @@
 package src;
 
 import src.entities.*;
+import src.enums.ModalidadeCliente;
 import src.enums.ServicosAdicionais;
 import src.interfaces.UsoDeVaga;
 import src.interfaces.Veiculo;
 import src.interfaces.VeiculoFactory;
 import src.Exceptions.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -185,7 +187,8 @@ public class Aplicacao {
             System.out.println("4. Calcular Arrecadado no Mês");
             System.out.println("5. Valor Médio Por Uso");
             System.out.println("6. Top 5 Clientes");
-            System.out.println("7. Sair");
+            System.out.println("7. Arrecadação média horistas");
+            System.out.println("8. Sair");
             System.out.println("\n");
 
             int escolha = scanner.nextInt();
@@ -268,14 +271,26 @@ public class Aplicacao {
                         for(Cliente tops : top5){
                             System.out.println("\nNome: " + tops.getNome() + " || Valor arrecadado: " + tops.arrecadadoNoMes(mes));
                         }
-                        
-                        
-                    
-                        
-                    
                     
                     break;
                 case 7:
+
+                    List<Double> clientesHoristas = estacionamento.getClientes().stream()
+        .filter(cliente -> cliente.getModalidade() == ModalidadeCliente.HORISTA)
+        .map(cliente -> cliente.arrecadadoNoMes(LocalDateTime.now().getMonthValue()))
+        .collect(Collectors.toList());
+
+                    double mediaArrecadacao = clientesHoristas.stream()
+                    .mapToDouble(Double::doubleValue)
+                    .average()
+                    .orElse(0.0);
+
+                    String mediaFormatada = String.format("%.2f", mediaArrecadacao);
+
+                    System.out.println("Média arrecadação horistas no mês atual: R$" + mediaFormatada);
+
+                    break;
+                case 8:
                     
                     System.out.println("Saindo do Menu do Estacionamento...\n");
                     return;
