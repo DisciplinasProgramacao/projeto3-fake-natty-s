@@ -8,9 +8,10 @@ import src.interfaces.VeiculoFactory;
 import src.Exceptions.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
-
+import java.util.stream.Collectors;
 
 import src.dao.SerializationUtils;
 
@@ -52,7 +53,8 @@ public class Aplicacao {
             System.out.println("1. Menu Estacionamento");
             System.out.println("2. Menu Cliente");
             System.out.println("3. Menu Veículo");
-            System.out.println("4. Sair");
+            System.out.println("4. Arrecadado de todos os estacionamentos");
+            System.out.println("5. Sair");
             System.out.println("");
 
             int escolha = scanner.nextInt();
@@ -144,8 +146,16 @@ public class Aplicacao {
                     }
 
                     break;
-                
+
                 case 4:
+                estacionamentos.stream()
+    .sorted(Comparator.comparingDouble(Estacionamento::totalArrecadado).reversed())
+    .forEach(est -> System.out.println(est.getNome() + " - " + est.totalArrecadado()));
+                    
+                    
+                    System.out.println("\n");
+                    break;
+                case 5:
                     System.out.println("Saindo do programa.");
                     scanner.close();
                     System.exit(0);
