@@ -13,8 +13,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import src.entities.UsoDeVaga;
+import src.entities.UsoDeVagaCarro;
 import src.enums.ServicosAdicionais;
+import src.interfaces.UsoDeVaga;
+import src.interfaces.Veiculo;
 import src.Exceptions.*;
 
 public class Estacionamento implements Serializable {
@@ -69,13 +71,13 @@ public class Estacionamento implements Serializable {
 	 * cadastrado e
 	 * chama o medoto addVeiculo(veiculo) do cliente especifico)
 	 */
-	public void addVeiculo(Carro veiculo, String idCli)
+	public void addVeiculo(Veiculo veiculo, String idCli)
 			throws ExcecaoCadastrarVeiculoExistente, ExcecaoClientejaExistente {
 		Cliente cliente = encontrarClientePorId(idCli);
-		List<Carro> veiculos = cliente.getVeiculos();
+		List<Veiculo> veiculos = cliente.getVeiculos();
 
 		if (veiculos.contains(veiculo)) {
-			throw new ExcecaoCadastrarVeiculoExistente(veiculo);
+			throw new ExcecaoCadastrarVeiculoExistente(veiculo.getPlaca());
 		} else {
 			cliente.addVeiculo(veiculo);
 		}
@@ -140,7 +142,7 @@ public class Estacionamento implements Serializable {
 		Boolean encontrado = false;
 		for (Cliente cliente : clientes) {
 			if (cliente.possuiVeiculo(placa) != null) {
-				Carro veiculo = cliente.possuiVeiculo(placa);
+				Veiculo veiculo = cliente.possuiVeiculo(placa);
 				encontrado = true;
 				for (Vaga vaga : vagas) { // procura vaga
 					if (vaga.disponivel()) {
@@ -193,7 +195,7 @@ public class Estacionamento implements Serializable {
 		Boolean encontrado = false;
 		for (Cliente cliente : clientes) {
 			if (cliente.possuiVeiculo(placa) != null) {
-				Carro veiculo = cliente.possuiVeiculo(placa);
+				Veiculo veiculo = cliente.possuiVeiculo(placa);
 				encontrado = true;
 				for (UsoDeVaga uso : veiculo.getUsos()) {
 					if (uso.getSaida() == null) {

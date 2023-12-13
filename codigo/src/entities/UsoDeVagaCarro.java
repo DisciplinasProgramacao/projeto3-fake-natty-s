@@ -8,6 +8,7 @@ import java.util.List;
 
 import src.enums.ServicosAdicionais;
 import src.enums.Turno;
+import src.interfaces.UsoDeVaga;
 
 /**
  * Classe que representa o uso de uma vaga de estacionamento.
@@ -15,7 +16,7 @@ import src.enums.Turno;
  * Esta classe permite registrar a entrada, saída e cálculo do valor pago por um
  * cliente ao utilizar uma vaga de estacionamento.
  */
-public class UsoDeVaga implements Serializable {
+public class UsoDeVagaCarro implements Serializable, UsoDeVaga {
 
 	private static final double VALOR_FRACAO = 4.0;
 	private static final double VALOR_MAXIMO = 50.0;
@@ -30,13 +31,13 @@ public class UsoDeVaga implements Serializable {
 	 * 
 	 * @param vaga A vaga de estacionamento utilizada.
 	 */
-	public UsoDeVaga(Vaga vaga) {
+	public UsoDeVagaCarro(Vaga vaga) {
 		this.vaga = vaga;
 		this.entrada = LocalDateTime.now();
 		this.servicosAdicionais = new ArrayList<>();
 	}
 
-	public UsoDeVaga(Vaga vaga, LocalDateTime entrada, LocalDateTime saida, double valorPago,
+	public UsoDeVagaCarro(Vaga vaga, LocalDateTime entrada, LocalDateTime saida, double valorPago,
 			List<ServicosAdicionais> servicosAdicionais) {
 		this.vaga = vaga;
 		this.entrada = entrada;
@@ -46,7 +47,7 @@ public class UsoDeVaga implements Serializable {
 
 	}
 
-	public UsoDeVaga(Vaga vaga, LocalDateTime entrada, List<ServicosAdicionais> servicosAdicionais) {
+	public UsoDeVagaCarro(Vaga vaga, LocalDateTime entrada, List<ServicosAdicionais> servicosAdicionais) {
 		this.vaga = vaga;
 		this.saida = null;
 		this.entrada = entrada;
@@ -60,7 +61,7 @@ public class UsoDeVaga implements Serializable {
 	 * @return O valor a ser pago pelo uso da vaga.
 	 */
 
-	public double sair(Cliente cliente) throws RuntimeException {
+	public Double sair(Cliente cliente) throws RuntimeException {
 		this.saida = LocalDateTime.now();
 		long minutosEstacionado = Duration.between(entrada, saida).toMinutes();
 
@@ -122,7 +123,7 @@ public class UsoDeVaga implements Serializable {
 	/**
 	 * @return double
 	 */
-	public double valorPago() {
+	public Double valorPago() {
 		return valorPago;
 	}
 

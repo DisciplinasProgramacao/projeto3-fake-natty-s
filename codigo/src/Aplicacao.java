@@ -2,6 +2,9 @@ package src;
 
 import src.entities.*;
 import src.enums.ServicosAdicionais;
+import src.interfaces.UsoDeVaga;
+import src.interfaces.Veiculo;
+import src.interfaces.VeiculoFactory;
 import src.Exceptions.*;
 
 import java.io.IOException;
@@ -13,8 +16,6 @@ import java.util.stream.Collectors;
 
 import javax.print.DocFlavor.SERVICE_FORMATTED;
 
-import src.Exceptions.ExcecaoCadastrarVeiculoExistente;
-import src.Exceptions.ExcecaoClientejaExistente;
 import src.dao.SerializationUtils;
 
 public class Aplicacao {
@@ -30,6 +31,7 @@ public class Aplicacao {
 
     static List<Estacionamento> estacionamentos;
     static SerializationUtils<Estacionamento> serializableEstacionamento;
+    
 /**
  * 
  * @param args Método principal que inicia a execução do programa.
@@ -262,10 +264,15 @@ public class Aplicacao {
 
                     break;
                 case 6:
-                    System.out.println("Calcular top5 clientes no mes de: ");
-                    System.out.println(" 1- Janeiro \n 2- Fevereiro \n 3- Março... ");
-                    mes = scanner.nextInt();
-                    estacionamento.top5Clientes(mes);
+                    try{
+                        System.out.println("Calcular top5 clientes no mes de: ");
+                        System.out.println(" 1- Janeiro \n 2- Fevereiro \n 3- Março... ");
+                        mes = scanner.nextInt();
+                        estacionamento.top5Clientes(mes);
+                    }catch (ExcecaoMesInvalido e) {
+                        System.out.println(e.getMessage());
+                    }
+                    
                     break;
                 case 7:
                     scanner.close();
@@ -314,12 +321,15 @@ public class Aplicacao {
             switch (escolha) {
 
                 case 1:
+                    VeiculoFactory veiculoFactory = new CarroFactory();
+                    
                     System.out.print("Digite a placa do veículo: ");
                     placa = scanner.nextLine();
-                    Carro veiculo = new Carro(placa);
+                    Veiculo veiculo = veiculoFactory.criarVeiculo(placa);
                     try {
                         estacionamento.addVeiculo(veiculo, idCliente);
                         Aplicacao.serializableEstacionamento.update(estacionamentos);
+                        System.out.println("veiculo adicionado com sucesso!");
                     } catch (ExcecaoCadastrarVeiculoExistente | ExcecaoClientejaExistente e) {
                         System.out.println(e.getMessage());
                     }
