@@ -115,7 +115,7 @@ public class Estacionamento implements Serializable {
 				for (Vaga vaga : vagas) { // procura vaga
 					if (vaga.disponivel()) {
 						for (UsoDeVaga vags : veiculo.getUsos()) {
-							if (vags.getSaida() != null) {
+							if (vags.getSaida() == null) {
 
 								throw new ExcecaoEstacionarSemSair(vaga);
 							}

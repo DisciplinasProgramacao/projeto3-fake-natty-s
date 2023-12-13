@@ -66,9 +66,9 @@ public class UsoDeVagaCarro implements Serializable, UsoDeVaga {
 		long minutosEstacionado = Duration.between(entrada, saida).toMinutes();
 
 		for (ServicosAdicionais servico : servicosAdicionais) {
-			if (servico == ServicosAdicionais.POLIMENTO && minutosEstacionado < 0) {
+			if (servico == ServicosAdicionais.POLIMENTO && minutosEstacionado < 120) {
 				throw new RuntimeException("Tempo mínimo de permanência para polimento não atendido.");
-			} else if (servico == ServicosAdicionais.LAVAGEM && minutosEstacionado < 0) {
+			} else if (servico == ServicosAdicionais.LAVAGEM && minutosEstacionado < 60) {
 				throw new RuntimeException("Tempo mínimo de permanência para lavagem não atendido.");
 			}
 		}
