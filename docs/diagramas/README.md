@@ -7,6 +7,6 @@ Coloque aqui todas as versões do seu diagrama de classes. Cada versão deve com
 ### 02 - Segunda versão
 ![Diagrama de classes](01.jpg "Diagrama de classes")
 
-### 03 - Versão preliminar da final
-![01 5](https://github.com/DisciplinasProgramacao/projeto3-fake-natty-s/assets/138057342/7c10a2bc-25f4-4b4c-bd29-f5b1c38dbce7)
+### 03 - Versão final
+![Diagrama de classes](BicoDoCorvoUML.drawio.png "Diagrama de classes")
 
