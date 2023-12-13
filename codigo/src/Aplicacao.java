@@ -7,14 +7,10 @@ import src.interfaces.Veiculo;
 import src.interfaces.VeiculoFactory;
 import src.Exceptions.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
-import javax.print.DocFlavor.SERVICE_FORMATTED;
 
 import src.dao.SerializationUtils;
 
@@ -56,8 +52,7 @@ public class Aplicacao {
             System.out.println("1. Menu Estacionamento");
             System.out.println("2. Menu Cliente");
             System.out.println("3. Menu Veículo");
-            System.out.println("4. Menu Vaga");
-            System.out.println("5. Sair");
+            System.out.println("4. Sair");
             System.out.println("");
 
             int escolha = scanner.nextInt();
@@ -83,6 +78,7 @@ public class Aplicacao {
                         estacionamentos.add(estacionamentoNovo);
 
                     } catch (Exception e) {
+                        
                         System.out.println(e.getMessage());
                     }
 
@@ -142,25 +138,8 @@ public class Aplicacao {
                     }
 
                     break;
+                
                 case 4:
-                    System.out.println("Digite o número do estacionamento a se trabalhar: ");
-                    for (Estacionamento estacio : estacionamentos) {
-
-                        System.out.println("1 - " + estacio.getNome());
-
-                    }
-
-                    estacionamentoAtrabalhar = scanner.nextInt();
-
-                    try {
-                        estacionamento = estacionamentos.get(estacionamentoAtrabalhar);
-                        menuVaga();
-                    } catch (Exception e) {
-                        System.out.println("Não existe este estacionamento em nosso sistema, Escolhe outro");
-                    }
-
-                    break;
-                case 5:
                     System.out.println("Saindo do programa.");
                     scanner.close();
                     System.exit(0);
@@ -264,19 +243,25 @@ public class Aplicacao {
 
                     break;
                 case 6:
-                    try{
+                    
                         System.out.println("Calcular top5 clientes no mes de: ");
                         System.out.println(" 1- Janeiro \n 2- Fevereiro \n 3- Março... ");
                         mes = scanner.nextInt();
-                        estacionamento.top5Clientes(mes);
-                    }catch (ExcecaoMesInvalido e) {
-                        System.out.println(e.getMessage());
-                    }
+                        List<Cliente> top5 = estacionamento.top5Clientes(mes);
+                        
+                        for(Cliente tops : top5){
+                            System.out.println("\nNome: " + tops.getNome() + " || Valor arrecadado: " + tops.arrecadadoNoMes(mes));
+                        }
+                        
+                        
+                    
+                        
+                    
                     
                     break;
                 case 7:
-                    scanner.close();
-                    System.out.println("Saindo do Menu do Estacionamento.");
+                    
+                    System.out.println("Saindo do Menu do Estacionamento...\n");
                     return;
 
                 default:
@@ -315,17 +300,16 @@ public class Aplicacao {
             System.out.println("\n");
             System.out.println("\n");
 
-            int escolha = scanner.nextInt();
-            scanner.nextLine(); // Limpa o buffer do scanner
-
-            switch (escolha) {
+            int escolhaCliente = scanner.nextInt();
+            scanner.nextLine();
+            switch (escolhaCliente) {
 
                 case 1:
                     VeiculoFactory veiculoFactory = new CarroFactory();
                     
                     System.out.print("Digite a placa do veículo: ");
                     placa = scanner.nextLine();
-                    Veiculo veiculo = veiculoFactory.criarVeiculo(placa);
+                    Veiculo veiculo = new Carro(placa);
                     try {
                         estacionamento.addVeiculo(veiculo, idCliente);
                         Aplicacao.serializableEstacionamento.update(estacionamentos);
@@ -352,7 +336,7 @@ public class Aplicacao {
                     break;
                 case 3:
                     List<UsoDeVaga> usos = clienteSelecionado.obterHistoricoDeUsos();
-                    int totalusos = usos.lastIndexOf(usos);
+                    int totalusos = usos.size();
                     System.out.println("Total de usos do cliente " + clienteSelecionado.getNome() + " é " + totalusos);
                     break;
                 case 4:
@@ -403,8 +387,8 @@ public class Aplicacao {
                     System.out.println("Veículo removido com sucesso.");
                     break;
                 case 9:
-                    System.out.println("Voltando ao Menu Principal.");
-                    scanner.close();
+                    System.out.println("Voltando ao Menu Principal...\n");
+                    return;
                     // Retorna ao do-while do main
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
@@ -471,7 +455,7 @@ public class Aplicacao {
 
                         estacionamento.estacionar(placa, servicos);
                         Aplicacao.serializableEstacionamento.update(estacionamentos);
-                    } catch (Exception e) {
+                    } catch (ExcecaoEstacionarSemSair | ExcecaoCadastrarVeiculoExistente e) {
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -484,7 +468,7 @@ public class Aplicacao {
                     try {
                         System.out.println(estacionamento.sair(placa1));
                         Aplicacao.serializableEstacionamento.update(estacionamentos);
-                    } catch (Exception e) {
+                    } catch (ExcecaoSairFinalizada | ExcecaoCadastrarVeiculoExistente e) {
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -533,6 +517,7 @@ public class Aplicacao {
 
                 case 5:
                     System.out.println("Saindo do Menu de Veículo.");
+                    
                     return;
 
                 default:
@@ -541,8 +526,5 @@ public class Aplicacao {
         }
     }
 
-    private static void menuVaga() {
-
-    }
-
+    
 }
