@@ -9,7 +9,6 @@ import src.interfaces.UsoDeVaga;
 import src.interfaces.Veiculo;
 import src.Exceptions.*;
 
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,6 +22,7 @@ public class Carro implements Serializable, Veiculo {
     public Carro(String placa) {
         this.placa = placa;
         this.usos = new ArrayList<UsoDeVaga>();
+        this.observadores = new ArrayList<>();
     }
 
     /**
@@ -34,18 +34,17 @@ public class Carro implements Serializable, Veiculo {
     public void estacionar(Vaga vaga, List<ServicosAdicionais> servicosAdicionais) throws ExcecaoEstacionarSemSair {
         UsoCarroFactoryImp factory = new UsoCarroFactoryImp();
         for (UsoDeVaga usoDeVaga : usos) {
-
             if (!usoDeVaga.getSaida().isBefore(LocalDateTime.now()) || usoDeVaga.getSaida() == null) {
                 throw new ExcecaoEstacionarSemSair(usoDeVaga.getVaga());
-            } else {
-                if (vaga.disponivel()) {
-                    usos.add(factory.criar(vaga, LocalDateTime.now(), null, 0, servicosAdicionais));
-                    vaga.estacionar();
-                } else {
-                    throw new ExcecaoEstacionarSemSair(usoDeVaga.getVaga());
-                }
             }
 
+        }
+
+        if (vaga.disponivel()) {
+            usos.add(factory.criarUsoDeVaga(vaga, LocalDateTime.now(), null, 0, servicosAdicionais));
+            vaga.estacionar();
+        } else {
+            throw new ExcecaoEstacionarSemSair(vaga);
         }
 
     }
@@ -57,27 +56,36 @@ public class Carro implements Serializable, Veiculo {
      * @return O valor a ser pago pelo uso da vaga.
      */
     @Override
-    public double sair(Vaga vaga, Cliente cliente) throws ExcecaoSairFinalizada {
-        double totalPago = 0.0;
-        Boolean encontrado = false;
-        for (UsoDeVaga usoDeVaga : usos) {
-            if (usoDeVaga.getVaga() == vaga) {
-                if (usoDeVaga.getSaida() == null) {
-                    encontrado = true;
-                    totalPago = usoDeVaga.sair(cliente);
-                }
+public double sair(Vaga vaga, Cliente cliente) throws ExcecaoSairFinalizada {
+    double totalPago = 0.0;
+    boolean encontrado = false;
+    boolean foiEstacionado = false;
+    
+    for (UsoDeVaga usoDeVaga : usos) {
+        if (usoDeVaga.getVaga() == vaga) {
+            
+            foiEstacionado = true;
+            
+            if (usoDeVaga.getSaida() == null) {
+                
+                encontrado = true;
+                totalPago = usoDeVaga.sair(cliente);
+                System.out.println("total pago: " + totalPago);
             }
         }
-
-        if(!encontrado){
-            throw new ExcecaoSairFinalizada(vaga);
-        }
-
-        this.notificarObservadores();
-        
-        return totalPago;
     }
+
+
+    if (!foiEstacionado) {
+        throw new ExcecaoSairFinalizada(vaga);
+    } else if (!encontrado) {
+        throw new ExcecaoSairFinalizada(vaga);
+    }
+
+    this.notificarObservadores();
     
+    return totalPago; 
+}
 
     /**
      * Calcula o valor total arrecadado pela empresa de estacionamento com este
@@ -99,10 +107,11 @@ public class Carro implements Serializable, Veiculo {
      */
     @Override
     public double arrecadadoNoMes(int mes) {
+
         return usos.stream()
-                   .filter(uso -> uso.getEntrada().getMonthValue() == mes)
-                   .mapToDouble(UsoDeVaga::valorPago)
-                   .sum();
+                .filter(uso -> uso.getEntrada().getMonthValue() == mes)
+                .mapToDouble(UsoDeVaga::valorPago)
+                .sum();
     }
 
     /**
@@ -115,16 +124,15 @@ public class Carro implements Serializable, Veiculo {
         return usos.size();
     }
 
-    
-    /** 
+    /**
      * @return String
      */
     @Override
     public String getPlaca() {
         return placa;
     }
-    
-    /** 
+
+    /**
      * @return List<UsoDeVaga>
      */
     @Override
@@ -143,13 +151,23 @@ public class Carro implements Serializable, Veiculo {
     }
 
     @Override
-    public void addUsos(UsoDeVaga uso){
+    public void addUsos(UsoDeVaga uso) {
         this.usos.add(uso);
     }
 
     @Override
-    public void notificarObservadores(){
+    public void notificarObservadores() {
         observadores.stream().forEach(observador -> observador.atualizar(LocalDateTime.now().getMonthValue()));
     }
-    
+
+    @Override
+    public void addObserver(Observador observador) {
+        observadores.add(observador);
+    }
+
+    @Override
+    public void removeObserver(Observador observador) {
+        observadores.remove(observador);
+    }
+
 }
