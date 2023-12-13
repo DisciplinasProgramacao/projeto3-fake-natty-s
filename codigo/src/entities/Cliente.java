@@ -139,23 +139,6 @@ public class Cliente implements Serializable {
     }
 
 
-   
-   
-    
-    /** 
-     * @return double
-     */
-    /*  public double arrecadadoPorVeiculo(String placa) {
-        double totalArrecadadoveiculo = 0.0;
-        for (Veiculo veiculo : veiculos) {
-            if (veiculo.getPlaca().equals(placa)) {
-               totalArrecadadoveiculo = veiculo.totalArrecadado();
-               return totalArrecadadoveiculo;
-            }
-        }
-        return totalArrecadadoveiculo;
-    } */
-
 
     /**
      * Calcula a arrecadação total de todos os veículos do cliente.
