@@ -7,7 +7,7 @@ import src.entities.Vaga;
 import src.enums.ServicosAdicionais;
 
 public interface UsoDeVagaFactory {
-    UsoDeVaga criar(Vaga vaga, LocalDateTime entrada, LocalDateTime saida, double valorPago,
+    UsoDeVaga criarUsoDeVaga(Vaga vaga, LocalDateTime entrada, LocalDateTime saida, double valorPago,
 			List<ServicosAdicionais> servicosAdicionais);
     
 } 
