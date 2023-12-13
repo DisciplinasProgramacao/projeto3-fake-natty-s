@@ -2,6 +2,7 @@ package src;
 
 import src.entities.*;
 import src.enums.ServicosAdicionais;
+import src.interfaces.UsoDeVaga;
 import src.interfaces.Veiculo;
 import src.interfaces.VeiculoFactory;
 import src.Exceptions.*;
@@ -350,7 +351,7 @@ public class Aplicacao {
 
                     break;
                 case 3:
-                    List<UsoDeVagaCarro> usos = clienteSelecionado.obterHistoricoDeUsos();
+                    List<UsoDeVaga> usos = clienteSelecionado.obterHistoricoDeUsos();
                     int totalusos = usos.lastIndexOf(usos);
                     System.out.println("Total de usos do cliente " + clienteSelecionado.getNome() + " é " + totalusos);
                     break;
@@ -386,8 +387,8 @@ public class Aplicacao {
 
                 case 7:
                     // Obter Histórico de Usos
-                    List<UsoDeVagaCarro> historicoUsos = clienteSelecionado.obterHistoricoDeUsos();
-                    for (UsoDeVagaCarro uso : historicoUsos) {
+                    List<UsoDeVaga> historicoUsos = clienteSelecionado.obterHistoricoDeUsos();
+                    for (UsoDeVaga uso : historicoUsos) {
                         System.out.println(" - Vaga: " + uso.getVaga().getPosicao() +
                                 " - Entrada: " + uso.getEntrada() + " - Saída: " + uso.getSaida() + " - Valor: "
                                 + uso.valorPago());
