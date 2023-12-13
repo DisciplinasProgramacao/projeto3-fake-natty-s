@@ -58,6 +58,7 @@ public class Aplicacao {
             int escolha = scanner.nextInt();
             scanner.nextLine();
             System.out.println("");
+            int i = 0;
             switch (escolha) {
                 case 0:
                     System.out.print("Digite o nome do estacionamento: ");
@@ -87,10 +88,12 @@ public class Aplicacao {
                 case 1:
 
                     System.out.println("Digite o número do estacionamento a se trabalhar: ");
+                    i = 0;
                     for (Estacionamento estacio : estacionamentos) {
 
-                        System.out.println("1 - " + estacio.getNome());
 
+                        System.out.println(i + " - " + estacio.getNome());
+                        i++;
                     }
 
                     estacionamentoAtrabalhar = scanner.nextInt();
@@ -104,10 +107,12 @@ public class Aplicacao {
                     break;
                 case 2:
                     System.out.println("Digite o número do estacionamento a se trabalhar: ");
+                    i = 0;
                     for (Estacionamento estacio : estacionamentos) {
 
-                        System.out.println("1 - " + estacio.getNome());
 
+                        System.out.println(i + " - " + estacio.getNome());
+                        i++;
                     }
 
                     estacionamentoAtrabalhar = scanner.nextInt();
@@ -122,10 +127,11 @@ public class Aplicacao {
                     break;
                 case 3:
                     System.out.println("Digite o número do estacionamento a se trabalhar: ");
+                    i = 0;
                     for (Estacionamento estacio : estacionamentos) {
 
-                        System.out.println("1 - " + estacio.getNome());
-
+                        System.out.println(i + " - " + estacio.getNome());
+                        i++;
                     }
 
                     estacionamentoAtrabalhar = scanner.nextInt();
