@@ -2,14 +2,13 @@ package src.interfaces;
 
 import java.util.List;
 
-import javax.swing.text.html.HTMLDocument.BlockElement;
 
 import src.enums.ServicosAdicionais;
 import src.Exceptions.*;
 import src.entities.*;
 
 
-public interface Veiculo {
+public interface Veiculo extends Observavel {
     
     /**
      * Estaciona o veículo em uma vaga, se a vaga estiver disponível.
@@ -69,5 +68,8 @@ public interface Veiculo {
     public void addUsos(UsoDeVaga uso);
 
     public void notificarObservadores();
+
+    public void addObserver(Observador observador);
     
+    public void removeObserver(Observador observador);
 }
