@@ -135,7 +135,7 @@ public class Cliente implements Serializable {
                 .filter(veiculo -> veiculo.getPlaca().equals(placa))
                 .findFirst()
                 .map(Veiculo::totalArrecadado)
-                .orElse(0.0);
+                .orElse(7.0);
     }
 
 
@@ -171,13 +171,6 @@ public class Cliente implements Serializable {
                 .sum();
     }
  
-     /*  public double arrecadadoTotal() {
-        double totalArrecadado = 0.0;
-        for (Veiculo veiculo : veiculos) {
-            totalArrecadado += veiculo.totalArrecadado();
-        }
-        return totalArrecadado;
-    } */
 
 
     /**
@@ -197,14 +190,7 @@ public class Cliente implements Serializable {
 
 
 
-/*
-    public double arrecadadoNoMes(int mes) {
-        double arrecadadoMes = 0.0;
-        for (Veiculo veiculo : veiculos) {
-            arrecadadoMes += veiculo.arrecadadoNoMes(mes);
-        }
-        return arrecadadoMes;
-    } */
+
 
 
 
@@ -222,15 +208,6 @@ public class Cliente implements Serializable {
                 .collect(Collectors.toList());
     }
 
-
-   
-   /*  public List<UsoDeVaga> obterHistoricoDeUsos() {
-        List<UsoDeVaga> historico = new ArrayList<>();
-        for (Veiculo veiculo : veiculos) {
-            historico.addAll(veiculo.getUsos());
-        }
-        return historico;
-    } */
 
 
 
