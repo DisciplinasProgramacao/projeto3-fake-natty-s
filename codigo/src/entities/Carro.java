@@ -5,6 +5,7 @@ import javax.swing.text.html.HTMLDocument.BlockElement;
 
 import src.enums.ServicosAdicionais;
 import src.interfaces.Observador;
+import src.interfaces.UsoDeVaga;
 import src.interfaces.Veiculo;
 import src.Exceptions.*;
 
@@ -31,13 +32,14 @@ public class Carro implements Serializable, Veiculo {
      */
     @Override
     public void estacionar(Vaga vaga, List<ServicosAdicionais> servicosAdicionais) throws ExcecaoEstacionarSemSair {
+        UsoCarroFactoryImp factory = new UsoCarroFactoryImp();
         for (UsoDeVaga usoDeVaga : usos) {
 
             if (!usoDeVaga.getSaida().isBefore(LocalDateTime.now()) || usoDeVaga.getSaida() == null) {
                 throw new ExcecaoEstacionarSemSair(usoDeVaga.getVaga());
             } else {
                 if (vaga.disponivel()) {
-                    usos.add(new UsoDeVaga(vaga, LocalDateTime.now(), servicosAdicionais));
+                    usos.add(factory.criar(vaga, LocalDateTime.now(), null, 0, servicosAdicionais));
                     vaga.estacionar();
                 } else {
                     throw new ExcecaoEstacionarSemSair(usoDeVaga.getVaga());
@@ -146,7 +148,7 @@ public class Carro implements Serializable, Veiculo {
     }
 
     @Override
-    public void notificarObservadores() {
+    public void notificarObservadores(){
         observadores.stream().forEach(observador -> observador.atualizar(LocalDateTime.now().getMonthValue()));
     }
     
