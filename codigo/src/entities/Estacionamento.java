@@ -225,12 +225,17 @@ public class Estacionamento implements Serializable {
 	 * @return O valor médio por uso.
 	 */
 	public double valorMedioPorUso() {
-		return clientes.stream()
-				.mapToInt(Cliente::totalDeUsos)
-				.average()
-				.orElse(0.0);
+		List<Double> valorMedio = new ArrayList<>();
+		for (Cliente cliente : clientes) {
+			for (Veiculo v : cliente.getVeiculos()) {
+				for (UsoDeVaga vags : v.getUsos()) {
+					valorMedio.add(vags.valorPago());
+				}
+			}
+		}
+		return valorMedio.stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
 	}
-
+	
 	/**
 	 * Retorna os 5 principais clientes com base no número total de usos no mês
 	 * especificado usando Streams.
