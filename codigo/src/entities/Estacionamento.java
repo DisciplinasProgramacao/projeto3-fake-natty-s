@@ -27,9 +27,7 @@ public class Estacionamento implements Serializable {
 	private int fileiras;
 	private int colunas;
 	private double valorArrecadado;
-	private int valorTotal;
-	private int valorMes;
-	private int valorUso;
+	private Relatorio relatorio;
 
 	/*
 	 * Construtor Estacionamento
@@ -42,12 +40,9 @@ public class Estacionamento implements Serializable {
 		this.colunas = vagasPorFila;
 		this.clientes = new ArrayList<>();
 		this.vagas = new ArrayList<>();
+		this.relatorio = new Relatorio(this);
 		this.valorArrecadado = 0;
-		this.valorTotal = 0;
-		this.valorMes = 0;
-		this.valorUso = 0;
 		char fila = 'A';
-
 
 		for (int i = 1; i <= fileiras; i++) {
 			for (int j = 1; j <= vagasPorFila; j++) {
@@ -56,11 +51,10 @@ public class Estacionamento implements Serializable {
 			}
 			fila++;
 		}
-		//gerarVagas();
+		// gerarVagas();
 	}
 
-	
-	/** 
+	/**
 	 * @param veiculo
 	 * @param idCli
 	 * @throws ExcecaoCadastrarVeiculoExistente
@@ -79,13 +73,12 @@ public class Estacionamento implements Serializable {
 		if (veiculos.contains(veiculo)) {
 			throw new ExcecaoCadastrarVeiculoExistente(veiculo.getPlaca());
 		} else {
+			veiculo.addObserver(this.relatorio);
 			cliente.addVeiculo(veiculo);
 		}
-
 	}
 
-	
-	/** 
+	/**
 	 * @param cliente
 	 * @throws ExcecaoClientejaExistente
 	 */
@@ -94,8 +87,6 @@ public class Estacionamento implements Serializable {
 	 * 
 	 * @param cliente: Cliente
 	 */
-
-
 	public void addCliente(Cliente cliente) throws ExcecaoClientejaExistente {
 
 		if (clientes.contains(cliente)) {
@@ -106,46 +97,30 @@ public class Estacionamento implements Serializable {
 	}
 
 	/*
-	 * Faz a verificação de vagas e fileiras e
-	 * adiciona uma vaga na lista de vagas
-	 * 
-	 */
-
-	private void gerarVagas() {
-
-		char filaChar = 'A';
-
-		for (int fila = 1; fila <= fileiras; fila++) {
-			for (int numero = 1; numero <= colunas; numero++) {
-
-				int index_vaga = numero + (colunas * (fila - 1)); // pega a posição da lista em que esta
-
-				if (vagas.get(index_vaga) == null) {
-					String filaString = String.valueOf(filaChar); // Converte char para String
-					Vaga vaga = new Vaga(filaString, numero);
-					vagas.add(vaga);
-					return;
-				}
-
-			}
-			filaChar++; // Avança para a próxima letra da fila (B, C, ...)
-		}
-	}
-
-	/*
 	 * Encontra vaga disponivel e chama metodo estacionar(placa) desta vaga
 	 * 
 	 * @param String placa
 	 */
 
-	public void estacionar(String placa, List<ServicosAdicionais> servicosAdicionais) throws ExcecaoEstacionarSemSair, ExcecaoCadastrarVeiculoExistente{
+	public void estacionar(String placa, List<ServicosAdicionais> servicosAdicionais)
+			throws ExcecaoEstacionarSemSair, ExcecaoCadastrarVeiculoExistente {
 		Boolean encontrado = false;
+		
 		for (Cliente cliente : clientes) {
 			if (cliente.possuiVeiculo(placa) != null) {
+
 				Veiculo veiculo = cliente.possuiVeiculo(placa);
 				encontrado = true;
+
 				for (Vaga vaga : vagas) { // procura vaga
 					if (vaga.disponivel()) {
+						for (UsoDeVaga vags : veiculo.getUsos()) {
+							if (vags.getSaida() != null) {
+
+								throw new ExcecaoEstacionarSemSair(vaga);
+							}
+						}
+						
 						veiculo.estacionar(vaga, servicosAdicionais);
 
 						break;
@@ -154,7 +129,7 @@ public class Estacionamento implements Serializable {
 			}
 		}
 
-		if(!encontrado){
+		if (!encontrado) {
 			throw new ExcecaoCadastrarVeiculoExistente("veiculo nao encontrado");
 		}
 
@@ -165,7 +140,6 @@ public class Estacionamento implements Serializable {
 	 * 
 	 * @param String idCli
 	 */
-
 	public Cliente encontrarClientePorId(String idCli) throws ExcecaoClientejaExistente {
 		boolean encontrado = false;
 		Cliente clienteEncontrado = null;
@@ -190,23 +164,29 @@ public class Estacionamento implements Serializable {
 	 * 
 	 * @param placa A placa do veículo que deseja sair.
 	 */
-	public Double sair(String placa) throws ExcecaoSairFinalizada, ExcecaoCadastrarVeiculoExistente {
-		Double totalPago = 0.0;
+	public double sair(String placa) throws ExcecaoSairFinalizada, ExcecaoCadastrarVeiculoExistente {
+		double totalPago = 0.0;
 		Boolean encontrado = false;
+		Boolean usoz = false;
+
 		for (Cliente cliente : clientes) {
 			if (cliente.possuiVeiculo(placa) != null) {
 				Veiculo veiculo = cliente.possuiVeiculo(placa);
 				encontrado = true;
 				for (UsoDeVaga uso : veiculo.getUsos()) {
 					if (uso.getSaida() == null) {
+						usoz = true;
 						totalPago = veiculo.sair(uso.getVaga(), cliente);
 					}
 				}
 			}
 
 		}
-		if(!encontrado){
+		if (!encontrado) {
 			throw new ExcecaoCadastrarVeiculoExistente("veiculo nao encontrado");
+		}
+		if (!usoz) {
+			throw new ExcecaoSairFinalizada();
 		}
 		return totalPago;
 	}
@@ -219,8 +199,6 @@ public class Estacionamento implements Serializable {
 		}
 		return null; // Retorna null se não houver vaga disponível
 	}
-
-	
 
 	public double totalArrecadado() {
 		return clientes.stream()
@@ -261,22 +239,12 @@ public class Estacionamento implements Serializable {
 	 * @return Uma string que contém os nomes e o total de usos dos 5 principais
 	 *         clientes no mês especificado.
 	 */
-	public Set<Cliente> top5Clientes(int mes) throws ExcecaoMesInvalido {
-        if (mes < 1 || mes > 12) {
-            throw new ExcecaoMesInvalido();
-        }
-
-        return clientes.stream()
-            .sorted(Comparator.comparingDouble(c -> ((Cliente) c).arrecadadoNoMes(mes)).reversed())
-            .limit(5)
-            .collect(Collectors.toSet());
+	public List<Cliente> top5Clientes(int mes) {
+		return clientes.stream()
+				.sorted(Comparator.comparingDouble(c -> ((Cliente) c).arrecadadoNoMes(mes)).reversed())
+				.limit(5)
+				.collect(Collectors.toList());
 	}
-
-	/**
-	 * Calcula o valor total arrecadado pela empresa a partir de todos os clientes.
-	 * 
-	 * @return O valor total arrecadado.
-	 */
 
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -291,18 +259,16 @@ public class Estacionamento implements Serializable {
 	}
 
 	public List<Cliente> getClientes() {
-    return clientes;
-
-	
+		return this.clientes;
 	}
 
-	public void setClientes(List<Cliente> clienteNovos){
+	public void setClientes(List<Cliente> clienteNovos) {
 		this.clientes = clienteNovos;
 	}
 
 	public void setVagas(List<Vaga> vagas) {
-        this.vagas = vagas;
-    }
+		this.vagas = vagas;
+	}
 
 	public String getNome() {
 		return nome;
