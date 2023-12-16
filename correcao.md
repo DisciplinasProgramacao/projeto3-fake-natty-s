@@ -7,6 +7,9 @@
   - Requisitos (classes e testes): 6,5/12 pontos;
   - Documentação: 2,5/3 pontos;
   - Tarefas nas aulas: 5 pontos;
+  - 01/11 (Arthur, Gabriel, João, Pedro, Renato)
+  - 08/11 (Arthur)
+  - 15/11 (Arthur, Felipe, Gabriel, João, Pedro, Renato)
   - Atraso nos artefatos: desconto de 1 a 4 pontos por semana.
 
 ## Requisitos
